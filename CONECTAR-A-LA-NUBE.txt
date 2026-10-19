@@ -1,0 +1,43 @@
+GATEWISE · DEMO EN VARIOS TELÉFONOS (Firebase, plan gratis)
+=============================================================
+
+A) CREAR EL PROYECTO (una sola vez, ~10 minutos, desde una computadora)
+1. Entra a https://console.firebase.google.com con tu cuenta de Google.
+2. "Crear un proyecto" > nombre: gatewise-demo > puedes desactivar Google Analytics > Crear.
+3. Menú izquierdo: Compilación > Realtime Database > "Crear base de datos".
+   - Ubicación: Estados Unidos (us-central1).
+   - Modo: "Comenzar en modo bloqueado" > Habilitar.
+   - Pestaña "Reglas": borra lo que hay, pega el contenido del archivo reglas-firebase.json y toca "Publicar".
+4. Menú izquierdo: Compilación > Authentication > "Comenzar" > pestaña "Método de acceso"
+   > "Anónimo" > Habilitar > Guardar.
+5. Engranaje (Configuración del proyecto) > General > "Tus apps" > ícono Web </>
+   > apodo: GateWise > "Registrar app" (no hace falta Firebase Hosting).
+   Copia el bloque "const firebaseConfig = { ... }". Debe incluir databaseURL.
+
+B) PONER LA CONFIGURACIÓN EN LA APP (elige una opción)
+   Opción 1 (recomendada): abre config.js con un editor de texto y reemplaza
+     window.GATEWISE_FIREBASE = null;
+   por
+     window.GATEWISE_FIREBASE = { ...lo que copiaste... };
+   Así todos los teléfonos que abran el sitio se conectan solos.
+   Opción 2: publica el sitio, entra como Administrador de la APP > Más > "Conexión a la nube",
+   pega la configuración y luego comparte el "enlace para otros teléfonos" (por WhatsApp).
+   También puedes mandarme la configuración y te devuelvo el zip listo.
+
+C) PUBLICAR EL SITIO
+   Arrastra la carpeta completa en https://app.netlify.com/drop (gratis) y abre el enlace https que te da.
+   (O súbela a tu hosting con https.)
+
+D) LISTO
+   - El primer teléfono que abre la app sube sus datos (los de ejemplo) a la nube.
+   - Los demás teléfonos reciben esos mismos datos y todo se actualiza en vivo:
+     pases y entradas, pagos, avisos, reclamos, cobros, tienda y chat.
+   - Abajo de la pantalla de inicio verás: "☁️ Conectado a la nube".
+
+IMPORTANTE (versión de demostración)
+- Las reglas de reglas-firebase.json permiten leer y escribir a cualquiera que abra la app.
+  Úsalo solo para demos con datos de prueba, no con datos reales de residentes.
+  Para producción se agregan cuentas reales y reglas por residencial y por rol.
+- Si dos personas cambian lo mismo en el mismo segundo, puede ganar el último cambio.
+- Plan gratis de Realtime Database: 1 GB guardado, 10 GB de descarga al mes y 100 conexiones a la vez.
+  Para una demo sobra. No pide tarjeta.

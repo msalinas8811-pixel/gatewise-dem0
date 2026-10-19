@@ -1,0 +1,8 @@
+{
+  "rules": {
+    "gw": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    }
+  }
+}

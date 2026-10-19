@@ -1,0 +1,68 @@
+GATEWISE — Versión de pruebas (PWA)
+
+1) SUBIRLA A UN SITIO
+Sube TODOS los archivos de esta carpeta (index.html, manifest.json, sw.js e íconos), sin cambiarles el nombre.
+Debe abrirse con https:// para que funcionen la cámara y la instalación como app.
+- En tu hosting (cPanel u otro): Administrador de archivos > crea una carpeta, ej. /residencial, y sube los archivos.
+  Queda en: https://tusitio.com/residencial/
+- Opción gratis y rápida: arrastra esta carpeta en Netlify Drop (app.netlify.com/drop) y te da un enlace https.
+
+2) CREAR TU USUARIO DE ADMINISTRADOR DE LA APP
+En la pantalla de inicio toca "Crear usuario de Administrador de la APP" (nombre, usuario y clave de mínimo 6 caracteres).
+Para entrar después: en "Entrar a" elige "Administrador de la APP" (última opción de la lista) y escribe tu usuario y clave.
+Para cambiar usuario o clave: Más > Mi cuenta. Usuario de ejemplo: plataforma / 1234.
+
+BORRAR LOS DATOS DE EJEMPLO PARA EMPEZAR REAL
+En la pantalla de inicio, al final: "Borrar todos los registros" y escribe BORRAR.
+Se borran las residenciales y datos de ejemplo; tu usuario de dueño se conserva.
+(También está en Más > Borrar todos los registros, entrando como dueño.)
+
+3) CREAR UNA RESIDENCIAL
+Como dueño: Residenciales > Registrar. En "Administrador(a)" escribes el usuario y la clave que le asignas al administrador.
+Para entrar: en "Entrar a" elige la residencial y escribe el usuario y la clave. La app valida que el usuario
+pertenezca a esa residencial (administración, residentes, inquilinos, vigilancia o cobradores).
+Desde Casas > Subir Excel carga todas las casas, propietarios y los meses que debe cada una
+(plantilla incluida). También en Pagos > Mora > "Cargar saldos y moras desde Excel".
+En el detalle de cada casa: "Editar meses que debe / saldo inicial" para marcarlos mes por mes.
+
+NOVEDADES
+- Pantalla de inicio: en "Entrar a" escribe las primeras letras y elige la residencial de la lista.
+- Directorio (Más > Directorio): números de emergencia y servicios de confianza (plomeros, electricistas,
+  empleadas de casa, etc.) que agrega la administración. Los residentes pueden llamar, escribir por WhatsApp
+  o crear un pase de acceso para esa persona.
+- Idioma: ícono 🌐 en la barra de arriba (ES/EN), botón "English" en la pantalla de inicio o Más > Español / English.
+- Condominios: torres, pisos, apartamentos por piso, numeración (101, A-101 o correlativo), área, estacionamientos,
+  bodega, cuota fija o por área (m²/ft²), fondo de reserva, amenidades y empresa administradora.
+- Registro de residenciales y condominios: elige Tipo (Residencial o Condominio / HOA) y País.
+  La dirección se adapta al país (EE. UU.: Street, City, State, ZIP; El Salvador: Departamento, Municipio;
+  México: Colonia, Estado, CP; etc.), igual que la moneda, el documento de identidad y el código telefónico.
+
+- Reportes en PDF (Más > Reportes, o Pagos > Mora): casas en mora, casas solventes, personas en mora
+  y resumen general, filtrables por polígono. Se generan en el teléfono, sin internet.
+- Casas: filtros Todas / En mora / Solventes / Sin dueño con conteo, filtro por polígono, búsqueda por número,
+  propietario, familia o teléfono, y botón "Reporte PDF" de la lista filtrada.
+- Directorio: a cada persona de servicio se le puede subir la solvencia policial (foto o PDF) y su fecha de vencimiento.
+
+- TIENDA: la administración da de alta vendedores (Más > Tienda: vendedores y pedidos). Cada vendedor entra con
+  su usuario, publica productos con foto, precio y descripción, y atiende pedidos. Los residentes compran desde
+  la pestaña Tienda, eligen domicilio o retiro, y coordinan por chat. El pedido queda "Entregado" cuando
+  vendedor y comprador confirman. Si un vendedor externo sale a entregar, se crea un pase automático para vigilancia.
+
+- PERSONALIZACIÓN: en Perfil de la residencial > "Logo y colores" la administración sube su logo y elige el color
+  principal y el de la barra superior. Todos los usuarios de esa residencial ven la app con esa identidad
+  (también en recibos y reportes PDF). Cada vendedor de la tienda puede poner su logo y una foto de portada
+  (Panel > Personalizar, o Más > Perfil de mi negocio).
+
+USUARIOS DEL EJEMPLO (si cargaste los ejemplos; contraseña 1234)
+Residencial Los Almendros: admin, casa5, inquilino8, vigilante, cobrador, tienda1, tienda2.
+
+DEMO EN VARIOS TELÉFONOS (NUBE)
+Sigue el archivo CONECTAR-A-LA-NUBE.txt para conectar la app a Firebase (gratis).
+Así todos los teléfonos comparten los mismos datos en vivo.
+
+IMPORTANTE PARA LAS PRUEBAS (sin nube)
+Esta versión guarda los datos en el navegador de cada teléfono. Sirve para probar y enseñar la app,
+pero cada dispositivo tiene sus propios datos: lo que creas en tu teléfono no aparece en el de otra persona.
+Para que administradores, residentes y vigilantes trabajen juntos desde sus teléfonos hace falta la
+versión con base de datos en la nube (siguiente fase).
+Si borras los datos del navegador, también se borra lo que hayas creado.
