@@ -7,10 +7,10 @@ Debe abrirse con https:// para que funcionen la cámara y la instalación como a
   Queda en: https://tusitio.com/residencial/
 - Opción gratis y rápida: arrastra esta carpeta en Netlify Drop (app.netlify.com/drop) y te da un enlace https.
 
-2) CREAR TU USUARIO DE ADMINISTRADOR DE LA APP
-En la pantalla de inicio toca "Crear usuario de Administrador de la APP" (nombre, usuario y clave de mínimo 6 caracteres).
-Para entrar después: en "Entrar a" elige "Administrador de la APP" (última opción de la lista) y escribe tu usuario y clave.
-Para cambiar usuario o clave: Más > Mi cuenta. Usuario de ejemplo: plataforma / 1234.
+2) ENTRAR COMO ADMINISTRADOR DE LA APP (SOLO EL DUEÑO)
+Solo el correo msalinas8811@gmail.com puede entrar a la administración de la app. La clave se crea en
+Firebase > Authentication > Usuarios (ver CONECTAR-A-LA-NUBE.txt). En "Entrar a" elige "Administrador de la APP"
+y escribe tu correo y clave. Para cambiar la clave: Más > Mi cuenta. Requiere la app conectada a la nube.
 
 BORRAR LOS DATOS DE EJEMPLO PARA EMPEZAR REAL
 En la pantalla de inicio, al final: "Borrar todos los registros" y escribe BORRAR.

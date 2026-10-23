@@ -8,3 +8,6 @@ window.GATEWISE_FIREBASE = {
   messagingSenderId: "883032889982",
   appId: "1:883032889982:web:3f0891bfb5f47b7d77d62f"
 };
+
+/* Único Administrador de la APP: solo este correo puede entrar a la administración de la app */
+window.GATEWISE_OWNER_EMAIL = "msalinas8811@gmail.com";

@@ -10,6 +10,9 @@ A) CREAR EL PROYECTO (una sola vez, ~10 minutos, desde una computadora)
    - Pestaña "Reglas": borra lo que hay, pega el contenido del archivo reglas-firebase.json y toca "Publicar".
 4. Menú izquierdo: Compilación > Authentication > "Comenzar" > pestaña "Método de acceso"
    > "Anónimo" > Habilitar > Guardar.
+   Luego "Agregar proveedor nuevo" > "Correo electrónico/contraseña" > Habilitar > Guardar.
+   Pestaña "Usuarios" > "Agregar usuario": tu correo (msalinas8811@gmail.com) y la clave que usarás
+   para entrar como Administrador de la APP (mínimo 6 caracteres).
 5. Engranaje (Configuración del proyecto) > General > "Tus apps" > ícono Web </>
    > apodo: GateWise > "Registrar app" (no hace falta Firebase Hosting).
    Copia el bloque "const firebaseConfig = { ... }". Debe incluir databaseURL.
@@ -25,8 +28,9 @@ B) PONER LA CONFIGURACIÓN EN LA APP (elige una opción)
    También puedes mandarme la configuración y te devuelvo el zip listo.
 
 C) PUBLICAR EL SITIO
-   Arrastra la carpeta completa en https://app.netlify.com/drop (gratis) y abre el enlace https que te da.
-   (O súbela a tu hosting con https.)
+   GitHub: en tu repositorio > Add file > Upload files > arrastra los archivos > Commit changes.
+   Activa Settings > Pages (rama main, carpeta / root). En Firebase > Authentication > Configuración >
+   Dominios autorizados, agrega TU-USUARIO.github.io.
 
 D) LISTO
    - El primer teléfono que abre la app sube sus datos (los de ejemplo) a la nube.
@@ -34,8 +38,18 @@ D) LISTO
      pases y entradas, pagos, avisos, reclamos, cobros, tienda y chat.
    - Abajo de la pantalla de inicio verás: "☁️ Conectado a la nube".
 
+ADMINISTRADOR DE LA APP (SOLO TU CORREO)
+- En la pantalla de inicio elige "Administrador de la APP" y entra con tu correo y la clave que creaste
+  en Firebase > Authentication > Usuarios. Ningún otro correo ni usuario puede entrar.
+- El correo autorizado está en config.js (GATEWISE_OWNER_EMAIL) y en reglas-firebase.json.
+  Si algún día lo cambias, cámbialo en los dos lugares y vuelve a publicar las reglas.
+- ¿Olvidaste la clave? Firebase > Authentication > Usuarios > menú del usuario > "Restablecer contraseña",
+  o dentro de la app: Más > Mi cuenta > "Enviarme correo para cambiar la contraseña".
+- Ya no existe el botón "Crear usuario de Administrador de la APP" ni el usuario de ejemplo plataforma/1234.
+
 IMPORTANTE (versión de demostración)
-- Las reglas de reglas-firebase.json permiten leer y escribir a cualquiera que abra la app.
+- Las reglas protegen la lista de Administradores de la APP (solo tu correo la puede cambiar), pero
+  los datos de las residenciales todavía los puede leer y escribir cualquiera que abra la app.
   Úsalo solo para demos con datos de prueba, no con datos reales de residentes.
   Para producción se agregan cuentas reales y reglas por residencial y por rol.
 - Si dos personas cambian lo mismo en el mismo segundo, puede ganar el último cambio.
