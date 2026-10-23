@@ -59,6 +59,13 @@ NOVEDADES
   un pedido (compra verificada). El vendedor puede responder; la administración puede responder u ocultar
   opiniones inapropiadas. Si alguien da 1 o 2 estrellas debe explicar qué pasó.
 
+- VOTACIONES (Más > Votaciones): elección de directiva (por cargo o por planilla) y aprobación de proyectos
+  (Sí / No / Abstención, con costo, aporte por casa y cotización adjunta). Un voto por casa, lo emite el propietario.
+  Reglas por votación: fecha y hora de cierre, quórum mínimo (%), mayoría simple o 2/3, voto secreto,
+  resultados en vivo o al cierre, y "solo casas al día". La administración abre la votación (se notifica a todos
+  los propietarios), ve quién falta, envía recordatorios o escribe por WhatsApp, y al cerrar obtiene el acta en PDF.
+  En elecciones, un botón actualiza la directiva del perfil con los ganadores. Se cierra sola a la hora indicada.
+
 USUARIOS DEL EJEMPLO (si cargaste los ejemplos; contraseña 1234)
 Residencial Los Almendros: admin, casa5, inquilino8, vigilante, cobrador, tienda1, tienda2.
 
