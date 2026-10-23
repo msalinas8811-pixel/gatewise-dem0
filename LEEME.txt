@@ -7,10 +7,10 @@ Debe abrirse con https:// para que funcionen la cámara y la instalación como a
   Queda en: https://tusitio.com/residencial/
 - Opción gratis y rápida: arrastra esta carpeta en Netlify Drop (app.netlify.com/drop) y te da un enlace https.
 
-2) CREAR TU USUARIO DE ADMINISTRADOR DE LA APP
-En la pantalla de inicio toca "Crear usuario de Administrador de la APP" (nombre, usuario y clave de mínimo 6 caracteres).
-Para entrar después: en "Entrar a" elige "Administrador de la APP" (última opción de la lista) y escribe tu usuario y clave.
-Para cambiar usuario o clave: Más > Mi cuenta. Usuario de ejemplo: plataforma / 1234.
+2) ENTRAR COMO ADMINISTRADOR DE LA APP (SOLO EL DUEÑO)
+Solo el correo msalinas8811@gmail.com puede entrar a la administración de la app. La clave se crea en
+Firebase > Authentication > Usuarios (ver CONECTAR-A-LA-NUBE.txt). En "Entrar a" elige "Administrador de la APP"
+y escribe tu correo y clave. Para cambiar la clave: Más > Mi cuenta. Requiere la app conectada a la nube.
 
 BORRAR LOS DATOS DE EJEMPLO PARA EMPEZAR REAL
 En la pantalla de inicio, al final: "Borrar todos los registros" y escribe BORRAR.
@@ -52,6 +52,19 @@ NOVEDADES
   principal y el de la barra superior. Todos los usuarios de esa residencial ven la app con esa identidad
   (también en recibos y reportes PDF). Cada vendedor de la tienda puede poner su logo y una foto de portada
   (Panel > Personalizar, o Más > Perfil de mi negocio).
+
+- OPINIONES Y ESTRELLAS: los residentes califican de 1 a 5 estrellas y comentan a las tiendas y al personal de
+  servicio del Directorio (jardinero, fontanero, trabajos varios, etc.). Todos los residentes ven el promedio,
+  las opiniones y pueden ordenar por "Mejor calificados". Las tiendas solo se califican después de recibir
+  un pedido (compra verificada). El vendedor puede responder; la administración puede responder u ocultar
+  opiniones inapropiadas. Si alguien da 1 o 2 estrellas debe explicar qué pasó.
+
+- VOTACIONES (Más > Votaciones): elección de directiva (por cargo o por planilla) y aprobación de proyectos
+  (Sí / No / Abstención, con costo del proyecto, aportación de fondos de la residencial, aportación por casa —puede ser cero— y cotización adjunta). Un voto por casa, lo emite el propietario.
+  Reglas por votación: fecha y hora de cierre, quórum mínimo (%), mayoría simple o 2/3, voto secreto,
+  resultados en vivo o al cierre, y "solo casas al día". La administración abre la votación (se notifica a todos
+  los propietarios), ve quién falta, envía recordatorios o escribe por WhatsApp, y al cerrar obtiene el acta en PDF.
+  En elecciones, un botón actualiza la directiva del perfil con los ganadores. Se cierra sola a la hora indicada.
 
 USUARIOS DEL EJEMPLO (si cargaste los ejemplos; contraseña 1234)
 Residencial Los Almendros: admin, casa5, inquilino8, vigilante, cobrador, tienda1, tienda2.

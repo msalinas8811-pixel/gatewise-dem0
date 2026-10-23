@@ -2,7 +2,14 @@
   "rules": {
     "gw": {
       ".read": "auth != null",
-      ".write": "auth != null"
+      "plat": {
+        "$k": {
+          ".write": "auth != null && ($k != 'superadmins' || auth.token.email == 'msalinas8811@gmail.com')"
+        }
+      },
+      "r": {
+        ".write": "auth != null"
+      }
     }
   }
 }

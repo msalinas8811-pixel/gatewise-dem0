@@ -1,4 +1,4 @@
-const CACHE = 'gatewise-v4';
+const CACHE = 'gatewise-v10';
 const ASSETS = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './config.js'];
 
 self.addEventListener('install', e => {
@@ -17,6 +17,6 @@ self.addEventListener('fetch', e => {
   e.respondWith(
     fetch(e.request)
       .then(r => { const copy = r.clone(); caches.open(CACHE).then(c => c.put(e.request, copy)); return r; })
-      .catch(() => caches.match(e.request).then(r => r || caches.match('./index.html')))
+      .catch(() => caches.match(e.request).then(r => r || (e.request.mode === 'navigate' ? caches.match('./index.html') : Response.error())))
   );
 });
