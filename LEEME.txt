@@ -60,7 +60,7 @@ NOVEDADES
   opiniones inapropiadas. Si alguien da 1 o 2 estrellas debe explicar qué pasó.
 
 - VOTACIONES (Más > Votaciones): elección de directiva (por cargo o por planilla) y aprobación de proyectos
-  (Sí / No / Abstención, con costo, aporte por casa y cotización adjunta). Un voto por casa, lo emite el propietario.
+  (Sí / No / Abstención, con costo del proyecto, aportación de fondos de la residencial, aportación por casa —puede ser cero— y cotización adjunta). Un voto por casa, lo emite el propietario.
   Reglas por votación: fecha y hora de cierre, quórum mínimo (%), mayoría simple o 2/3, voto secreto,
   resultados en vivo o al cierre, y "solo casas al día". La administración abre la votación (se notifica a todos
   los propietarios), ve quién falta, envía recordatorios o escribe por WhatsApp, y al cerrar obtiene el acta en PDF.
