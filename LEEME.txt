@@ -53,6 +53,12 @@ NOVEDADES
   (también en recibos y reportes PDF). Cada vendedor de la tienda puede poner su logo y una foto de portada
   (Panel > Personalizar, o Más > Perfil de mi negocio).
 
+- OPINIONES Y ESTRELLAS: los residentes califican de 1 a 5 estrellas y comentan a las tiendas y al personal de
+  servicio del Directorio (jardinero, fontanero, trabajos varios, etc.). Todos los residentes ven el promedio,
+  las opiniones y pueden ordenar por "Mejor calificados". Las tiendas solo se califican después de recibir
+  un pedido (compra verificada). El vendedor puede responder; la administración puede responder u ocultar
+  opiniones inapropiadas. Si alguien da 1 o 2 estrellas debe explicar qué pasó.
+
 USUARIOS DEL EJEMPLO (si cargaste los ejemplos; contraseña 1234)
 Residencial Los Almendros: admin, casa5, inquilino8, vigilante, cobrador, tienda1, tienda2.
 
