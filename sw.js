@@ -1,4 +1,4 @@
-const CACHE = 'gatewise-v17';
+const CACHE = 'gatewise-v18';
 const ASSETS = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './config.js'];
 
 self.addEventListener('install', e => {
