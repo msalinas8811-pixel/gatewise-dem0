@@ -79,3 +79,41 @@ pero cada dispositivo tiene sus propios datos: lo que creas en tu teléfono no a
 Para que administradores, residentes y vigilantes trabajen juntos desde sus teléfonos hace falta la
 versión con base de datos en la nube (siguiente fase).
 Si borras los datos del navegador, también se borra lo que hayas creado.
+
+=========================================================
+ACADEMIAS, EVENTOS Y RESERVAS (versión 2026.10.29-20)
+=========================================================
+Menú › Comunidad (administración, residentes e inquilinos):
+
+ACADEMIAS (fútbol, karate, danza, etc.)
+- La administración crea cada academia: días, horario, lugar, instructor,
+  cuota para residentes, cuota para alumnos de afuera, inscripción,
+  día límite de pago y categorías por edad (se asignan solas).
+- Alumnos de la residencial: quedan ligados a su casa.
+- Alumnos de afuera: se registra al responsable (nombre, parentesco,
+  teléfono, DUI, dirección), personas autorizadas y, si aplica, qué
+  residente lo recomendó (opcional).
+- Cada alumno de afuera recibe un CÓDIGO DE INGRESO de 6 números que se
+  envía por WhatsApp. Vigilancia lo busca en Portería o en
+  "Academias: ingreso de alumnos" y marca entrada y salida.
+  Solo vale en los días y horario de la academia; se puede bloquear
+  automáticamente por falta de pago.
+- Pagos: por mes, con forma de pago, recibo en PDF, mora y reporte
+  mensual. Los residentes piden inscripción desde la app.
+
+EVENTOS
+- Fiestas y otros eventos: invitación a todas las casas; cada casa dice
+  si asiste y cuántos adultos y niños. La app calcula el presupuesto
+  (costo por adulto y niño + gastos fijos − aporte de la residencial)
+  y el aporte sugerido por casa y por persona. Lista en PDF.
+- Torneos: inscripción de equipos e integrantes, aprobación,
+  formatos Liga, Eliminación directa o Grupos + eliminatoria,
+  calendario automático (días, horas, canchas), resultados con
+  penales y goleadores, tabla de posiciones, llaves, campeón,
+  subcampeón y tercer lugar. Calendario y resultados en PDF.
+
+RESERVAS DE ÁREAS COMUNES
+- Salón de usos múltiples y las áreas que agregues (rancho, cancha…):
+  calendario, horarios ocupados, aprobación, costo y depósito,
+  reglamento y regla de "solo casas al día". Vigilancia ve las
+  reservas del día.
