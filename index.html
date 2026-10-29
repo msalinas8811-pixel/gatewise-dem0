@@ -1824,12 +1824,12 @@ function resCard(r,adm,own){const mio=r.userId===S.user.id;
 /* Calificar */
 let CALV=0;
 function calificar(tipo,ref){if(!puedeCalif(tipo,ref))return toast(tipo==='tienda'?'Podrás calificar después de recibir un pedido de esta tienda':'Solo los residentes pueden calificar');const m=miRes(tipo,ref);CALV=m?m.estrellas:0;
-  sheet(m?'Editar mi opinión':'Calificar',`<p style="margin:0;text-align:center;font-weight:700;font-size:16px">${esc(nomObj(tipo,ref))}</p><form onsubmit="guardarRes(event,'${tipo}','${ref}')"><div class="pick" id="pick">${pickHTML()}</div><p class="note" id="pickL" style="text-align:center;margin:2px 0 14px;font-weight:600">${CALV?ETQ[CALV]:'Toca las estrellas para calificar'}</p>
+  sheet(m?'Editar mi opinión':'Calificar',`<p style="margin:0;text-align:center;font-weight:700;font-size:16px">${esc(nomObj(tipo,ref))}</p><form onsubmit="guardarResena(event,'${tipo}','${ref}')"><div class="pick" id="pick">${pickHTML()}</div><p class="note" id="pickL" style="text-align:center;margin:2px 0 14px;font-weight:600">${CALV?ETQ[CALV]:'Toca las estrellas para calificar'}</p>
   <label class="f">Comentario<textarea name="texto" maxlength="500" placeholder="${tipo==='tienda'?'¿Qué tal el producto, la atención y la entrega?':'¿Qué trabajo te hicieron? ¿Fue puntual, ordenado y cobró lo acordado?'}">${esc(m?m.texto:'')}</textarea></label>
   <p class="note">Se publicará como <b>${esc(autorNom({nombre:S.user.nombre,casaId:S.user.casaId}))}</b>. Todos los residentes podrán verla.</p><button class="btn block big-ok">Publicar opinión</button>${m?`<button type="button" class="btn bad block" onclick="borrarRes('${m.id}')">Eliminar mi opinión</button>`:''}</form>`)}
 const pickHTML=()=>[1,2,3,4,5].map(i=>`<button type="button" class="pk ${i<=CALV?'on':''}" onclick="setCal(${i})" aria-label="${i} / 5">★</button>`).join('');
 function setCal(i){CALV=i;document.getElementById('pick').innerHTML=pickHTML();document.getElementById('pickL').textContent=ETQ[i]}
-function guardarRes(e,tipo,ref){e.preventDefault();if(!CALV)return toast('Elige de 1 a 5 estrellas');const texto=String(new FormData(e.target).get('texto')||'').trim();
+function guardarResena(e,tipo,ref){e.preventDefault();if(!CALV)return toast('Elige de 1 a 5 estrellas');const texto=String(new FormData(e.target).get('texto')||'').trim();
   if(CALV<=2&&texto.length<10)return toast('Cuéntanos brevemente qué pasó para ayudar a otros vecinos');
   const L=resDB();let r=miRes(tipo,ref);const nuevo=!r;
   if(!r){r={id:uid(),tipo,ref,userId:S.user.id,nombre:S.user.nombre,casaId:S.user.casaId};L.push(r)}
@@ -2286,7 +2286,7 @@ Object.assign(I18N,{"Planes y precios":"Plans and prices","Precio mensual acorda
 
 
 /* ---------- Versión y actualización ---------- */
-const APP_VERSION='2026.10.29-21';
+const APP_VERSION='2026.10.29-22';
 async function buscarActualizacion(){toast('Buscando la versión más reciente…');try{if(navigator.serviceWorker){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}setTimeout(()=>{location.href=location.pathname+'?v='+Date.now()},400)}
 const versionHTML=()=>`<p class="note" style="text-align:center;margin-top:18px">GateWise · versión ${APP_VERSION} · <a href="#" onclick="buscarActualizacion();return false" style="color:var(--pri);font-weight:700">Buscar actualización</a></p>`;
 try{if(navigator.serviceWorker){navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!window.__gwRecargado){window.__gwRecargado=1;if(!S.user||!document.querySelector('#ov'))location.reload()}})}}catch(e){}
