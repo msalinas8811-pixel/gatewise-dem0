@@ -117,3 +117,25 @@ RESERVAS DE ÁREAS COMUNES
   calendario, horarios ocupados, aprobación, costo y depósito,
   reglamento y regla de "solo casas al día". Vigilancia ve las
   reservas del día.
+
+=========================================================
+CARGA MASIVA DE CASAS Y CASAS AUTORIZADAS (2026.10.29-21)
+=========================================================
+- Administración › Casas › "Subir Excel": sube todas las casas con sus
+  propietarios desde un archivo (Excel o CSV) o pegando las filas.
+  Botón "Descargar plantilla" con las columnas:
+  Número de casa, Polígono, Apellidos de la familia, Propietario, DUI,
+  Teléfono, Correo, Meses que debe, Teléfono 2 / WhatsApp,
+  Placas de vehículos, Habitantes, Notas.
+  Solo Número y Polígono son obligatorios.
+- No se crean usuarios ni claves: el propietario queda "sin cuenta".
+  Se registra después con el código de su casa, o la administración
+  le crea el usuario desde la ficha de la casa.
+- CASAS AUTORIZADAS: el Administrador de la APP define cuántas casas
+  puede usar cada residencial (ficha de la residencial). La
+  administración no puede pasarse de ese número, ni a mano ni con el
+  archivo; las filas que no caben se marcan y no se importan.
+- Si la residencial se creó con casas vacías automáticas, al subir el
+  archivo se puede marcar "Reemplazar las casas vacías" para quedarse
+  solo con la lista real.
+- Vigilancia puede buscar por placa en Portería.
