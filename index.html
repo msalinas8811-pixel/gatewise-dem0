@@ -2809,7 +2809,7 @@ Object.assign(I18N,{"Planes y precios":"Plans and prices","Precio mensual acorda
 
 
 /* ---------- Versión y actualización ---------- */
-const APP_VERSION='2026.11.05-28';
+const APP_VERSION='2026.11.05-29';
 async function buscarActualizacion(){toast('Buscando la versión más reciente…');try{if(navigator.serviceWorker){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}setTimeout(()=>{location.href=location.pathname+'?v='+Date.now()},400)}
 const versionHTML=()=>`<p class="note" style="text-align:center;margin-top:18px">GateWise · versión ${APP_VERSION} · <a href="#" onclick="buscarActualizacion();return false" style="color:var(--pri);font-weight:700">Buscar actualización</a></p>`;
 try{if(navigator.serviceWorker){navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!window.__gwRecargado){window.__gwRecargado=1;if(!S.user||!document.querySelector('#ov'))location.reload()}})}}catch(e){}
@@ -5239,7 +5239,7 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
   ];
   const hayDemo = () => (PLAT.residenciales || []).some(r => r.id === 'r1');
   window.verDemo = function () {
-    if (!hayDemo()) return toast('La residencial de demostración no está cargada');
+    if (!hayDemo()) return sheet('Ver la demo', `<div class="b-conf" style="--b-c:var(--pri)"><div class="b-conf-ic">${ic('building', 26)}</div><p>Esta app todavía no tiene la residencial de ejemplo <b>Residencial Los Almendros</b>. Se agrega junto a tus residenciales, sin borrar nada.</p></div><button class="btn block big-ok" onclick="cargarDemo(true);verDemo()">${ic('plus', 20)}<span class="b-tx">Cargar la demo ahora</span></button>`);
     sheet('Ver la demo', `<p class="note" style="margin-top:0"><b>Residencial Los Almendros</b> tiene datos de ejemplo. Toca un rol para entrar sin escribir la clave. Todas las claves son <b>1234</b>.</p>
       <div class="r7-tipos">${ACC.map(([i, t, u, id, d]) => `<button class="r7-tipo" onclick="entrarDemo('${id}')"><span class="ti-big" style="background:color-mix(in srgb,var(--pri) 14%,var(--card));color:var(--pri);display:grid;place-items:center">${ic(i, 24)}</span><span><b>${t}</b><small>${esc(d)} · usuario <b>${u}</b></small></span>${ic('chev', 20)}</button>`).join('')}</div>`);
   };
@@ -5264,16 +5264,18 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
       <button class="item" onclick="borrarTodoDemo()"><span class="mic c-red">${ic('trash', 20)}</span><div class="grow"><b>Borrar todo y empezar de cero</b><div class="sm muted">Elimina todas las residenciales${otras ? ` (incluidas ${otras} creadas por ti)` : ''} y sus datos. Tu acceso de Administrador de la APP se conserva.</div></div>${ic('chev', 18)}</button>
       ${d ? `<button class="item" onclick="quitarDemo()"><span class="mic c-amber">${ic('x', 20)}</span><div class="grow"><b>Quitar solo la demo</b><div class="sm muted">Borra Los Almendros y deja tus residenciales reales.</div></div>${ic('chev', 18)}</button>` : ''}`;
   }
-  window.recargarDemo = function () {
-    const hacer = () => {
-      const ej = seedPlat().residenciales.find(r => r.id === 'r1');
+  function cargarDemo(silencio) {
+    const ej = seedPlat().residenciales.find(r => r.id === 'r1');
       PLAT.residenciales = PLAT.residenciales.filter(r => r.id !== 'r1'); PLAT.residenciales.unshift(ej); savePlat();
       try { localStorage.removeItem(dbKey('r1')); } catch (e) { }
       const prev = RES; RES = null; DB = null; load('r1'); sembrar(DB); save();
       try { if (typeof nubeSetRes === 'function' && typeof NUBE !== 'undefined' && NUBE.on) nubeSetRes('r1', DB); } catch (e) { }
       if (prev && prev !== 'r1' && PLAT.residenciales.some(r => r.id === prev)) load(prev);
-      render(); toast('Demo lista: Residencial Los Almendros');
-    };
+      render(); if (!silencio) toast('Demo lista: Residencial Los Almendros');
+  }
+  window.cargarDemo = cargarDemo;
+  window.recargarDemo = function () {
+    const hacer = () => cargarDemo();
     if (!hayDemo()) return hacer();
     confirmar('¿Reiniciar la demo?', 'Los Almendros vuelve a los datos de ejemplo originales. Tus otras residenciales no se tocan.', 'Reiniciar demo', hacer, { tono: 'pri', icono: 'refresh' });
   };
@@ -5314,7 +5316,7 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
   // Pantalla de ingreso: botón "Ver la demo"
   const vl = vLogin;
   vLogin = function () {
-    const h = vl.apply(this, arguments); if (!hayDemo()) return h;
+    const h = vl.apply(this, arguments);
     const b = `<button class="btn sec block" onclick="verDemo()">${ic('users', 18)}<span class="b-tx">Ver la demo · entrar como…</span></button>`;
     const k = h.lastIndexOf('</form>'); return k >= 0 ? h.slice(0, k + 7) + b + h.slice(k + 7) : h + b;
   };
