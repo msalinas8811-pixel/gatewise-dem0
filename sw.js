@@ -1,5 +1,43 @@
-const CACHE = 'gatewise-v22';
-const ASSETS = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './config.js'];
+const CACHE = 'gatewise-v25';
+// Archivos de la app (si agregas un módulo en js/app, agrégalo aquí)
+const ASSETS = [
+  './',
+  './index.html',
+  './manifest.json',
+  './icon-192.png',
+  './icon-512.png',
+  './config.js',
+  './css/base.css',
+  './css/botones.css',
+  './css/diseno.css',
+  './css/residente.css',
+  './js/app/01-nucleo.js',
+  './js/app/02-administracion.js',
+  './js/app/03-residente.js',
+  './js/app/04-vigilancia.js',
+  './js/app/05-plataforma.js',
+  './js/app/06-cobrador.js',
+  './js/app/07-importar-casas.js',
+  './js/app/08-region-idioma.js',
+  './js/app/09-pdf-reportes.js',
+  './js/app/10-tienda.js',
+  './js/app/11-marca.js',
+  './js/app/12-nube-demo.js',
+  './js/app/13-menu-movil.js',
+  './js/app/14-opiniones.js',
+  './js/app/15-votaciones.js',
+  './js/app/16-dueno-app.js',
+  './js/app/17-menu-lateral.js',
+  './js/app/18-precios.js',
+  './js/app/19-movimiento.js',
+  './js/app/20-profundidad.js',
+  './js/app/21-comunidad.js',
+  './js/app/22-casas-autorizadas.js',
+  './js/app/23-botones.js',
+  './js/app/24-residente.js',
+  './js/app/99-arranque.js',
+  './js/prod.js',
+];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS.map(u => new Request(u, { cache: 'reload' })))));

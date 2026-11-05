@@ -139,3 +139,23 @@ CARGA MASIVA DE CASAS Y CASAS AUTORIZADAS (2026.10.29-21)
   archivo se puede marcar "Reemplazar las casas vacías" para quedarse
   solo con la lista real.
 - Vigilancia puede buscar por placa en Portería.
+
+==========================================================
+VERSIÓN 2026.10.29-23 · LISTA PARA PRODUCCIÓN
+==========================================================
+La app ya trae la base de datos segura (Firebase Authentication + Cloud Firestore
+con reglas por rol, funciones del servidor, respaldos diarios y notificaciones).
+Por defecto sigue en modo demo. Para activarla con datos reales sigue
+PRODUCCION-LEEME.txt paso a paso.
+
+==========================================================
+VERSIÓN 2026.11.05-24 · BOTONES NUEVOS Y PROYECTO ORDENADO
+==========================================================
+- Botones rediseñados: píldora moderna, ícono automático según la acción,
+  flecha de avance, onda al tocar, "cargando" mientras responde el servidor
+  y bloqueo de doble envío.
+- Las ventanas del navegador (confirm/prompt) se cambiaron por ventanas
+  propias de la app (eliminar aviso, rechazar pago, cancelar pase, etc.).
+- El código ya no está en un solo archivo: ver ESTRUCTURA.md
+  (css/ para estilos, js/app/ para los módulos, js/prod.js para producción).
+- IMPORTANTE al subir a GitHub/hosting: sube también las carpetas css/ y js/.

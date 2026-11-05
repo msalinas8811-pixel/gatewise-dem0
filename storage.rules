@@ -1,0 +1,29 @@
+rules_version = '2';
+// GateWise · Reglas de Cloud Storage (fotos y documentos)
+// Ruta: r/{residencial}/{carpeta}/{archivo}
+//  - Solo usuarios de esa residencial (o el dueño de la app) pueden leer.
+//  - Solo se suben imágenes o PDF de hasta 8 MB.
+//  - Los documentos de registro (DUI, escrituras) solo los ve la administración.
+service firebase.storage {
+  match /b/{bucket}/o {
+    function owner() { return request.auth != null && request.auth.token.email == 'msalinas8811@gmail.com'; }
+    function inRes(rid) { return request.auth != null && request.auth.token.rid == rid; }
+    function admin(rid) { return owner() || (inRes(rid) && request.auth.token.rol == 'admin'); }
+    function archivoValido() {
+      return request.resource.size < 8 * 1024 * 1024
+        && (request.resource.contentType.matches('image/.*') || request.resource.contentType == 'application/pdf');
+    }
+    match /r/{rid}/registro/{archivo=**} {
+      allow read, delete: if admin(rid);
+      allow create: if archivoValido(); // la Cloud Function de registro sube aquí
+    }
+    match /r/{rid}/{carpeta}/{archivo=**} {
+      allow read: if owner() || inRes(rid);
+      allow create, update: if (owner() || inRes(rid)) && archivoValido();
+      allow delete: if admin(rid);
+    }
+    match /{otro=**} {
+      allow read, write: if false;
+    }
+  }
+}

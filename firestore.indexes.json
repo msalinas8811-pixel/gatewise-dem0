@@ -1,0 +1,165 @@
+{
+  "indexes": [],
+  "fieldOverrides": [
+    {
+      "collectionGroup": "miembros",
+      "fieldPath": "d",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "perfiles",
+      "fieldPath": "d",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "casas",
+      "fieldPath": "d",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "casasPriv",
+      "fieldPath": "d",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "cuotas",
+      "fieldPath": "d",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "pagos",
+      "fieldPath": "d",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "visitasCobro",
+      "fieldPath": "d",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "cierres",
+      "fieldPath": "d",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "pases",
+      "fieldPath": "d",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "autorizaciones",
+      "fieldPath": "d",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "acadIngresos",
+      "fieldPath": "d",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "avisos",
+      "fieldPath": "d",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "reclamos",
+      "fieldPath": "d",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "notifs",
+      "fieldPath": "d",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "solicitudes",
+      "fieldPath": "d",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "votaciones",
+      "fieldPath": "d",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "eventos",
+      "fieldPath": "d",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "areas",
+      "fieldPath": "d",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "academias",
+      "fieldPath": "d",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "alumnos",
+      "fieldPath": "d",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "acadPagos",
+      "fieldPath": "d",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "resenas",
+      "fieldPath": "d",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "tiendaProductos",
+      "fieldPath": "d",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "tiendaPedidos",
+      "fieldPath": "d",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "kvVoto",
+      "fieldPath": "d",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "kvBoleta",
+      "fieldPath": "d",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "kvRsvp",
+      "fieldPath": "d",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "kvEquipo",
+      "fieldPath": "d",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "kvReserva",
+      "fieldPath": "d",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "kvSolAcad",
+      "fieldPath": "d",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "meta",
+      "fieldPath": "d",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "auditoria",
+      "fieldPath": "d",
+      "indexes": []
+    }
+  ]
+}

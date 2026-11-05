@@ -1,0 +1,181 @@
+GATEWISE · PUESTA EN PRODUCCIÓN (base de datos segura)
+=====================================================
+Versión 2026.10.29-23
+
+Este paquete trae la app lista para trabajar con datos reales de forma segura.
+Mientras config.js diga  GATEWISE_MODO = "demo",  la app funciona igual que hoy
+(datos de ejemplo, ideal para presentar). Cuando completes esta guía y cambies a
+"produccion", entra en funcionamiento todo lo de abajo.
+
+
+1. QUÉ CAMBIA EN PRODUCCIÓN
+---------------------------
+- Ingreso con usuario y clave, como hoy, pero la clave ya NO se guarda en la base
+  de datos: la protege Firebase Authentication (Google). Claves de mínimo 6 caracteres.
+- El único Administrador de la APP es msalinas8811@gmail.com.
+- Cada residencial vive separada: un usuario de una residencial no puede ver nada
+  de otra. Esto lo hace cumplir el servidor (firestore.rules), no solo la pantalla.
+- Cada persona descarga solo lo que su rol permite:
+    Administración ......... todo lo de su residencial
+    Residente / inquilino .. su casa (cuotas, pagos, pases, reclamos, academias,
+                             pedidos) + avisos, votaciones, eventos, reservas
+    Vigilancia ............. lo necesario para el portón (pases, placas, teléfonos,
+                             alumnos externos) — no ve finanzas
+    Cobrador ............... cuotas, pagos, visitas de cobro y cierres
+    Vendedor ............... sus productos y sus pedidos
+- Teléfono, DUI, correo y códigos de registro de cada casa están en documentos
+  privados aparte; los vecinos no los ven.
+- Un residente solo puede REPORTAR un pago (queda "en revisión"); marcarlo como
+  pagado lo hace la administración o el cobrador.
+- Crear, cambiar o borrar usuarios, el registro de propietarios y su aprobación
+  pasan por funciones del servidor (Cloud Functions) que revisan permisos.
+- El código de registro de la casa se valida en el servidor y se renueva al aprobar.
+- Tareas automáticas diarias: cuotas del mes, inquilinos vencidos, estadísticas
+  para tu panel, y RESPALDO COMPLETO de la base de datos cada noche.
+- Notificaciones push al teléfono (Android y iPhone con la app instalada).
+- Opción "Eliminar mi cuenta" y páginas de privacidad (lo pide Google Play).
+- Protección contra borrados masivos por error.
+
+
+2. ARCHIVOS NUEVOS
+------------------
+  js/prod.js ..................... capa de producción de la app
+  config.js ...................... modo (demo/produccion) y llaves de Firebase
+  firebase-messaging-sw.js ....... notificaciones con la app cerrada
+  firestore.rules ................ reglas de seguridad de la base de datos
+  storage.rules .................. reglas para archivos (fotos, PDF)
+  firestore.indexes.json ......... índices (optimizado para no pagar de más)
+  functions/ ..................... funciones del servidor + 16 pruebas
+  tests/rules.test.js ............ 22 pruebas de las reglas (corren en GitHub)
+  tests/navegador/ ............... pruebas de la app por rol con Firebase simulado
+  firebase.json, .firebaserc ..... configuración del proyecto gatewise-prod
+  .github/workflows/deploy.yml ... pruebas y publicación automática desde GitHub
+  scripts/preparar-public.sh ..... arma la carpeta que se publica
+  privacidad.html ................ política de privacidad
+  eliminar-cuenta.html ........... cómo eliminar la cuenta (requisito de Play)
+  .well-known/assetlinks.json .... para la app de Play Store (se completa después)
+
+
+3. PASO A PASO (una sola vez, unos 60–90 minutos)
+-------------------------------------------------
+A) Crear el proyecto
+   1. Entra a https://console.firebase.google.com con msalinas8811@gmail.com.
+   2. "Agregar proyecto" › nombre: gatewise-prod. (Si el ID sale distinto, cámbialo
+      en .firebaserc y en .github/workflows/deploy.yml.) Google Analytics: opcional.
+   3. Engranaje › "Uso y facturación" › Detalles y configuración del plan:
+      cambia al plan Blaze (pago por uso). Lo exigen las funciones del servidor.
+      Pon una ALERTA DE PRESUPUESTO de US$25 en Google Cloud › Facturación ›
+      Presupuestos y alertas.
+
+B) Encender los servicios
+   4. Authentication › Comenzar › Método de acceso › "Correo electrónico/contraseña"
+      › Habilitar. (No actives "vínculo por correo".)
+   5. Authentication › Usuarios › Agregar usuario: msalinas8811@gmail.com con una
+      contraseña fuerte (12+ caracteres). Esa es tu cuenta de Administrador de la APP.
+   6. Authentication › Configuración › Dominios autorizados: agrega tu dominio
+      cuando lo tengas (gatewise-prod.web.app ya viene incluido).
+   7. Firestore Database › Crear base de datos › modo PRODUCCIÓN ›
+      ubicación us-east1 (Carolina del Sur). La ubicación no se puede cambiar después.
+   8. Storage › Comenzar › modo producción › misma ubicación.
+
+C) Respaldos nocturnos
+   9. En Google Cloud Console (console.cloud.google.com, proyecto gatewise-prod)
+      › Cloud Storage › Crear bucket: nombre  gatewise-prod-respaldos , región
+      us-east1, clase "Coldline". En "Ciclo de vida" agrega: borrar objetos de más
+      de 60 días.
+  10. IAM y administración › IAM › busca la cuenta
+      gatewise-prod@appspot.gserviceaccount.com (o la "Compute Engine default")
+      y dale los roles "Cloud Datastore Import Export Admin" y
+      "Storage Admin" sobre ese bucket.
+
+D) Llaves de la app (config.js)
+  11. Configuración del proyecto › General › Tus apps › ícono Web (</>) ›
+      apodo "GateWise web" › Registrar. Copia los valores apiKey, messagingSenderId
+      y appId en  window.GATEWISE_FIREBASE_PROD  dentro de config.js.
+      (Estas llaves son públicas por diseño; la seguridad la dan las reglas.)
+  12. Configuración del proyecto › Cloud Messaging › Certificados push web ›
+      Generar par de claves. Copia la clave en  window.GATEWISE_VAPID .
+  13. Cambia  window.GATEWISE_MODO = "demo"  por  "produccion" .
+      (Consejo: deja la versión demo en otro repositorio o en el artefacto para
+      tus presentaciones.)
+
+E) Publicación automática desde GitHub
+  14. Sube TODO el contenido de esta carpeta a tu repositorio de GitHub (rama main),
+      incluidas las carpetas ocultas .github y .well-known. Si usas la web de
+      GitHub y no te deja subir carpetas que empiezan con punto, crea el archivo
+      con "Add file › Create new file" y escribe la ruta
+      .github/workflows/deploy.yml , pegando su contenido.
+  15. Google Cloud Console › IAM › Cuentas de servicio › Crear cuenta de servicio
+      "github-deploy" con los roles: Firebase Admin, Cloud Functions Admin,
+      Service Account User, Cloud Scheduler Admin, Artifact Registry Administrator,
+      Cloud Build Editor, Firebase Rules Admin. Luego › Claves › Agregar clave ›
+      JSON. Se descarga un archivo.
+  16. En GitHub › tu repositorio › Settings › Secrets and variables › Actions ›
+      New repository secret: nombre  FIREBASE_SERVICE_ACCOUNT , valor: TODO el
+      contenido del archivo JSON. Borra el archivo de tu computadora después.
+  17. Settings › Environments › New environment "produccion" (opcional: exige tu
+      aprobación antes de publicar).
+  18. Haz un cambio cualquiera en main o ve a Actions › "Probar y publicar" ›
+      Run workflow. Primero corren las pruebas (servidor y reglas); si alguna
+      falla, NO se publica nada. La primera publicación tarda ~10 minutos.
+  19. Al terminar, tu app queda en  https://gatewise-prod.web.app
+
+F) Primer uso
+  20. Abre la app, toca "Administrador de la APP" y entra con tu correo.
+  21. Registra la residencial (Panel › Registrar residencial). Define el usuario y
+      la clave (mínimo 6) del administrador de la residencial.
+  22. Entra a la residencial y usa "Subir casas desde archivo" para cargar todas
+      las casas de una vez (respeta el número de casas autorizadas).
+  23. Los propietarios se registran con "Soy propietario · crear mi cuenta" y el
+      código de su casa; la administración los aprueba en Solicitudes.
+  24. Cada usuario, en Menú › Este teléfono: "Activar notificaciones" e
+      "Instalar la app".
+
+Los datos de la demo NO se pasan a producción: cada residencial real empieza
+limpia (y así no se mezclan datos de prueba con datos reales).
+
+
+4. COSTO ESTIMADO (Google, plan Blaze)
+--------------------------------------
+Residencial de 950 casas, ~2,500 usuarios, uso diario normal:
+  - Firestore: cada vez que un residente abre la app (después de 30 min sin
+    usarla) descarga la lista de casas y vecinos (~3,500 lecturas). Con 2 aperturas
+    diarias por casa: ~6 millones de lecturas/mes ≈ US$35–60/mes.
+  - Funciones, almacenamiento, respaldos y hosting: ≈ US$5–15/mes.
+  - Notificaciones push y Authentication con usuario/clave: gratis.
+  Total aproximado: US$40–75 al mes para 950 casas (menos de US$0.08 por casa).
+  Residenciales pequeñas (100–200 casas) quedan casi siempre dentro de la capa gratis.
+Mejora prevista (fase 2): resumir casas y vecinos en un solo documento por
+residencial, lo que bajaría las lecturas de los residentes unas 100 veces.
+Espacio: Firestore no tiene tope de tamaño; 950 casas con 5 años de historial
+ocupan menos de 2 GB (≈ US$0.36/mes).
+
+
+5. QUÉ SE PROBÓ Y QUÉ FALTA PROBAR
+----------------------------------
+Probado aquí:
+  - 16 pruebas de las funciones del servidor (permisos, registro, aprobación,
+    rechazo, desactivación, cuotas diarias sin duplicar, inquilinos vencidos,
+    push, suspensión, eliminar cuenta, eliminar residencial).
+  - La app completa en modo producción, con un Firebase simulado que aplica las
+    mismas reglas: dueño, administración, residente, inquilino, vigilancia,
+    cobrador y vendedor; recorrido de todas las pantallas de cada rol sin errores;
+    intentos prohibidos (editar avisos, marcarse pagado, subirse de rol, crear un
+    admin siendo residente) rechazados y revertidos en pantalla.
+  - El modo demo sigue igual (pruebas anteriores de academias, eventos, reservas,
+    carga de casas y reseñas).
+Falta (se hace solo en GitHub o al publicar):
+  - Las 22 pruebas de firestore.rules contra el emulador oficial de Firebase:
+    corren automáticamente en GitHub Actions antes de cada publicación.
+  - Notificaciones push reales en un teléfono (necesitan el proyecto creado).
+  - Prueba con 2–3 personas reales en teléfonos distintos antes de la entrega.
+
+
+6. SEGURIDAD: BUENAS PRÁCTICAS
+------------------------------
+  - Activa la verificación en 2 pasos en tu cuenta de Google.
+  - Nunca subas a GitHub el archivo JSON de la cuenta de servicio.
+  - Revisa los respaldos una vez al mes (bucket gatewise-prod-respaldos).
+  - Para restaurar un respaldo: Google Cloud › Firestore › Importar/Exportar.
+  - Fase 2 recomendada: App Check (bloquea copias falsas de la app) y un
+    dominio propio (ej. app.gatewise.app).

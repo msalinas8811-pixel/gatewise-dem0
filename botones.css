@@ -1,0 +1,142 @@
+/* =====================================================================
+   GateWise · SISTEMA DE BOTONES (UI 6)
+   Reemplaza los estilos de botón anteriores (js/app/23-botones.js los retira
+   al arrancar), para que haya una sola fuente de verdad.
+
+   Variantes (las mismas clases de siempre):
+     .btn            principal: píldora con degradado y brillo de color
+     .btn.ok         confirmar / éxito (verde)
+     .btn.sec        tonal: fondo suave del color de la marca
+     .btn.ghost      contorno suave sobre la tarjeta
+     .btn.bad        peligro tonal (rojo suave)
+   Tamaños: .smb (compacto)  ·  .big-ok (acción grande)  ·  .block (ancho completo)
+   Estados: :hover · :active (se hunde) · :focus-visible (anillo) ·
+            .is-busy (cargando) · :disabled
+   ===================================================================== */
+:root{
+  --b-h:48px;--b-h-sm:36px;--b-h-lg:58px;
+  --b-ease:cubic-bezier(.23,1,.32,1);
+  --b-ring:0 0 0 3px var(--card),0 0 0 5px color-mix(in srgb,var(--pri) 55%,transparent);
+}
+
+.btn{
+  --b-bg:var(--pri);--b-fg:var(--onpri);--b-tone:var(--pri);
+  position:relative;isolation:isolate;overflow:hidden;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:var(--b-h);padding:0 22px;margin:0;
+  border:0;border-radius:999px;
+  font:inherit;font-size:15px;font-weight:650;letter-spacing:-.006em;line-height:1.15;
+  color:var(--b-fg);text-decoration:none;text-align:center;white-space:normal;
+  background:var(--b-bg);
+  cursor:pointer;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation;
+  transition:transform 160ms var(--b-ease),box-shadow 220ms ease,background-color 160ms ease,color 160ms ease,opacity 160ms ease;
+}
+.btn svg{flex:none;width:18px;height:18px}
+.btn > *{position:relative;z-index:1}
+
+/* ---------- Relleno (principal y confirmar) ---------- */
+.btn:not(.sec):not(.ghost):not(.bad){
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,0) 55%),
+    linear-gradient(135deg,color-mix(in srgb,var(--b-tone) 82%,#fff) 0%,var(--b-tone) 48%,color-mix(in srgb,var(--b-tone) 78%,#000) 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.28),inset 0 -1px 0 rgba(0,0,0,.12),0 10px 22px -12px color-mix(in srgb,var(--b-tone) 90%,transparent),0 2px 4px -2px color-mix(in srgb,var(--b-tone) 50%,transparent);
+}
+.btn.ok{--b-tone:var(--ok);--b-fg:#fff}
+/* brillo que cruza al pasar el mouse */
+.btn:not(.sec):not(.ghost):not(.bad)::before{
+  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;border-radius:inherit;
+  background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.32) 50%,transparent 70%);
+  transform:translateX(-110%);transition:transform 700ms var(--b-ease);
+}
+
+/* ---------- Tonal ---------- */
+.btn.sec{--b-bg:color-mix(in srgb,var(--pri) 13%,var(--card));--b-fg:color-mix(in srgb,var(--pri) 88%,var(--text));
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--pri) 16%,transparent)}
+/* ---------- Contorno suave ---------- */
+.btn.ghost{--b-bg:var(--card);--b-fg:var(--text);
+  box-shadow:inset 0 0 0 1px var(--line),0 1px 2px rgba(16,24,40,.05)}
+/* ---------- Peligro tonal ---------- */
+.btn.bad{--b-bg:color-mix(in srgb,var(--bad) 11%,var(--card));--b-fg:var(--bad);
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--bad) 22%,transparent)}
+.btn.ghost.b-danger{--b-fg:var(--bad)}
+
+/* ---------- Tamaños ---------- */
+.btn.block{display:flex;width:100%;margin-top:10px}
+.btn.smb{min-height:var(--b-h-sm);padding:0 14px;font-size:13.5px;gap:6px}
+.btn.smb svg{width:16px;height:16px}
+.btn.big-ok{min-height:var(--b-h-lg);font-size:17px;padding:0 24px}
+.btn.big-ok svg{width:20px;height:20px}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.btns .btn{flex:1 1 auto;margin-top:0}
+.btns .btn.block{margin-top:0}
+
+/* ---------- Flecha de avance en las acciones principales ---------- */
+.btn .b-ar{display:grid;place-items:center;width:28px;height:28px;margin:0 -10px 0 2px;border-radius:50%;
+  background:rgba(255,255,255,.2);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22);
+  transition:transform 220ms var(--b-ease)}
+.btn .b-ar svg{width:16px;height:16px}
+.btn.big-ok .b-ar{width:32px;height:32px}
+.btn.block .b-ar{position:absolute;right:10px;top:50%;margin:-14px 0 0}
+.btn.block.big-ok .b-ar{margin-top:-16px}
+.btn.block:has(.b-ar){padding-inline:48px}
+
+/* ---------- Interacción ---------- */
+@media (hover:hover) and (pointer:fine){
+  .btn:not(.sec):not(.ghost):not(.bad):hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.3),inset 0 -1px 0 rgba(0,0,0,.12),0 16px 28px -14px color-mix(in srgb,var(--b-tone) 95%,transparent),0 3px 6px -3px color-mix(in srgb,var(--b-tone) 55%,transparent)}
+  .btn:not(.sec):not(.ghost):not(.bad):hover::before{transform:translateX(110%)}
+  .btn:hover .b-ar{transform:translateX(3px)}
+  .btn.sec:hover{--b-bg:color-mix(in srgb,var(--pri) 19%,var(--card))}
+  .btn.ghost:hover{--b-bg:color-mix(in srgb,var(--text) 4%,var(--card));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--text) 18%,var(--line)),0 2px 6px rgba(16,24,40,.06)}
+  .btn.bad:hover{--b-bg:color-mix(in srgb,var(--bad) 17%,var(--card))}
+  .btn.ghost.b-danger:hover{--b-bg:color-mix(in srgb,var(--bad) 8%,var(--card));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--bad) 30%,var(--line))}
+}
+.btn:active{transform:scale(.97)}
+.btn:active .b-ar{transform:translateX(4px)}
+.btn:focus{outline:none}
+.btn:focus-visible{box-shadow:var(--b-ring)}
+
+/* onda desde el punto donde se toca */
+.btn .b-rip{position:absolute;z-index:0;border-radius:50%;pointer-events:none;width:12px;height:12px;margin:-6px 0 0 -6px;
+  background:currentColor;opacity:.22;transform:scale(0);animation:b-rip 520ms var(--b-ease) forwards}
+.btn:not(.sec):not(.ghost):not(.bad) .b-rip{background:#fff;opacity:.3}
+@keyframes b-rip{to{transform:scale(var(--b-rs,30));opacity:0}}
+
+/* ---------- Cargando (mientras el servidor responde) ---------- */
+.btn.is-busy{pointer-events:none;cursor:progress}
+.btn.is-busy > :not(.b-spin):not(.b-rip){opacity:0;transform:scale(.96);filter:blur(2px);transition:opacity 160ms ease,transform 160ms var(--b-ease),filter 160ms ease}
+.btn .b-spin{position:absolute;inset:0;z-index:2;display:grid;place-items:center;opacity:0;transition:opacity 160ms ease}
+.btn.is-busy .b-spin{opacity:1}
+.btn .b-spin i{width:20px;height:20px;border-radius:50%;border:2.5px solid currentColor;border-right-color:transparent;opacity:.9;animation:b-giro .6s linear infinite}
+.btn.smb .b-spin i{width:16px;height:16px;border-width:2px}
+@keyframes b-giro{to{transform:rotate(360deg)}}
+/* texto suelto dentro del botón: se envuelve en .b-tx para poder ocultarlo */
+.btn .b-tx{display:inline}
+
+/* ---------- Deshabilitado ---------- */
+.btn:disabled,.btn[aria-disabled="true"]{opacity:.5;pointer-events:none;box-shadow:none;filter:saturate(.6)}
+
+/* ---------- Contextos especiales ---------- */
+.codigo6 .btns .btn{--b-bg:rgba(255,255,255,.16);--b-fg:#fff;background:rgba(255,255,255,.16);box-shadow:inset 0 0 0 1px rgba(255,255,255,.3)}
+.codigo6 .btns .btn::before{display:none}
+.top .btn{min-height:38px}
+
+/* ---------- Confirmaciones (reemplazan las ventanas del navegador) ---------- */
+.b-conf{text-align:center;padding-top:4px}
+.b-conf .b-conf-ic{display:grid;place-items:center;width:56px;height:56px;margin:0 auto 12px;border-radius:18px;
+  background:color-mix(in srgb,var(--b-c,var(--pri)) 13%,var(--card));color:var(--b-c,var(--pri));
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--b-c,var(--pri)) 22%,transparent)}
+.b-conf .b-conf-ic svg{width:26px;height:26px}
+.b-conf p{margin:0 0 4px;color:var(--muted);line-height:1.5}
+.b-conf .btns{flex-direction:column-reverse;gap:8px;margin-top:18px}
+@media (min-width:520px){.b-conf .btns{flex-direction:row-reverse}}
+
+/* ---------- Menos movimiento ---------- */
+@media (prefers-reduced-motion:reduce){
+  .btn,.btn .b-ar{transition:background-color 160ms ease,box-shadow 160ms ease,opacity 160ms ease}
+  .btn:active,.btn:active .b-ar,.btn:hover .b-ar{transform:none}
+  .btn::before,.btn .b-rip{display:none}
+  .btn .b-spin i{animation-duration:1.4s}
+}
+
+/* ---------- Modo oscuro: texto oscuro sobre verde claro (contraste) ---------- */
+@media (prefers-color-scheme:dark){.btn.ok{--b-fg:#04210f}}

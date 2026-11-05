@@ -1,0 +1,278 @@
+rules_version = '2';
+// =====================================================================
+// GateWise · Reglas de seguridad de Cloud Firestore (producción)
+//
+// Estructura:
+//   /plataforma/publico          nombres y estado de residenciales (login)
+//   /plataforma/privado          datos del negocio (solo el dueño de la app)
+//   /solicitudesRes/{id}         "Quiero la app para mi residencial" (público, solo crear)
+//   /tokens/{uid}                tokens de notificaciones push (solo el propio usuario)
+//   /r/{rid}                     una residencial; todo su contenido vive debajo
+//     /miembros/{uid}            perfil público del usuario (rol, casa, nombre)
+//     /perfiles/{uid}            datos privados (teléfono, DUI, correo, usuario)
+//     /casas/{id}  /casasPriv/{id}   casa pública / datos privados de la casa
+//     /cuotas /pagos /pases /autorizaciones /reclamos /notifs ...
+//     /meta/{clave}              configuración y datos generales
+//     /auditoria/{id}            registro de cambios (solo lectura admin)
+//
+// Cada documento de datos tiene la forma:
+//   { d: "<JSON del registro>", _u: <uid de quien escribió>, _t: <hora del servidor>,
+//     ...campos promovidos (casaId, estado, monto, userId...) }
+// Los campos promovidos son los que validan estas reglas; la app los usa
+// como fuente de verdad sobre el JSON.
+//
+// Los roles y la residencial vienen en el token (custom claims) que ponen
+// las Cloud Functions: token.rid, token.rol, token.casa.
+// =====================================================================
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------- Quién es quién ----------
+    function signedIn() { return request.auth != null; }
+    function isOwner() {
+      return signedIn() && request.auth.token.email == 'msalinas8811@gmail.com';
+    }
+    function inRes(rid) { return signedIn() && request.auth.token.rid == rid; }
+    function rol(rid) { return inRes(rid) ? request.auth.token.rol : ''; }
+    function member(rid) { return isOwner() || inRes(rid); }
+    function isAdmin(rid) { return isOwner() || rol(rid) == 'admin'; }
+    function isVig(rid) { return rol(rid) == 'vigilante'; }
+    function isCob(rid) { return rol(rid) == 'cobrador'; }
+    function isRes(rid) { return rol(rid) == 'residente'; }
+    function isVecino(rid) { return rol(rid) in ['residente', 'inquilino']; }
+    function isVend(rid) { return rol(rid) == 'vendedor'; }
+    function myCasa() { return request.auth.token.get('casa', ''); }
+    function hasCasa() { return myCasa() is string && myCasa().size() > 0; }
+    function uid() { return request.auth.uid; }
+
+    // ---------- Forma de los documentos ----------
+    function nd() { return request.resource.data; }   // nuevo
+    function od() { return resource.data; }           // existente
+    // Sobre: siempre trae el JSON, quién escribió y la hora del servidor
+    function sobre() {
+      return nd().d is string && nd().d.size() < 1000000
+        && nd()._u == uid() && nd()._t == request.time;
+    }
+    function sinCambio(campos) {
+      return !nd().diff(od()).affectedKeys().hasAny(campos);
+    }
+    function ownNew(rid) { return inRes(rid) && hasCasa() && nd().casaId == myCasa(); }
+    function ownOld(rid) { return inRes(rid) && hasCasa() && od().casaId == myCasa(); }
+
+    // ---------- Plataforma ----------
+    match /plataforma/publico {
+      allow read: if true;
+      allow write: if isOwner();
+    }
+    match /plataforma/{doc} {
+      allow read, write: if isOwner();
+    }
+    match /solicitudesRes/{id} {
+      allow create: if nd().keys().hasOnly(['d', '_t'])
+        && nd().d is string && nd().d.size() < 20000 && nd()._t == request.time;
+      allow read, update, delete: if isOwner();
+    }
+    match /tokens/{u} {
+      allow read: if false;
+      allow write: if signedIn() && uid() == u;
+    }
+
+    // ---------- Una residencial ----------
+    match /r/{rid} {
+      allow read: if member(rid);
+      allow write: if isOwner();
+
+      match /meta/{clave} {
+        allow read: if member(rid);
+        allow write: if isAdmin(rid)
+          || (clave in ['recordados', 'tiendaSeq'] && inRes(rid) && sobre())
+          || (clave == 'reciboSeq' && isCob(rid) && sobre());
+      }
+
+      // Usuarios: los crean y borran solo las Cloud Functions
+      match /miembros/{u} {
+        allow read: if member(rid);
+        allow create, delete: if false;
+        allow update: if sobre() && (
+          (isAdmin(rid) && sinCambio(['rol', 'casaId']))
+          || (inRes(rid) && uid() == u && sinCambio(['rol', 'casaId', 'activo', 'padreId']))
+          || (isRes(rid) && od().padreId == uid() && sinCambio(['rol', 'casaId', 'padreId']))
+        );
+      }
+      match /perfiles/{u} {
+        allow read: if isAdmin(rid) || (inRes(rid) && (uid() == u || isVig(rid) || isCob(rid)))
+          || (isRes(rid) && get(/databases/$(database)/documents/r/$(rid)/miembros/$(u)).data.padreId == uid());
+        allow write: if sobre() && (isAdmin(rid) || (inRes(rid) && uid() == u)
+          || (isRes(rid) && get(/databases/$(database)/documents/r/$(rid)/miembros/$(u)).data.padreId == uid()));
+      }
+
+      // Casas
+      match /casas/{id} {
+        allow read: if member(rid);
+        allow write: if isAdmin(rid);
+      }
+      match /casasPriv/{id} {
+        allow read: if isAdmin(rid) || isVig(rid) || isCob(rid) || (inRes(rid) && id == myCasa());
+        allow write: if isAdmin(rid);
+      }
+
+      // Finanzas
+      match /cuotas/{id} {
+        allow read: if isAdmin(rid) || isCob(rid) || ownOld(rid);
+        allow create, delete: if isAdmin(rid);
+        allow update: if isAdmin(rid) || (isCob(rid) && sobre())
+          || (isRes(rid) && ownOld(rid) && sobre()
+              && sinCambio(['casaId', 'periodo', 'monto'])
+              && od().estado in ['pendiente', 'revision'] && nd().estado == 'revision');
+      }
+      match /pagos/{id} {
+        allow read: if isAdmin(rid) || isCob(rid) || ownOld(rid);
+        allow create: if isAdmin(rid) || (isCob(rid) && sobre())
+          || (isRes(rid) && ownNew(rid) && sobre() && nd().estado == 'revision');
+        allow update: if isAdmin(rid) || (isCob(rid) && sobre());
+        allow delete: if isAdmin(rid);
+      }
+      match /visitasCobro/{id} {
+        allow read: if isAdmin(rid) || isCob(rid) || ownOld(rid);
+        allow create: if isAdmin(rid) || (isRes(rid) && ownNew(rid) && sobre());
+        allow update: if isAdmin(rid) || (isCob(rid) && sobre())
+          || (isRes(rid) && ownOld(rid) && sobre() && sinCambio(['casaId', 'cobradorId']));
+        allow delete: if isAdmin(rid);
+      }
+      match /cierres/{id} {
+        allow read: if isAdmin(rid) || isCob(rid);
+        allow create: if isAdmin(rid) || (isCob(rid) && sobre() && nd().cobradorId == uid());
+        allow update: if isAdmin(rid) || (isCob(rid) && sobre() && od().cobradorId == uid() && sinCambio(['cobradorId', 'estado']));
+        allow delete: if isAdmin(rid);
+      }
+
+      // Seguridad / portería
+      match /pases/{id} {
+        allow read: if isAdmin(rid) || isVig(rid) || ownOld(rid);
+        allow create: if isAdmin(rid) || (isVecino(rid) && ownNew(rid) && sobre());
+        allow update: if isAdmin(rid) || (isVig(rid) && sobre() && sinCambio(['casaId']))
+          || (isVecino(rid) && ownOld(rid) && sobre() && sinCambio(['casaId']));
+        allow delete: if isAdmin(rid) || (isVecino(rid) && ownOld(rid));
+      }
+      match /autorizaciones/{id} {
+        allow read: if isAdmin(rid) || isVig(rid) || ownOld(rid);
+        allow create: if isAdmin(rid) || (isVig(rid) && sobre());
+        allow update: if isAdmin(rid) || (isVig(rid) && sobre())
+          || (isVecino(rid) && ownOld(rid) && sobre() && sinCambio(['casaId']));
+        allow delete: if isAdmin(rid);
+      }
+      match /acadIngresos/{id} {
+        allow read: if isAdmin(rid) || isVig(rid);
+        allow write: if isAdmin(rid) || (isVig(rid) && sobre());
+      }
+
+      // Comunicación
+      match /avisos/{id} {
+        allow read: if member(rid);
+        allow write: if isAdmin(rid);
+      }
+      match /reclamos/{id} {
+        allow read: if isAdmin(rid) || ownOld(rid);
+        allow create: if isAdmin(rid) || (isVecino(rid) && ownNew(rid) && sobre());
+        allow update: if isAdmin(rid) || (isVecino(rid) && ownOld(rid) && sobre() && sinCambio(['casaId']));
+        allow delete: if isAdmin(rid);
+      }
+      match /notifs/{id} {
+        allow read: if isAdmin(rid) || (inRes(rid) && od().userId == uid());
+        allow create: if member(rid) && (isOwner() || sobre()) && nd().userId is string;
+        allow update: if isAdmin(rid) || (inRes(rid) && od().userId == uid() && sobre() && sinCambio(['userId']));
+        allow delete: if isAdmin(rid) || (inRes(rid) && od().userId == uid());
+      }
+      match /solicitudes/{id} {
+        allow read, update, delete: if isAdmin(rid);
+        allow create: if false; // solo la Cloud Function de registro
+      }
+
+      // Comunidad: todos los vecinos leen, la administración escribe
+      match /votaciones/{id} { allow read: if member(rid); allow write: if isAdmin(rid); }
+      match /eventos/{id}    { allow read: if member(rid); allow write: if isAdmin(rid); }
+      match /areas/{id}      { allow read: if member(rid); allow write: if isAdmin(rid); }
+      match /academias/{id}  { allow read: if member(rid); allow write: if isAdmin(rid); }
+      match /alumnos/{id} {
+        allow read: if isAdmin(rid) || (isVig(rid) && od().tipo == 'ext') || ownOld(rid);
+        allow write: if isAdmin(rid);
+      }
+      match /acadPagos/{id} {
+        allow read: if isAdmin(rid) || ownOld(rid);
+        allow write: if isAdmin(rid);
+      }
+      match /resenas/{id} {
+        allow read: if member(rid);
+        allow create: if isAdmin(rid) || (isVecino(rid) && sobre() && nd().userId == uid());
+        allow update: if isAdmin(rid)
+          || (inRes(rid) && od().userId == uid() && sobre() && sinCambio(['userId', 'tipo', 'ref']))
+          || (isVend(rid) && od().tipo == 'tienda' && od().ref == uid() && sobre() && sinCambio(['userId', 'tipo', 'ref']));
+        allow delete: if isAdmin(rid) || (inRes(rid) && od().userId == uid());
+      }
+
+      // Tienda entre vecinos
+      match /tiendaProductos/{id} {
+        allow read: if member(rid);
+        allow create: if isAdmin(rid) || (isVend(rid) && sobre() && nd().vendedorId == uid());
+        allow update, delete: if isAdmin(rid) || (isVend(rid) && od().vendedorId == uid()
+          && (request.method == 'delete' || (sobre() && nd().vendedorId == uid())));
+      }
+      match /tiendaPedidos/{id} {
+        allow read: if isAdmin(rid) || ownOld(rid) || (isVend(rid) && od().vendedorId == uid());
+        allow create: if isAdmin(rid) || (isVecino(rid) && ownNew(rid) && sobre() && nd().compradorId == uid());
+        allow update: if isAdmin(rid) || (sobre() && sinCambio(['casaId', 'vendedorId', 'compradorId'])
+          && (ownOld(rid) || (isVend(rid) && od().vendedorId == uid())));
+        allow delete: if isAdmin(rid);
+      }
+
+      // Registros por casa (una clave por casa para no pisarse)
+      match /kvVoto/{k} {          // vto_<votación>_<casa>: qué casa ya votó
+        allow read: if member(rid);
+        allow write: if isAdmin(rid) || (isRes(rid) && hasCasa() && sobre()
+          && k.matches('vto_.+_' + myCasa()) && nd().casaId == myCasa());
+      }
+      match /kvBoleta/{k} {        // vtb_<votación>_<azar>: boleta secreta, sin casa
+        allow read: if member(rid);
+        allow create: if isAdmin(rid) || (isRes(rid) && sobre() && k.matches('vtb_.+'));
+        allow update, delete: if isAdmin(rid);
+      }
+      match /kvRsvp/{k} {          // evr_<evento>_<casa>: confirmación de asistencia
+        allow read: if member(rid);
+        allow write: if isAdmin(rid) || (isVecino(rid) && hasCasa() && sobre()
+          && k.matches('evr_.+_' + myCasa()) && nd().casaId == myCasa());
+      }
+      match /kvEquipo/{k} {        // evq_<evento>_<equipo>: inscripción de equipos
+        allow read: if member(rid);
+        allow create: if isAdmin(rid) || (isVecino(rid) && sobre() && nd().capId == uid());
+        allow update: if isAdmin(rid) || (isVecino(rid) && sobre() && od().capId == uid() && sinCambio(['capId', 'estado']));
+        allow delete: if isAdmin(rid);
+      }
+      match /kvReserva/{k} {       // rsv_<id>: reservas de áreas comunes
+        allow read: if member(rid);
+        allow create: if isAdmin(rid) || (isVecino(rid) && ownNew(rid) && sobre()
+          && (nd().estado == 'pendiente'
+              || (nd().estado == 'aprobada'
+                  && get(/databases/$(database)/documents/r/$(rid)/areas/$(nd().areaId)).data.aprobacion == false)));
+        allow update: if isAdmin(rid) || (isVecino(rid) && ownOld(rid) && sobre()
+          && sinCambio(['casaId', 'areaId'])
+          && (nd().estado == 'cancelada' || sinCambio(['estado'])));
+        allow delete: if isAdmin(rid);
+      }
+      match /kvSolAcad/{k} {       // acs_<id>: solicitudes de inscripción a academias
+        allow read: if isAdmin(rid) || ownOld(rid);
+        allow create: if isAdmin(rid) || (isVecino(rid) && ownNew(rid) && sobre() && nd().estado == 'pendiente');
+        allow update, delete: if isAdmin(rid);
+      }
+
+      match /auditoria/{id} {
+        allow read: if isAdmin(rid);
+        allow write: if false;
+      }
+    }
+
+    // Todo lo que no esté arriba queda cerrado
+    match /{path=**} {
+      allow read, write: if false;
+    }
+  }
+}
