@@ -1,0 +1,35 @@
+GATEWISE · CÓMO SUBIRLA A GITHUB (versión 2026.11.05-25)
+=======================================================
+
+La carpeta "gatewise-github" tiene TODO lo necesario, sin subcarpetas:
+
+  index.html ............... la app completa (diseño y funciones en un solo archivo)
+  config.js ................ configuración (modo demo / producción)
+  sw.js .................... para que funcione sin internet y se actualice sola
+  manifest.json ............ para instalarla como app en el teléfono
+  icon-192.png, icon-512.png  íconos
+  firebase-messaging-sw.js . notificaciones (modo producción)
+  privacidad.html .......... política de privacidad
+  eliminar-cuenta.html ..... cómo eliminar la cuenta
+
+PASOS
+1. Descomprime el zip en tu computadora.
+2. Entra a tu repositorio en github.com.
+3. Toca "Add file" › "Upload files".
+4. Abre la carpeta "gatewise-github", selecciona TODOS los archivos
+   (Ctrl + A en Windows, Cmd + A en Mac) y arrástralos a la página de GitHub.
+   Arrastra los archivos, no la carpeta, para que queden en la raíz del repositorio.
+5. Abajo toca "Commit changes".
+6. Espera 1 o 2 minutos y abre tu página.
+   Si todavía ves la versión anterior: Menú › "Buscar actualización",
+   o cierra y vuelve a abrir la app.
+   Abajo de la pantalla de ingreso debe decir: versión 2026.11.05-25.
+
+SI ALGO NO SE VE BIEN
+- Si quedaron en el repositorio carpetas viejas "css" o "js", o un "prod.js" suelto,
+  no estorban; si quieres, bórralas.
+- Si GitHub te muestra una X roja en "Actions": es el archivo
+  .github/workflows/deploy.yml de la publicación en Firebase (modo producción),
+  que todavía no está configurado. Bórralo del repositorio por ahora;
+  no afecta a la página.
+- En GitHub › Settings › Pages debe estar: "Deploy from a branch", rama "main", carpeta "/ (root)".
