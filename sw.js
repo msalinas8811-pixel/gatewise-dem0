@@ -1,13 +1,5 @@
-const CACHE = 'gatewise-v25';
-const ASSETS = [
-  './',
-  './index.html',
-  './config.js',
-  './manifest.json',
-  './icon-192.png',
-  './icon-512.png',
-  './firebase-messaging-sw.js',
-];
+const CACHE = 'gatewise-v22';
+const ASSETS = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './config.js'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS.map(u => new Request(u, { cache: 'reload' })))));

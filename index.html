@@ -10,9 +10,7 @@
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <title>GateWise</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
-<style data-origen="css/base.css">
-/* GateWise · estilos base: colores, tipografía, tarjetas, formularios */
+<style>
 :root{--bg:#f3f5f7;--card:#fff;--text:#13202a;--muted:#64748b;--line:#e3e8ee;--pri:#0f766e;--onpri:#fff;--pri2:#d5f5ef;--ok:#15803d;--okbg:#dcfce7;--warn:#a16207;--warnbg:#fef3c7;--bad:#b91c1c;--badbg:#fee2e2;--info:#1d4ed8;--infobg:#dbeafe;--shadow:0 1px 2px rgba(15,23,42,.06)}
 @media (prefers-color-scheme:dark){:root{--bg:#0b1218;--card:#141e27;--text:#e6edf3;--muted:#94a3b8;--line:#243241;--pri:#2dd4bf;--onpri:#04211f;--pri2:#0f3d3a;--ok:#4ade80;--okbg:#10301e;--warn:#fbbf24;--warnbg:#382808;--bad:#f87171;--badbg:#3b1515;--info:#93c5fd;--infobg:#132a4a;--shadow:none}}
 *{box-sizing:border-box}
@@ -81,10 +79,9 @@ textarea{min-height:90px;resize:vertical}
 .combo{position:relative;margin-top:4px}.combo input{margin-top:0}.combo-list{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:40;background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.15);max-height:280px;overflow:auto;padding:4px}
 .combo-it{display:flex;align-items:center;gap:8px;width:100%;border:0;background:none;padding:10px;border-radius:8px;text-align:left;color:var(--text);font-weight:600}.combo-it:hover,.combo-it:focus{background:var(--pri2)}.combo-it small{margin-left:auto;color:var(--muted);font-weight:400;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:40%}
 .note{font-size:13px;color:var(--muted);margin:6px 0 12px}
-
 </style>
-<style data-origen="css/diseno.css">
-/* GateWise · capa de diseño (UI 2): sombras, íconos, barra superior y menú */
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<style id="ui2">
 /* ===== GateWise UI 2: tipografía, componentes, menú móvil y escritorio ===== */
 :root{--bg:#f4f6f8;--line:#e4e9ef;--shadow:0 1px 2px rgba(16,24,40,.04),0 2px 8px rgba(16,24,40,.05);--shadow-lg:0 24px 56px rgba(16,24,40,.2);--side:272px;
   --c-teal:#0f766e;--c-blue:#2563eb;--c-indigo:#4f46e5;--c-violet:#7c3aed;--c-pink:#db2777;--c-red:#dc2626;--c-orange:#ea580c;--c-amber:#b45309;--c-green:#15803d;--c-sky:#0284c7;--c-slate:#475569}
@@ -207,311 +204,12 @@ button:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
 .hero-f .hf-ic{width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.14);display:grid;place-items:center;flex:none}
 .hero-f b{display:block;font-size:15px}.hero-f span{font-size:14px;opacity:.8}
 .auth-hero small{opacity:.6}
-
-</style>
-<style id="botones-css" data-origen="css/botones.css">
-/* =====================================================================
-   GateWise · SISTEMA DE BOTONES (UI 6)
-   Reemplaza los estilos de botón anteriores (js/app/23-botones.js los retira
-   al arrancar), para que haya una sola fuente de verdad.
-
-   Variantes (las mismas clases de siempre):
-     .btn            principal: píldora con degradado y brillo de color
-     .btn.ok         confirmar / éxito (verde)
-     .btn.sec        tonal: fondo suave del color de la marca
-     .btn.ghost      contorno suave sobre la tarjeta
-     .btn.bad        peligro tonal (rojo suave)
-   Tamaños: .smb (compacto)  ·  .big-ok (acción grande)  ·  .block (ancho completo)
-   Estados: :hover · :active (se hunde) · :focus-visible (anillo) ·
-            .is-busy (cargando) · :disabled
-   ===================================================================== */
-:root{
-  --b-h:48px;--b-h-sm:36px;--b-h-lg:58px;
-  --b-ease:cubic-bezier(.23,1,.32,1);
-  --b-ring:0 0 0 3px var(--card),0 0 0 5px color-mix(in srgb,var(--pri) 55%,transparent);
-}
-
-.btn{
-  --b-bg:var(--pri);--b-fg:var(--onpri);--b-tone:var(--pri);
-  position:relative;isolation:isolate;overflow:hidden;
-  display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  min-height:var(--b-h);padding:0 22px;margin:0;
-  border:0;border-radius:999px;
-  font:inherit;font-size:15px;font-weight:650;letter-spacing:-.006em;line-height:1.15;
-  color:var(--b-fg);text-decoration:none;text-align:center;white-space:normal;
-  background:var(--b-bg);
-  cursor:pointer;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation;
-  transition:transform 160ms var(--b-ease),box-shadow 220ms ease,background-color 160ms ease,color 160ms ease,opacity 160ms ease;
-}
-.btn svg{flex:none;width:18px;height:18px}
-.btn > *{position:relative;z-index:1}
-
-/* ---------- Relleno (principal y confirmar) ---------- */
-.btn:not(.sec):not(.ghost):not(.bad){
-  background:
-    linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,0) 55%),
-    linear-gradient(135deg,color-mix(in srgb,var(--b-tone) 82%,#fff) 0%,var(--b-tone) 48%,color-mix(in srgb,var(--b-tone) 78%,#000) 100%);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.28),inset 0 -1px 0 rgba(0,0,0,.12),0 10px 22px -12px color-mix(in srgb,var(--b-tone) 90%,transparent),0 2px 4px -2px color-mix(in srgb,var(--b-tone) 50%,transparent);
-}
-.btn.ok{--b-tone:var(--ok);--b-fg:#fff}
-/* brillo que cruza al pasar el mouse */
-.btn:not(.sec):not(.ghost):not(.bad)::before{
-  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;border-radius:inherit;
-  background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.32) 50%,transparent 70%);
-  transform:translateX(-110%);transition:transform 700ms var(--b-ease);
-}
-
-/* ---------- Tonal ---------- */
-.btn.sec{--b-bg:color-mix(in srgb,var(--pri) 13%,var(--card));--b-fg:color-mix(in srgb,var(--pri) 88%,var(--text));
-  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--pri) 16%,transparent)}
-/* ---------- Contorno suave ---------- */
-.btn.ghost{--b-bg:var(--card);--b-fg:var(--text);
-  box-shadow:inset 0 0 0 1px var(--line),0 1px 2px rgba(16,24,40,.05)}
-/* ---------- Peligro tonal ---------- */
-.btn.bad{--b-bg:color-mix(in srgb,var(--bad) 11%,var(--card));--b-fg:var(--bad);
-  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--bad) 22%,transparent)}
-.btn.ghost.b-danger{--b-fg:var(--bad)}
-
-/* ---------- Tamaños ---------- */
-.btn.block{display:flex;width:100%;margin-top:10px}
-.btn.smb{min-height:var(--b-h-sm);padding:0 14px;font-size:13.5px;gap:6px}
-.btn.smb svg{width:16px;height:16px}
-.btn.big-ok{min-height:var(--b-h-lg);font-size:17px;padding:0 24px}
-.btn.big-ok svg{width:20px;height:20px}
-.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
-.btns .btn{flex:1 1 auto;margin-top:0}
-.btns .btn.block{margin-top:0}
-
-/* ---------- Flecha de avance en las acciones principales ---------- */
-.btn .b-ar{display:grid;place-items:center;width:28px;height:28px;margin:0 -10px 0 2px;border-radius:50%;
-  background:rgba(255,255,255,.2);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22);
-  transition:transform 220ms var(--b-ease)}
-.btn .b-ar svg{width:16px;height:16px}
-.btn.big-ok .b-ar{width:32px;height:32px}
-.btn.block .b-ar{position:absolute;right:10px;top:50%;margin:-14px 0 0}
-.btn.block.big-ok .b-ar{margin-top:-16px}
-.btn.block:has(.b-ar){padding-inline:48px}
-
-/* ---------- Interacción ---------- */
-@media (hover:hover) and (pointer:fine){
-  .btn:not(.sec):not(.ghost):not(.bad):hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.3),inset 0 -1px 0 rgba(0,0,0,.12),0 16px 28px -14px color-mix(in srgb,var(--b-tone) 95%,transparent),0 3px 6px -3px color-mix(in srgb,var(--b-tone) 55%,transparent)}
-  .btn:not(.sec):not(.ghost):not(.bad):hover::before{transform:translateX(110%)}
-  .btn:hover .b-ar{transform:translateX(3px)}
-  .btn.sec:hover{--b-bg:color-mix(in srgb,var(--pri) 19%,var(--card))}
-  .btn.ghost:hover{--b-bg:color-mix(in srgb,var(--text) 4%,var(--card));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--text) 18%,var(--line)),0 2px 6px rgba(16,24,40,.06)}
-  .btn.bad:hover{--b-bg:color-mix(in srgb,var(--bad) 17%,var(--card))}
-  .btn.ghost.b-danger:hover{--b-bg:color-mix(in srgb,var(--bad) 8%,var(--card));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--bad) 30%,var(--line))}
-}
-.btn:active{transform:scale(.97)}
-.btn:active .b-ar{transform:translateX(4px)}
-.btn:focus{outline:none}
-.btn:focus-visible{box-shadow:var(--b-ring)}
-
-/* onda desde el punto donde se toca */
-.btn .b-rip{position:absolute;z-index:0;border-radius:50%;pointer-events:none;width:12px;height:12px;margin:-6px 0 0 -6px;
-  background:currentColor;opacity:.22;transform:scale(0);animation:b-rip 520ms var(--b-ease) forwards}
-.btn:not(.sec):not(.ghost):not(.bad) .b-rip{background:#fff;opacity:.3}
-@keyframes b-rip{to{transform:scale(var(--b-rs,30));opacity:0}}
-
-/* ---------- Cargando (mientras el servidor responde) ---------- */
-.btn.is-busy{pointer-events:none;cursor:progress}
-.btn.is-busy > :not(.b-spin):not(.b-rip){opacity:0;transform:scale(.96);filter:blur(2px);transition:opacity 160ms ease,transform 160ms var(--b-ease),filter 160ms ease}
-.btn .b-spin{position:absolute;inset:0;z-index:2;display:grid;place-items:center;opacity:0;transition:opacity 160ms ease}
-.btn.is-busy .b-spin{opacity:1}
-.btn .b-spin i{width:20px;height:20px;border-radius:50%;border:2.5px solid currentColor;border-right-color:transparent;opacity:.9;animation:b-giro .6s linear infinite}
-.btn.smb .b-spin i{width:16px;height:16px;border-width:2px}
-@keyframes b-giro{to{transform:rotate(360deg)}}
-/* texto suelto dentro del botón: se envuelve en .b-tx para poder ocultarlo */
-.btn .b-tx{display:inline}
-
-/* ---------- Deshabilitado ---------- */
-.btn:disabled,.btn[aria-disabled="true"]{opacity:.5;pointer-events:none;box-shadow:none;filter:saturate(.6)}
-
-/* ---------- Contextos especiales ---------- */
-.codigo6 .btns .btn{--b-bg:rgba(255,255,255,.16);--b-fg:#fff;background:rgba(255,255,255,.16);box-shadow:inset 0 0 0 1px rgba(255,255,255,.3)}
-.codigo6 .btns .btn::before{display:none}
-.top .btn{min-height:38px}
-
-/* ---------- Confirmaciones (reemplazan las ventanas del navegador) ---------- */
-.b-conf{text-align:center;padding-top:4px}
-.b-conf .b-conf-ic{display:grid;place-items:center;width:56px;height:56px;margin:0 auto 12px;border-radius:18px;
-  background:color-mix(in srgb,var(--b-c,var(--pri)) 13%,var(--card));color:var(--b-c,var(--pri));
-  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--b-c,var(--pri)) 22%,transparent)}
-.b-conf .b-conf-ic svg{width:26px;height:26px}
-.b-conf p{margin:0 0 4px;color:var(--muted);line-height:1.5}
-.b-conf .btns{flex-direction:column-reverse;gap:8px;margin-top:18px}
-@media (min-width:520px){.b-conf .btns{flex-direction:row-reverse}}
-
-/* ---------- Menos movimiento ---------- */
-@media (prefers-reduced-motion:reduce){
-  .btn,.btn .b-ar{transition:background-color 160ms ease,box-shadow 160ms ease,opacity 160ms ease}
-  .btn:active,.btn:active .b-ar,.btn:hover .b-ar{transform:none}
-  .btn::before,.btn .b-rip{display:none}
-  .btn .b-spin i{animation-duration:1.4s}
-}
-
-/* ---------- Modo oscuro: texto oscuro sobre verde claro (contraste) ---------- */
-@media (prefers-color-scheme:dark){.btn.ok{--b-fg:#04210f}}
-
-</style>
-<style data-origen="css/residente.css">
-/* =====================================================================
-   GateWise · PANTALLAS DEL RESIDENTE (UI 7)
-   Pensadas también para personas mayores:
-   - letra más grande y con más contraste
-   - botones grandes (56 px o más), con ícono Y texto
-   - una acción por botón, con verbos claros ("Pagar mi cuota")
-   - movimiento suave y corto; nada se mueve solo
-   ===================================================================== */
-
-/* ---------- Lectura más cómoda para residentes e inquilinos ---------- */
-body.rol-vecino{--muted:#4b5b66}
-@media (prefers-color-scheme:dark){body.rol-vecino{--muted:#a9b7c2}}
-body.rol-vecino main.wrap{font-size:16.5px;line-height:1.5}
-body.rol-vecino main.wrap h2{font-size:27px;letter-spacing:-.02em}
-body.rol-vecino main.wrap h3{font-size:13.5px;margin-top:26px}
-body.rol-vecino main.wrap .sm{font-size:14.5px}
-body.rol-vecino main.wrap .item{min-height:66px;padding:14px 16px;border-radius:18px}
-body.rol-vecino main.wrap .item b{font-size:16.5px}
-body.rol-vecino main.wrap .item .mic{width:42px;height:42px;border-radius:13px}
-body.rol-vecino main.wrap .chip{font-size:12.5px;padding:4px 10px}
-body.rol-vecino .f input,body.rol-vecino .f select,body.rol-vecino .f textarea{font-size:17px;min-height:52px}
-body.rol-vecino .nav .ni svg{width:25px;height:25px}
-body.rol-vecino .nav button{font-size:12.5px;font-weight:650}
-body.rol-vecino .btn{font-size:16px}
-body.rol-vecino .btn.smb{font-size:14.5px;min-height:42px}
-
-/* ---------- Tamaño de letra (Menú › Tamaño de letra) ---------- */
-html.letra-1 main.wrap,html.letra-1 #ov .sheet{zoom:1.12}
-html.letra-2 main.wrap,html.letra-2 #ov .sheet{zoom:1.25}
-html.letra-1 .nav,html.letra-2 .nav{zoom:1.08}
-
-/* ---------- Portada ---------- */
-.r7-hero{position:relative;isolation:isolate;overflow:hidden;margin:-2px 0 18px;padding:20px 18px 18px;border-radius:26px;color:#fff;
-  background:radial-gradient(120% 90% at 100% 0%,color-mix(in srgb,var(--acc2,#2dd4bf) 55%,transparent),transparent 60%),
-             linear-gradient(150deg,color-mix(in srgb,var(--bar,var(--pri)) 92%,#fff) 0%,var(--bar,var(--pri)) 45%,color-mix(in srgb,var(--bar,var(--pri)) 70%,#000) 100%);
-  box-shadow:0 18px 40px -22px color-mix(in srgb,var(--bar,var(--pri)) 90%,transparent)}
-.r7-hero::after{content:"";position:absolute;z-index:-1;width:260px;height:260px;right:-90px;top:-110px;border-radius:50%;border:38px solid rgba(255,255,255,.07)}
-.r7-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
-.r7-top small{font-size:14px;opacity:.88}
-.r7-aa{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 13px;border:0;border-radius:999px;background:rgba(255,255,255,.16);color:#fff;font:inherit;font-size:14px;font-weight:700;box-shadow:inset 0 0 0 1px rgba(255,255,255,.28);cursor:pointer;transition:transform 160ms var(--b-ease),background-color 160ms ease}
-.r7-aa:active{transform:scale(.95)}
-.r7-aa b{font-size:17px;line-height:1}
-.r7-hero h2{margin:2px 0 2px;font-size:30px;line-height:1.12;letter-spacing:-.025em;color:#fff}
-.r7-hero .r7-casa{margin:0;font-size:15.5px;opacity:.92}
-
-/* estado de cuenta dentro de la portada */
-.r7-est{display:grid;grid-template-columns:auto 1fr auto;align-items:center;column-gap:14px;row-gap:2px;margin-top:16px;padding:14px 16px;border-radius:20px;background:rgba(255,255,255,.14);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
-.r7-est .r7-ei{grid-row:1/3;display:grid;place-items:center;width:48px;height:48px;border-radius:16px;background:#fff;color:var(--ok)}
-.r7-est.warn .r7-ei{color:#b45309}.r7-est.bad .r7-ei{color:#dc2626}.r7-est.info .r7-ei{color:#2563eb}
-.r7-est .r7-tt{font-size:18.5px;line-height:1.25;min-width:0}
-.r7-est .r7-monto{text-align:right;font-size:23px;font-weight:800;letter-spacing:-.02em;white-space:nowrap;line-height:1.1}
-.r7-est .r7-monto small{display:block;font-size:12px;font-weight:600;letter-spacing:.02em;opacity:.85}
-.r7-est .r7-sub{grid-column:2/-1;font-size:14.5px;opacity:.92;line-height:1.4}
-.r7-est:not(:has(.r7-monto)) .r7-tt{grid-column:2/-1}
-.r7-pagar{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:56px;margin-top:12px;border:0;border-radius:999px;
-  background:#fff;color:color-mix(in srgb,var(--bar,var(--pri)) 85%,#000);font:inherit;font-size:17px;font-weight:800;cursor:pointer;
-  box-shadow:0 10px 24px -12px rgba(0,0,0,.45);transition:transform 160ms var(--b-ease),box-shadow 200ms ease}
-.r7-pagar svg{width:22px;height:22px}
-.r7-pagar:active{transform:scale(.97)}
-.r7-est.bad + .r7-pagar{background:#fff;color:#b91c1c}
-
-/* ---------- "¿Qué necesitas hoy?": botones grandes ---------- */
-.r7-q{margin:22px 2px 10px;font-size:19px;font-weight:800;letter-spacing:-.01em;color:var(--text)}
-.r7-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.r7-t{--c:var(--c-teal,#0d9488);position:relative;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:12px;min-height:138px;padding:16px;
-  border:0;border-radius:22px;text-align:left;text-decoration:none;font:inherit;color:var(--text);cursor:pointer;
-  background:linear-gradient(160deg,color-mix(in srgb,var(--c) 14%,var(--card)) 0%,var(--card) 70%);
-  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c) 22%,var(--line)),0 1px 2px rgba(16,24,40,.05),0 10px 24px -18px color-mix(in srgb,var(--c) 70%,transparent);
-  transition:transform 180ms var(--b-ease),box-shadow 220ms ease;-webkit-tap-highlight-color:transparent}
-.r7-t .r7-ti{display:grid;place-items:center;width:54px;height:54px;border-radius:17px;color:#fff;
-  background:linear-gradient(145deg,color-mix(in srgb,var(--c) 78%,#fff),var(--c) 55%,color-mix(in srgb,var(--c) 80%,#000));
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 8px 16px -8px color-mix(in srgb,var(--c) 90%,transparent);transition:transform 220ms var(--b-ease)}
-.r7-t .r7-ti svg{width:27px;height:27px}
-.r7-t b{display:block;font-size:17px;line-height:1.25;letter-spacing:-.01em}
-.r7-t small{display:block;margin-top:3px;font-size:14px;line-height:1.35;color:var(--muted)}
-.r7-t .r7-bd{position:absolute;top:14px;right:14px;min-width:28px;height:28px;padding:0 8px;border-radius:999px;display:grid;place-items:center;
-  background:var(--bad);color:#fff;font-size:14px;font-weight:800;box-shadow:0 0 0 3px var(--card)}
-.r7-t:active{transform:scale(.97)}
-.r7-t:active .r7-ti{transform:scale(.92)}
-@media (hover:hover) and (pointer:fine){
-  .r7-t:hover{transform:translateY(-2px);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c) 35%,var(--line)),0 16px 30px -18px color-mix(in srgb,var(--c) 85%,transparent)}
-  .r7-t:hover .r7-ti{transform:rotate(-6deg) scale(1.05)}
-}
-.r7-t:focus-visible{outline:none;box-shadow:var(--b-ring)}
-.r7-t.c-teal{--c:var(--c-teal,#0d9488)}.r7-t.c-indigo{--c:var(--c-indigo,#4f46e5)}.r7-t.c-green{--c:var(--c-green,#16a34a)}
-.r7-t.c-amber{--c:var(--c-amber,#d97706)}.r7-t.c-violet{--c:var(--c-violet,#7c3aed)}.r7-t.c-orange{--c:var(--c-orange,#ea580c)}
-.r7-t.c-sky{--c:var(--c-sky,#0284c7)}.r7-t.c-pink{--c:var(--c-pink,#db2777)}
-
-/* emergencia: ancho completo, rojo, inconfundible */
-.r7-sos{grid-column:1/-1;flex-direction:row;align-items:center;min-height:84px;color:#fff;
-  background:linear-gradient(135deg,#ef4444,#dc2626 55%,#b91c1c);box-shadow:0 14px 28px -16px rgba(220,38,38,.9),inset 0 1px 0 rgba(255,255,255,.25)}
-.r7-sos .r7-ti{background:rgba(255,255,255,.2);box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}
-.r7-sos small{color:rgba(255,255,255,.92)}
-.r7-sos .r7-sos-ch{margin-left:auto;opacity:.9}
-.r7-sos .r7-ti::after{content:"";position:absolute;inset:-6px;border-radius:21px;border:2px solid rgba(255,255,255,.45);opacity:0;animation:r7-pulso 2.6s var(--b-ease) 1s 2}
-.r7-sos .r7-ti{position:relative}
-@keyframes r7-pulso{0%{opacity:.9;transform:scale(.9)}70%,100%{opacity:0;transform:scale(1.25)}}
-
-/* ---------- Visitas: elegir el tipo de pase ---------- */
-.r7-tipos{display:grid;gap:10px}
-.r7-tipo{display:flex;align-items:center;gap:14px;width:100%;min-height:76px;padding:12px 16px;border:0;border-radius:20px;text-align:left;font:inherit;color:var(--text);cursor:pointer;
-  background:var(--card);box-shadow:inset 0 0 0 1px var(--line),0 1px 2px rgba(16,24,40,.05);transition:transform 160ms var(--b-ease),box-shadow 200ms ease}
-.r7-tipo:active{transform:scale(.98)}
-.r7-tipo .ti-big{width:52px;height:52px;border-radius:16px;flex:none}
-.r7-tipo b{display:block;font-size:17px}.r7-tipo small{display:block;font-size:14px;color:var(--muted)}
-.r7-tipo > svg{margin-left:auto;color:var(--muted)}
-.tipos button small.r7-d{display:block;margin-top:2px;font-size:13px;font-weight:500;color:var(--muted);line-height:1.3}
-
-/* ---------- Visitas de hoy: vacío amable ---------- */
-.r7-vacio{display:flex;align-items:center;gap:14px;padding:16px;border-radius:20px;background:color-mix(in srgb,var(--pri) 6%,var(--card));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--pri) 14%,var(--line))}
-.r7-vacio .mic{width:46px;height:46px;border-radius:15px;flex:none}
-.r7-vacio p{margin:0;font-size:15.5px;color:var(--muted)}
-.r7-vacio p b{display:block;color:var(--text);font-size:16.5px}
-
-/* ---------- Mis pagos ---------- */
-.r7-pago{margin-bottom:16px;padding:18px;border-radius:24px;color:#fff;background:linear-gradient(145deg,#16a34a,#15803d);box-shadow:0 16px 32px -20px rgba(21,128,61,.9)}
-.r7-pago.warn{background:linear-gradient(145deg,#f59e0b,#d97706 60%,#b45309);box-shadow:0 16px 32px -20px rgba(180,83,9,.9)}
-.r7-pago.bad{background:linear-gradient(145deg,#ef4444,#dc2626 60%,#b91c1c);box-shadow:0 16px 32px -20px rgba(185,28,28,.9)}
-.r7-pago.info{background:linear-gradient(145deg,#3b82f6,#2563eb 60%,#1d4ed8);box-shadow:0 16px 32px -20px rgba(29,78,216,.9)}
-.r7-pago .r7-est{margin-top:0;background:transparent;box-shadow:none;padding:0;-webkit-backdrop-filter:none;backdrop-filter:none}
-.r7-pago .r7-pagar{color:#14532d}
-.r7-pago.warn .r7-pagar{color:#92400e}.r7-pago.bad .r7-pagar{color:#991b1b}
-.r7-pago .r7-sec{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:52px;margin-top:10px;border:0;border-radius:999px;background:rgba(255,255,255,.16);color:#fff;font:inherit;font-size:16px;font-weight:700;box-shadow:inset 0 0 0 1px rgba(255,255,255,.35);cursor:pointer;transition:transform 160ms var(--b-ease)}
-.r7-pago .r7-sec:active{transform:scale(.97)}
-.r7-pago .r7-sec svg{width:20px;height:20px}
-body.rol-vecino .chk{min-height:56px;font-size:16.5px}
-body.rol-vecino .chk input[type=checkbox]{width:24px;height:24px}
-
-/* ---------- Tamaño de letra: selector ---------- */
-.r7-letras{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:6px 0 4px}
-.r7-letras button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:96px;border:0;border-radius:18px;background:var(--card);color:var(--text);font:inherit;font-weight:700;cursor:pointer;
-  box-shadow:inset 0 0 0 1px var(--line);transition:transform 160ms var(--b-ease),box-shadow 160ms ease}
-.r7-letras button span{font-size:14px;color:var(--muted);font-weight:600}
-.r7-letras button.on{box-shadow:inset 0 0 0 2px var(--pri),0 8px 18px -12px var(--pri);background:color-mix(in srgb,var(--pri) 8%,var(--card))}
-.r7-letras button:active{transform:scale(.96)}
-
-/* ---------- Entrada escalonada (solo al abrir el inicio) ---------- */
-.r7-in > *{animation:r7-sube 380ms var(--b-ease) both}
-.r7-in > *:nth-child(2){animation-delay:40ms}.r7-in > *:nth-child(3){animation-delay:80ms}.r7-in > *:nth-child(4){animation-delay:120ms}
-.r7-in > *:nth-child(5){animation-delay:160ms}.r7-in > *:nth-child(6){animation-delay:200ms}.r7-in > *:nth-child(7){animation-delay:240ms}
-@keyframes r7-sube{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-
-@media (min-width:720px){.r7-grid{grid-template-columns:repeat(3,1fr)}}
-@media (prefers-reduced-motion:reduce){
-  .r7-in > *,.r7-sos .r7-ti::after{animation:none!important}
-  .r7-t,.r7-t .r7-ti,.r7-tipo,.r7-pagar{transition:none}
-  .r7-t:hover,.r7-t:hover .r7-ti{transform:none}
-}
-
 </style>
 </head>
 <body>
 <div id="app"></div>
-<!-- Configuración: modo demo/producción y llaves de Firebase -->
 <script src="config.js"></script>
-<!-- La app, por módulos (el orden importa: cada módulo puede ampliar a los anteriores) -->
-<script data-origen="js/app/01-nucleo.js">
+<script>
 /* =========================================================
    MI RESIDENCIAL — Prototipo demo (PWA)
    Datos guardados en el dispositivo (localStorage).
@@ -827,8 +525,6 @@ function verNotifs(){if(S.user.rol==='superadmin')return go('solicitudesRes');co
 function abrirNotif(id){const n=DB.notifs.find(x=>x.id===id);if(!n)return;n.leida=true;save();closeSheet();const a=n.accion;if(!a)return render();if(a.tipo==='pagar'){S.sel=a.periodos;return go('pagos')}if(a.tipo==='pedido'||a.tipo==='chat'){if(!pedido(a.id))return render();go(S.user.rol==='vendedor'?'pedidos':S.user.rol==='admin'?'tienda':'tienda',S.user.rol==='vendedor'||S.user.rol==='admin'?undefined:'pedidos');return a.tipo==='chat'?abrirChat(a.id):verPedido(a.id)}go(a.tab||'inicio',a.sub)}
 function leerTodas(){DB.notifs.forEach(n=>{if(n.userId===S.user.id)n.leida=true});save();closeSheet();render()}
 
-</script>
-<script data-origen="js/app/02-administracion.js">
 /* =========================================================
    ADMINISTRACIÓN
    ========================================================= */
@@ -879,7 +575,7 @@ function vAdmCasa(){const c=casa(S.sub);if(!c)return empty('Casa no encontrada')
   <h3>Estado de cuenta ${m.length?`· mora ${money(sum(m,montoCuota))}`:''}</h3><button class="btn ghost block" style="margin:0 0 8px" onclick="editarSaldo('${c.id}')">Editar meses que debe / saldo inicial</button><div class="card">${cs.map(q=>{const st=q.estado==='pagado'?['Pagado','ok']:q.estado==='revision'?['En revisión','info']:vencida(q)?['Vencido','bad']:['Pendiente','warn'];return `<div class="chk"><span class="grow">${perL(q.periodo)}</span>${chip(st[0],st[1])}<b style="min-width:62px;text-align:right">${money(q.estado==='pagado'?q.monto:montoCuota(q))}</b></div>`}).join('')}</div>
   <h3>Últimos accesos</h3>${ing.slice(0,6).map(x=>ingresoRow(x)).join('')||empty('Sin ingresos registrados')}
   <h3>Reclamos</h3>${rc.map(reclamoItem).join('')||empty('Sin reclamos')}`}
-function regenCodigo(id){confirmar('¿Generar un código nuevo?','El código anterior dejará de funcionar.','Generar código',()=>{casa(id).codigo=genCodigo();save();render();toast('Código renovado')},{icono:'key',tono:'pri'})}
+function regenCodigo(id){if(!confirm('¿Generar un código nuevo? El anterior dejará de funcionar.'))return;casa(id).codigo=genCodigo();save();render();toast('Código renovado')}
 function recordarCasa(cid){const m=moraCasa(cid),p=pendCasa(cid);if(!p.length)return toast('Esta casa está al día');if(!duenoIds(cid).length)return toast('La casa no tiene propietario registrado');
   const l=m.length?m:p;notificar(duenoIds(cid),m.length?'💳 Recordatorio: pagos en mora':'⏰ Recordatorio de pago',`${m.length?'Meses en mora':'Pendiente'}: ${l.map(c=>perL(c.periodo)).join(', ')}. Total ${money(sum(l,montoCuota))}. Toca para pagar.`,{tipo:'pagar',periodos:l.map(c=>c.periodo)});save();toast('Recordatorio enviado a '+casaNom(cid))}
 function recordarTodos(){const mor=morosos().filter(x=>casa(x.c.id).duenoId);mor.forEach(x=>notificar(duenoIds(x.c.id),'💳 Recordatorio: pagos en mora',`Meses en mora: ${x.m.map(c=>perL(c.periodo)).join(', ')}. Total ${money(x.total)}. Toca para pagar.`,{tipo:'pagar',periodos:x.m.map(c=>c.periodo)}));save();toast(`Recordatorio enviado a ${mor.length} casa(s)`)}
@@ -910,8 +606,7 @@ const pago=id=>DB.pagos.find(p=>p.id===id);
 function verComp(id){const p=pago(id);verArchivo(p.comprobante,'Comprobante · '+casaNom(p.casaId))}
 function aprobarPago(id){const p=pago(id);p.estado='aprobado';p.fechaAprob=nowISO();p.aprobadoPor=S.user.id;cuotasCasa(p.casaId).forEach(c=>{if(p.periodos.includes(c.periodo))c.estado='pagado'});
   notificar(duenoIds(p.casaId),'✅ Pago aprobado',`Tu pago de ${p.periodos.map(perL).join(', ')} por ${money(p.monto)} fue aprobado. Ya puedes ver tu recibo.`,{tab:'pagos'});save();render();toast('Pago aprobado')}
-function rechazarPago(id){pedirTexto('Rechazar pago','Motivo (lo verá el residente)','El monto o la referencia no coinciden',motivo=>rechazarPagoOk(id,motivo),{boton:'Rechazar pago'})}
-function rechazarPagoOk(id,motivo){const p=pago(id);p.estado='rechazado';p.nota=motivo;
+function rechazarPago(id){const motivo=prompt('Motivo del rechazo (lo verá el residente):','El monto o la referencia no coinciden');if(motivo===null)return;const p=pago(id);p.estado='rechazado';p.nota=motivo;
   cuotasCasa(p.casaId).forEach(c=>{if(p.periodos.includes(c.periodo)&&c.estado==='revision')c.estado='pendiente'});
   notificar(duenoIds(p.casaId),'❌ Pago rechazado',`Tu comprobante de ${p.periodos.map(perL).join(', ')} fue rechazado: ${motivo}`,{tipo:'pagar',periodos:p.periodos});save();render();toast('Pago rechazado')}
 function verRecibo(id){const p=pago(id);const c=casa(p.casaId);const img=genImg({titulo:'Recibo de pago',sub:DB.residencial.nombre,filas:[['Recibo N°',p.id.toUpperCase()],['Casa',casaNom(p.casaId)+' · '+c.pasaje],['Propietario',duenoNom(p.casaId)],['Concepto','Cuota de mantenimiento: '+p.periodos.map(perL).join(', ')],['Monto',money(p.monto)],['Método',METODO[p.metodo]+(p.ref?' · Ref. '+p.ref:'')],['Fecha de aprobación',fFecha(p.fechaAprob||p.fecha)]],sello:'CANCELADO'});
@@ -924,7 +619,7 @@ function avisoCard(a,adm){const c=CAT[a.categoria]||CAT.general;return `<div cla
 function nuevoAviso(){sheet('Nuevo aviso',`<form onsubmit="crearAviso(event)"><label class="f">Tipo<select name="cat">${Object.entries(CAT).map(([k,c])=>`<option value="${k}">${c.e} ${c.l}</option>`).join('')}</select></label><label class="f">Título<input name="t" required placeholder="Ej. Interrupción de energía"></label><label class="f">Mensaje<textarea name="m" required></textarea></label><label class="f">Fecha y hora del evento (opcional)<input name="cuando" type="datetime-local"></label><label class="f">Prioridad<select name="p"><option value="normal">Normal</option><option value="urgente">Urgente</option></select></label><label class="f">Enviar a<select name="a"><option value="todos">Todos (residentes, inquilinos y vigilancia)</option><option value="res">Solo residentes e inquilinos</option></select></label><button class="btn block">Publicar y notificar</button></form>`)}
 function crearAviso(e){e.preventDefault();const f=new FormData(e.target);const a={id:uid(),categoria:f.get('cat'),titulo:f.get('t'),cuerpo:f.get('m'),cuando:f.get('cuando')||'',prioridad:f.get('p'),fecha:nowISO()};DB.avisos.unshift(a);
   const ids=DB.usuarios.filter(u=>u.activo&&u.rol!=='admin'&&(f.get('a')==='todos'||u.rol!=='vigilante')).map(u=>u.id);notificar(ids,(a.prioridad==='urgente'?'🚨 ':(CAT[a.categoria].e+' '))+a.titulo,a.cuerpo,{tab:'avisos'});save();closeSheet();render();toast(`Aviso publicado · ${ids.length} notificados`)}
-function borrarAviso(id){confirmar('¿Eliminar este aviso?','Dejará de verse para todos los residentes.','Eliminar aviso',()=>{DB.avisos=DB.avisos.filter(a=>a.id!==id);save();render();toast('Aviso eliminado')})}
+function borrarAviso(id){if(!confirm('¿Eliminar este aviso?'))return;DB.avisos=DB.avisos.filter(a=>a.id!==id);save();render()}
 
 function vAdmMas(){const sol=DB.solicitudes.filter(s=>s.estado==='pendiente').length;const rec=DB.reclamos.filter(r=>r.estado==='abierto').length;
   return `<h2>Más</h2>${menuItem('vote','Votaciones',"go('votaciones')",(()=>{const n=votDB().filter(v=>v.estado==='abierta').length;return n?n+' abierta(s)':''})())}${menuItem('building','Perfil de la residencial',"go('residencial')")}${menuItem('chart','Reportes en PDF (mora y solventes)',"go('reportes')")}${menuItem('store','Tienda: vendedores y pedidos',"go('tienda')",(()=>{const n=(DB.tienda?DB.tienda.pedidos:[]).filter(p=>p.estado==='nuevo').length;return n?String(n):''})())}${menuItem('book','Directorio: emergencias y servicios',"go('directorio')")}${menuItem('wallet','Cobro a domicilio y cierres',"go('cobros')",(()=>{const n=DB.cierres.filter(c=>c.estado==='enviado').length+DB.visitasCobro.filter(v=>v.estado==='pendiente'&&!v.cobradorId).length;return n?String(n):''})())}${menuItem('clip','Accesos y bitácora',"go('accesos')")}${menuItem('chatalert','Reclamos y reportes',"go('reclamos')",rec?rec+' nuevo(s)':'')}${menuItem('userplus','Solicitudes de registro',"go('solicitudes')",sol?String(sol):'')}${menuItem('shield','Usuarios de vigilancia',"go('vigilantes')")}${menuItem('card','Cobros y link de pago',"go('config')")}
@@ -968,13 +663,12 @@ function vSolicitudes(){const p=DB.solicitudes.filter(s=>s.estado==='pendiente')
   <div class="kv" style="margin-top:10px"><span>Familia</span><b>${esc(s.familia||'—')}</b><span>DUI</span><b>${esc(s.dui)}</b><span>Teléfono</span><b>${esc(s.tel)}</b><span>Correo</span><b>${esc(s.email)}</b><span>Usuario</span><b>${esc(s.user)}</b></div>${c.duenoId?alertBox('warn','La casa ya tiene propietario',`Si apruebas, ${esc(duenoNom(c.id))} y sus inquilinos quedarán desactivados.`):''}<div class="btns"><button class="btn ghost smb" onclick="verDocSol('${s.id}','documento')">Ver documento de propiedad</button></div><div class="btns"><button class="btn ok" onclick="aprobarSol('${s.id}')">Aprobar</button><button class="btn bad" onclick="rechazarSol('${s.id}')">Rechazar</button></div></div>`}).join('')||empty('No hay solicitudes pendientes')}
   ${h.length?`<h3>Historial</h3>${h.map(s=>`<div class="item">${avatar(s,40)}<div class="grow"><b>${esc(s.nombre)}</b><div class="sm muted">${casaNom(s.casaId)} · ${fFecha(s.fecha)}${s.motivo?' · '+esc(s.motivo):''}</div></div>${chip(s.estado==='aprobada'?'Aprobada':'Rechazada',s.estado==='aprobada'?'ok':'bad')}</div>`).join('')}`:''}`}
 function verDocSol(id,k){const s=DB.solicitudes.find(x=>x.id===id);verArchivo(s[k],{documento:'Documento de propiedad',duiFoto:'DUI',foto:'Foto de perfil',selfie:'Foto en tiempo real'}[k])}
-function aprobarSol(id,ok){const s=DB.solicitudes.find(x=>x.id===id);const c=casa(s.casaId);if(DB.usuarios.some(u=>u.user.toLowerCase()===s.user.toLowerCase()))return toast('El usuario ya existe; rechaza y pide otro');
-  if(c.duenoId&&!ok)return confirmar('La casa ya tiene propietario',`${esc(duenoNom(c.id))} y sus inquilinos quedarán desactivados.`,'Aprobar y reemplazar',()=>aprobarSol(id,true),{icono:'userplus',tono:'warn'});
+function aprobarSol(id){const s=DB.solicitudes.find(x=>x.id===id);const c=casa(s.casaId);if(DB.usuarios.some(u=>u.user.toLowerCase()===s.user.toLowerCase()))return toast('El usuario ya existe; rechaza y pide otro');
+  if(c.duenoId&&!confirm('La casa ya tiene propietario. ¿Reemplazarlo?'))return;
   if(c.duenoId)DB.usuarios.forEach(u=>{if(u.id===c.duenoId||(u.rol==='inquilino'&&u.padreId===c.duenoId))u.activo=false});
   const u={id:'u_'+uid(),rol:'residente',nombre:s.nombre,user:s.user,pass:s.pass,casaId:c.id,tel:s.tel,email:s.email,dui:s.dui,foto:s.foto||null,activo:true};DB.usuarios.push(u);c.duenoId=u.id;if(s.familia)c.familia=s.familia;c.codigo=genCodigo();s.estado='aprobada';
   notificar([u.id],'🎉 Cuenta aprobada','Bienvenido(a). Ya puedes gestionar accesos, pagos y reportes de tu casa.');save();render();toast('Propietario aprobado. Ya puede ingresar con su usuario')}
-function rechazarSol(id){pedirTexto('Rechazar solicitud','Motivo (lo verá la persona)','Documento no coincide con el propietario',m=>rechazarSolOk(id,m),{boton:'Rechazar solicitud'})}
-function rechazarSolOk(id,m){const s=DB.solicitudes.find(x=>x.id===id);s.estado='rechazada';s.motivo=m;s.pass='';save();render();toast('Solicitud rechazada')}
+function rechazarSol(id){const m=prompt('Motivo del rechazo:','Documento no coincide con el propietario');if(m===null)return;const s=DB.solicitudes.find(x=>x.id===id);s.estado='rechazada';s.motivo=m;s.pass='';save();render();toast('Solicitud rechazada')}
 
 /* Vigilantes */
 function vVigilantes(){const l=DB.usuarios.filter(u=>u.rol==='vigilante');return `<div class="row" style="margin-bottom:12px"><h2 class="grow" style="margin:0">Vigilancia</h2><button class="btn smb" onclick="nuevoVig()">${ic('plus',16)} Vigilante</button></div><p class="note">Los vigilantes ven los pases de acceso, validan a la persona y marcan su ingreso y salida. El residente recibe el aviso al instante.</p>${l.map(u=>`<div class="item"><div class="av">${ic('shield',20)}</div><div class="grow"><b>${esc(u.nombre)}</b><div class="sm muted">Usuario: ${esc(u.user)} · ${esc(u.turno||'')}</div></div><button class="btn smb ${u.activo?'ghost':'sec'}" onclick="toggleUser('${u.id}')">${u.activo?'Desactivar':'Activar'}</button></div>`).join('')||empty('Sin vigilantes')}`}
@@ -1020,8 +714,6 @@ function vConfig(){const c=DB.config;return `<h2>Cobros y link de pago</h2><form
 function guardarConfig(e){e.preventDefault();const f=new FormData(e.target);const c=DB.config;c.cuota=+f.get('cuota');c.diaVence=Math.min(28,Math.max(1,+f.get('diaVence')));c.recargo=+f.get('recargo');c.diasAviso=+f.get('diasAviso');c.linkPago=String(f.get('linkPago')||'').trim();
   const per=periodoActual();DB.cuotas.forEach(q=>{if(q.periodo>per&&q.estado==='pendiente')q.monto=c.cuota});save();render();toast('Configuración guardada')}
 
-</script>
-<script data-origen="js/app/03-residente.js">
 /* =========================================================
    RESIDENTE e INQUILINO
    ========================================================= */
@@ -1060,7 +752,7 @@ function verPase(id,nuevo){const p=DB.pases.find(x=>x.id===id);const e=estadoPas
   ${p.ingresos.length?`<h3>Ingresos</h3>${p.ingresos.slice().reverse().slice(0,10).map(i=>`<div class="chk"><span class="grow">${fFecha(i.entrada)}</span><span class="sm muted">${i.salida?'salió '+hora(i.salida):'dentro'}</span></div>`).join('')}`:''}
   <div class="btns">${act?`<button class="btn" onclick="compartirPase('${p.id}')">${ic('share',18)} Compartir</button><button class="btn bad" onclick="cancelarPase('${p.id}')">Cancelar pase</button>`:''}</div>`)}
 async function compartirPase(id){const p=DB.pases.find(x=>x.id===id);const t=textoPase(p);try{if(navigator.share){await navigator.share({text:t});return}}catch(e){return}try{await navigator.clipboard.writeText(t);toast('Copiado: pégalo en WhatsApp')}catch(e){window.open('https://wa.me/?text='+encodeURIComponent(t),'_blank')}}
-function cancelarPase(id){confirmar('¿Cancelar este pase?','El PIN dejará de funcionar en portería.','Cancelar pase',()=>{const p=DB.pases.find(x=>x.id===id);p.estado='cancelado';save();render();toast('Pase cancelado')},{no:'Mantener pase',icono:'ticket'})}
+function cancelarPase(id){if(!confirm('¿Cancelar este pase? El PIN dejará de funcionar.'))return;const p=DB.pases.find(x=>x.id===id);p.estado='cancelado';save();closeSheet();render();toast('Pase cancelado')}
 
 function vResPagos(){const cid=S.user.casaId;const cs=cuotasCasa(cid);const pend=cs.filter(c=>c.estado==='pendiente');
   if(!S.sel)S.sel=pend.map(c=>c.periodo);S.sel=S.sel.filter(p=>pend.some(c=>c.periodo===p));
@@ -1108,8 +800,6 @@ function vPerfil(){const u=S.user,r=DB.residencial;return `<h2>Mi perfil</h2><di
 async function cambiarFoto(inp){try{const f=await leerArchivo(inp.files[0]);if(!f)return;S.user.foto=f;save();render();toast('Foto actualizada')}catch(e){toast('Foto no válida')}}
 function cambiarPass(e){e.preventDefault();const f=new FormData(e.target);if(f.get('a')!==S.user.pass)return toast('La contraseña actual no es correcta');S.user.pass=f.get('n');save();e.target.reset();toast('Contraseña actualizada')}
 
-</script>
-<script data-origen="js/app/04-vigilancia.js">
 /* =========================================================
    VIGILANCIA
    ========================================================= */
@@ -1146,8 +836,6 @@ const VIEWS={
   inquilino:{inicio:vResInicio,accesos:vAccesos,avisos:vAvisos,mas:vResMas,perfil:vPerfil},
   vigilante:{inicio:vVigInicio,sinpase:vSinPase,bitacora:vBitacora,avisos:vAvisos,mas:vVigMas,perfil:vPerfil}};
 
-</script>
-<script data-origen="js/app/05-plataforma.js">
 /* =========================================================
    PLATAFORMA (varias residenciales)
    ========================================================= */
@@ -1254,8 +942,6 @@ function vSAMas(){return `<h2>Más</h2>${menuItem('sliders','Planes y precios','
 function vSolicitarRes(){return `<div class="login"><button class="btn ghost smb" style="align-self:flex-start;margin-bottom:12px" onclick="S.tab='inicio';render()">${ic('back',16)} Volver</button><h2>Quiero la app para mi residencial</h2><p class="note">Déjanos los datos y te contactamos para crear la cuenta de tu residencial con 30 días de prueba.</p><form class="card" onsubmit="enviarSolRes(event)"><label class="f">Nombre de la residencial<input name="nombre" required></label><div class="two"><label class="f">Municipio<input name="municipio" required></label><label class="f">N° de casas<input name="casas" type="number" min="1" required></label></div><label class="f">Tu nombre<input name="cn" required></label><div class="two"><label class="f">Teléfono<input name="ct" required inputmode="tel"></label><label class="f">Correo<input name="ce" type="email" required></label></div><label class="f">Comentario<textarea name="m"></textarea></label><button class="btn block">Enviar</button></form></div>`}
 function enviarSolRes(e){e.preventDefault();const f=new FormData(e.target);PLAT.solicitudes.unshift({id:uid(),nombre:f.get('nombre'),municipio:f.get('municipio'),casas:+f.get('casas'),contacto:{nombre:f.get('cn'),tel:f.get('ct'),email:f.get('ce')},mensaje:f.get('m'),fecha:nowISO(),estado:'pendiente'});savePlat();S.tab='inicio';render();sheet('Solicitud enviada','<p>Gracias. Te contactaremos para crear la cuenta de tu residencial.</p><button class="btn block" onclick="closeSheet()">Listo</button>')}
 
-</script>
-<script data-origen="js/app/06-cobrador.js">
 /* =========================================================
    COBRADOR A DOMICILIO
    ========================================================= */
@@ -1334,14 +1020,12 @@ NAV.cobrador=[{id:'inicio',l:'Ruta',i:'houses'},{id:'caja',l:'Mi caja',i:'card'}
 NAV.superadmin=[{id:'inicio',l:'Panel',i:'home'},{id:'residenciales',l:'Residenciales',i:'houses'},{id:'solicitudesRes',l:'Solicitudes',i:'user'},{id:'mas',l:'Más',i:'menu'}];
 VIEWS.cobrador={inicio:vCobRuta,caja:vCobCaja,cierres:vCobCierres,mas:vVigMas,perfil:vPerfil};
 VIEWS.superadmin={inicio:vSAInicio,residenciales:vSAResidenciales,resDet:vSAResDet,nuevaRes:vSANuevaRes,solicitudesRes:vSASolicitudes,mas:vSAMas};
-VIEWS.admin.cobros=vAdmCobros; // las vistas de la tienda se registran al final de 10-tienda.js
+VIEWS.admin.cobros=vAdmCobros;VIEWS.admin.tienda=vAdmTienda;VIEWS.residente.tienda=vTienda;VIEWS.inquilino.tienda=vTienda;
 NAV.residente.splice(3,0,{id:'tienda',l:'Tienda',i:'store'});NAV.inquilino.splice(2,0,{id:'tienda',l:'Tienda',i:'store'});
 NAV.vendedor=[{id:'inicio',l:'Panel',i:'store'},{id:'productos',l:'Productos',i:'box'},{id:'pedidos',l:'Pedidos',i:'log'},{id:'mas',l:'Más',i:'menu'}];
-// VIEWS.vendedor, reportes y directorio: se registran al final de 10-tienda.js (sus funciones se definen después)
+VIEWS.vendedor={inicio:vVenInicio,productos:vVenProductos,pedidos:vVenPedidos,mas:vVenMas,perfil:vPerfil,directorio:vDirectorio};VIEWS.admin.reportes=vReportes;['admin','residente','inquilino','vigilante','cobrador'].forEach(r=>VIEWS[r].directorio=vDirectorio);
 BACK.resDet='residenciales';BACK.nuevaRes='residenciales';
 
-</script>
-<script data-origen="js/app/07-importar-casas.js">
 /* =========================================================
    IMPORTAR CASAS DESDE EXCEL / CSV
    ========================================================= */
@@ -1452,9 +1136,6 @@ function loginRolOk(e,rol){e.preventDefault();const f=new FormData(e.target);con
   if(rol==='superadmin'){closeSheet();return loginDueno(un,pw)}
   const u=DB.usuarios.find(x=>x.user.toLowerCase()===un&&x.pass===pw);if(!u)return toast('Usuario o clave incorrectos para '+DB.residencial.nombre);
   if(u.rol!==rol)return toast('Ese usuario es de '+ROL[u.rol].toLowerCase()+', no de '+ROL[rol].toLowerCase());closeSheet();entrar(u)}
-
-</script>
-<script data-origen="js/app/08-region-idioma.js">
 /* =========================================================
    BUSCADOR DE RESIDENCIAL EN LA PANTALLA DE INICIO
    ========================================================= */
@@ -1679,9 +1360,6 @@ function condoCampos(f){const g=k=>String(f.get(k)??'').trim();const o={piso:g('
 function ajustarCuotaCasa(c){const per=periodoActual();cuotasCasa(c.id).forEach(q=>{if(q.estado==='pendiente'&&q.periodo>=per)q.monto=c.cuota||DB.config.cuota})}
 Object.assign(I18N,{"Torres, pisos y apartamentos":"Towers, floors and apartments","Torres o edificios (separados por coma)":"Towers or buildings (comma separated)","Pisos por torre":"Floors per tower","Apartamentos por piso":"Apartments per floor","Primer piso con apartamentos":"First residential floor","Numeración":"Numbering","Piso + número (101, 102…)":"Floor + number (101, 102…)","Torre-piso-número (A-101)":"Tower-floor-number (A-101)","Correlativo (1, 2, 3…)":"Sequential (1, 2, 3…)","Área típica por unidad (m² o ft²)":"Typical unit area (m² or ft²)","Estacionamientos por unidad":"Parking spaces per unit","Cada unidad tiene bodega / storage":"Each unit has a storage unit","Cuota de mantenimiento (HOA)":"Maintenance fee (HOA dues)","Cómo se cobra":"How it's charged","Cuota fija por unidad":"Flat fee per unit","Por área: tarifa × m² / ft² de cada unidad":"By area: rate × m² / ft² of each unit","Cuota por unidad o tarifa por m²/ft²":"Fee per unit or rate per m²/ft²","Fondo de reserva (% de cada cuota, opcional)":"Reserve fund (% of each fee, optional)","Amenidades":"Amenities","Administración del condominio":"Condominium management","Empresa administradora (opcional)":"Management company (optional)","Asociación / HOA (nombre legal, opcional)":"Association / HOA (legal name, optional)","Piscina":"Pool","Gimnasio":"Gym","Salón social / clubhouse":"Clubhouse","Ascensores":"Elevators","Área de BBQ":"BBQ area","Parque infantil":"Playground","Cancha deportiva":"Sports court","Lavandería":"Laundry room","Business center / cowork":"Business center / cowork","Rooftop / terraza":"Rooftop / terrace","Área de mascotas":"Pet area","Sala de paquetes":"Package room","Estacionamiento de visitas":"Guest parking","Cargadores para autos eléctricos":"EV chargers","Piso":"Floor","Estacionamientos":"Parking spaces","Cuota propia (opcional)":"Own fee (optional)","Se calcula por área":"Calculated by area","Tiene bodega / storage":"Has storage unit","Torres":"Towers","Cuota HOA":"HOA dues","Administradora":"Management company","Escribe al menos una torre o edificio":"Enter at least one tower or building","bodega":"storage"});
 I18N_RE.unshift([/^Piso (\S+)$/,'Floor $1'],[/^(\d+) estac\.$/,'$1 parking'],[/^(\d+) apartamentos$/,'$1 apartments'],[/^(\d+) torre\(s\) × (\d+) pisos × (\d+) por piso\. Ejemplo: (.+)$/,'$1 tower(s) × $2 floors × $3 per floor. Example: $4'],[/^(.+) por unidad$/,'$1 per unit'],[/^reserva (.+)$/,'reserve $1'],[/^Torre (.+)$/,'Tower $1']);
-
-</script>
-<script data-origen="js/app/09-pdf-reportes.js">
 /* =========================================================
    GENERADOR DE PDF (sin dependencias, funciona sin internet)
    ========================================================= */
@@ -1750,9 +1428,6 @@ const solvChip=s=>{if(!s.solvencia)return'';if(s.solvVence){const v=s.solvVence<
 
 Object.assign(I18N,{"Solventes":"Up to date","Reportes":"Reports","Reportes en PDF (mora y solventes)":"PDF reports (overdue and up to date)","Ver PDF":"View PDF","Descargar PDF":"Download PDF","Reporte PDF":"PDF report","Casas en mora":"Houses overdue","Casas solventes":"Houses up to date","Personas en mora":"People overdue","Resumen general":"General summary","Reporte de casas en mora":"Overdue houses report","Reporte de casas solventes":"Up-to-date houses report","Reporte de personas en mora":"Overdue people report","Resumen general de cobranza":"Collections summary","Meses en mora":"Months overdue","Último mes pagado":"Last month paid","Persona":"Person","% solventes":"% up to date","Cuota mensual":"Monthly fee","Meses adeudados":"Months owed","Pagos por validar":"Payments to review","Sin registros":"No records","Sin registros para este reporte":"No records for this report","Generado con GateWise":"Generated with GateWise","Página":"Page","Más reportes":"More reports","PDF casas en mora":"Overdue houses PDF","Casas sin propietario registrado":"Houses without a registered owner","Casas sin dueño":"Houses without owner","Buscar por número, propietario, familia o teléfono":"Search by number, owner, family or phone","Solvencia policial (foto o PDF)":"Police clearance (photo or PDF)","Ver solvencia guardada":"View saved clearance","Solvencia vigente hasta (opcional)":"Clearance valid until (optional)","Solvencia":"Clearance","Estado":"Status"});
 I18N_RE.unshift([/^Sin dueño \((\d+)\)$/,'No owner ($1)'],[/^Solventes \((\d+)\)$/,'Up to date ($1)'],[/^(\d+) casa\(s\)$/,'$1 house(s)'],[/^en mora (.+)$/,'overdue $1'],[/^(\d+) personas$/,'$1 people'],[/^Polígono: (.+)$/,'Block: $1'],[/^Solvencia PNC hasta (.+)$/,'Police clearance until $1'],[/^Solvencia vencida (.+)$/,'Clearance expired $1'],[/^Solvencia policial · (.+)$/,'Police clearance · $1'],[/^Los totales incluyen recargo de (\S+) por mes vencido\.$/,'Totals include a $1 late fee per overdue month.']);
-
-</script>
-<script data-origen="js/app/10-tienda.js">
 /* =========================================================
    TIENDA: VENDEDORES, PRODUCTOS, PEDIDOS Y CHAT
    ========================================================= */
@@ -1895,12 +1570,7 @@ function crearVendedor(e){e.preventDefault();const f=new FormData(e.target);cons
 
 Object.assign(I18N,{"Tienda":"Shop","Tiendas":"Shops","🛍️ Tiendas":"🛍️ Shops","Mis pedidos":"My orders","Buscar tienda o producto":"Search shop or product","Productos":"Products","Tiendas de la residencial":"Community shops","Todavía no hay tiendas. La administración da de alta a los vendedores.":"No shops yet. The administration adds the sellers.","Aún no has hecho pedidos":"You haven't placed any orders yet","🛵 Domicilio":"🛵 Delivery","🏠 Retiro":"🏠 Pickup","Agregar":"Add","Agotado":"Sold out","Disponible":"Available","Todas las tiendas":"All shops","Entrega":"Delivery","Esta tienda aún no tiene productos":"This shop has no products yet","Entregar en":"Deliver to","Referencia (opcional)":"Landmark (optional)","Forma de pago":"Payment method","Nota para el vendedor (opcional)":"Note for the seller (optional)","Enviar pedido":"Send order","Efectivo al recibir":"Cash on delivery","Transferencia":"Bank transfer","Tarjeta (POS del vendedor)":"Card (seller's terminal)","Nuevo":"New","Aceptado":"Accepted","Listo para retirar":"Ready for pickup","En camino":"On the way","Entregado":"Delivered","Rechazado":"Rejected","Cancelado":"Cancelled","Aceptar pedido":"Accept order","🛵 Salió a entregar":"🛵 Out for delivery","🏠 Listo para retirar":"🏠 Ready for pickup","Cancelar pedido":"Cancel order","Confirmar entrega":"Confirm delivery","El pedido queda entregado cuando vendedor y comprador confirman.":"The order is delivered once both seller and buyer confirm.","Entregué el pedido":"I delivered the order","Recibí mi pedido":"I received my order","Envío":"Delivery fee","🛵 A domicilio":"🛵 Delivery","Pago":"Payment","Cliente":"Customer","💬 Chat":"💬 Chat","Escribe para coordinar la entrega.":"Write to coordinate the delivery.","Escribe un mensaje":"Type a message","Ver pedido":"View order","Tú":"You","Voy en camino 🛵":"On my way 🛵","Ya estoy afuera":"I'm outside","¿Me confirma la dirección?":"Can you confirm the address?","Su pedido está listo":"Your order is ready","¿A qué hora llega?":"What time will it arrive?","Ya voy a recogerlo":"I'm on my way to pick it up","Estoy en casa":"I'm home","Gracias 🙌":"Thanks 🙌","Ventas de hoy":"Sales today","Ventas del mes":"Sales this month","Pedidos en curso":"Orders in progress","Entregados este mes":"Delivered this month","Pedidos por atender":"Orders to handle","No tienes pedidos pendientes":"No pending orders","Publicar producto":"Publish product","Pedidos":"Orders","Entregados":"Delivered","Cancelados":"Cancelled","Total vendido":"Total sold","Sin pedidos":"No orders","Mis productos":"My products","Publicar":"Publish","Los residentes ven tus productos en su módulo Tienda. Marca \"Agotado\" cuando no tengas.":"Residents see your products in their Shop. Mark \"Sold out\" when you're out.","Publica tu primer producto con foto, precio y descripción.":"Publish your first product with photo, price and description.","Editar producto":"Edit product","Foto del producto":"Product photo","Nombre del producto":"Product name","Descripción":"Description","Precio":"Price","Categoría":"Category","Disponible para pedidos":"Available for orders","Eliminar producto":"Delete product","Perfil de mi negocio":"My business profile","Nombre del negocio":"Business name","Descripción corta":"Short description","Horario de atención":"Business hours","🛵 Hace entregas a domicilio dentro de la residencial":"🛵 Delivers within the community","Costo de envío (0 = gratis)":"Delivery fee (0 = free)","🏠 Se puede retirar en casa o local del vendedor":"🏠 Pickup at the seller's home or store","Dirección de retiro":"Pickup address","Tienda / vendedor":"Shop / seller","Da de alta a los vecinos o negocios que pueden vender a los residentes. Cada vendedor tiene su propio usuario para publicar productos y atender pedidos.":"Add the neighbors or businesses allowed to sell to residents. Each seller gets their own user to publish products and handle orders.","Vendedor":"Seller","Vendedores":"Sellers","Vendedores activos":"Active sellers","Pedidos este mes":"Orders this month","Últimos pedidos":"Latest orders","Aún no hay vendedores":"No sellers yet","Nuevo vendedor":"New seller","Puede ser un vecino de la residencial o un negocio externo de confianza.":"It can be a neighbor or a trusted outside business.","Nombre de quien vende":"Seller's name","Vive en":"Lives in","Externo (no vive aquí)":"External (doesn't live here)","Crear vendedor":"Create seller","Vendedor creado":"Seller created","Tienda: vendedores y pedidos":"Shop: sellers and orders","Comida":"Food","Bebidas":"Drinks","Panadería y postres":"Bakery and desserts","Abarrotes":"Groceries","Ropa y accesorios":"Clothing and accessories","Belleza":"Beauty","Hogar":"Home","Servicios":"Services","Producto publicado":"Product published","Producto actualizado":"Product updated","Producto eliminado":"Product deleted","Negocio actualizado":"Business updated","Pedido entregado ✓":"Order delivered ✓","Confirmación registrada":"Confirmation saved","Se vació el carrito de la otra tienda":"The other shop's cart was emptied","Elige al menos una forma de entrega":"Choose at least one delivery option","Comprador":"Buyer"});
 I18N_RE.unshift([/^Mis pedidos \((\d+)\)$/,'My orders ($1)'],[/^(\d+) producto\(s\)( publicados)?$/,(m,a,b)=>a+' product(s)'+(b?' published':'')],[/^(\d+) venta\(s\)$/,'$1 sale(s)'],[/^Vende: (.+)$/,'Seller: $1'],[/^Ver pedido · (\d+) artículo\(s\) · (.+)$/,'View order · $1 item(s) · $2'],[/^Tu pedido · (.+)$/,'Your order · $1'],[/^Pedido (#\d+)$/,'Order $1'],[/^🏠 Retiro en (.+)$/,'🏠 Pickup at $1'],[/^Nuevos \((\d+)\)$/,'New ($1)'],[/^En curso \((\d+)\)$/,'In progress ($1)'],[/^(\d+) pedido\(s\) nuevo\(s\)$/,'$1 new order(s)'],[/^Esperando la confirmación de (el comprador|el vendedor)\.$/,(m,a)=>'Waiting for '+(a==='el comprador'?'the buyer':'the seller')+' to confirm.'],[/^Pedido enviado a (.+)$/,'Order sent to $1'],[/^(✓|…) (Vendedor|Comprador)$/,(m,a,b)=>a+' '+(b==='Vendedor'?'Seller':'Buyer')]);
-/* ---------- Registro de vistas que dependen de módulos anteriores (cobrador, directorio, reportes, tienda) ---------- */
-VIEWS.admin.tienda=vAdmTienda;VIEWS.residente.tienda=vTienda;VIEWS.inquilino.tienda=vTienda;
-VIEWS.vendedor={inicio:vVenInicio,productos:vVenProductos,pedidos:vVenPedidos,mas:vVenMas,perfil:vPerfil,directorio:vDirectorio};VIEWS.admin.reportes=vReportes;['admin','residente','inquilino','vigilante','cobrador'].forEach(r=>VIEWS[r].directorio=vDirectorio);
 
-</script>
-<script data-origen="js/app/11-marca.js">
 /* =========================================================
    MARCA: LOGO Y COLORES POR RESIDENCIAL Y POR NEGOCIO
    ========================================================= */
@@ -1949,8 +1619,6 @@ const logoNegocio=(v,s=56,r='50%')=>v&&v.logo?logoImg(v.logo,s,r):'';
 Object.assign(I18N,{"Logo y colores":"Logo and colors","Vista previa":"Preview","Botón principal":"Primary button","Secundario":"Secondary","Seleccionado":"Selected","Logo de la residencial":"Community logo","Subir logo":"Upload logo","Cambiar logo":"Change logo","Quitar":"Remove","PNG con fondo transparente o JPG cuadrado. Aparece en la barra superior, la pantalla de entrada, recibos y reportes PDF.":"Transparent PNG or square JPG. It appears in the top bar, sign-in screen, receipts and PDF reports.","Color principal":"Primary color","Botones, pestañas activas y selecciones.":"Buttons, active tabs and selections.","Otro color":"Custom color","Color de la barra superior":"Top bar color","Igual que el color principal":"Same as primary color","Color muy claro":"Very light color","El texto de los botones se verá en negro para que se pueda leer.":"Button text will be black so it stays readable.","Guardar logo y colores":"Save logo and colors","Volver a los colores de GateWise":"Reset to GateWise colors","Logo y colores guardados":"Logo and colors saved","Imagen del negocio":"Business image","Logo del negocio":"Business logo","Se muestra en la lista de tiendas y en tus pedidos.":"Shown in the shop list and on your orders.","Foto de portada (opcional)":"Cover photo (optional)","Imagen no válida":"Invalid image"});
 I18N_RE.unshift([/^Personaliza la app con el logo y los colores de (.+)\. Todos los usuarios de la residencial \(residentes, vigilancia, cobradores y tiendas\) la verán así\.$/,'Customize the app with the logo and colors of $1. Every user of the community (residents, security, collectors and shops) will see it this way.'],[/^Residente · Casa 1$/,'Resident · House 1']);
 
-</script>
-<script data-origen="js/app/12-nube-demo.js">
 /* =========================================================
    NUBE: sincronización entre dispositivos (Firebase Realtime Database)
    Cada sección de los datos (casas, pagos, pases, tienda…) se guarda como texto
@@ -2009,9 +1677,6 @@ function desconectarNube(){try{localStorage.removeItem(KEY+'_fb')}catch(e){}loca
 (function cfgDesdeEnlace(){const h=location.hash||'';if(!h.startsWith('#cfg='))return;try{const b=h.slice(5).replace(/-/g,'+').replace(/_/g,'/');const c=JSON.parse(decodeURIComponent(escape(atob(b+'==='.slice((b.length+3)%4)))));if(c&&c.apiKey&&c.databaseURL){localStorage.setItem(KEY+'_fb',JSON.stringify(c))}}catch(e){}try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}})();
 
 Object.assign(I18N,{'Conexión a la nube':'Cloud connection','Conexión a la nube (demos en varios teléfonos)':'Cloud connection (demos on several phones)','Conectar otros teléfonos':'Connect other phones','Copiar enlace':'Copy link','Enviar por WhatsApp':'Send via WhatsApp','Conectar este dispositivo':'Connect this device','Desconectar este dispositivo':'Disconnect this device','Pegar configuración':'Paste configuration','Cambiar configuración':'Change configuration','📱 Datos solo en este dispositivo':'📱 Data on this device only','☁️ Conectado a la nube · datos compartidos entre dispositivos':'☁️ Connected to the cloud · data shared across devices','☁️ Conectando a la nube…':'☁️ Connecting to the cloud…','Enlace copiado':'Link copied'});
-
-</script>
-<script data-origen="js/app/13-menu-movil.js">
 /* =========================================================
    UI 2: ÍCONOS, MENÚ MÓVIL Y BARRA LATERAL DE ESCRITORIO
    ========================================================= */
@@ -2111,8 +1776,6 @@ function authShell(html){const f=(i,t,d)=>`<div class="hero-f"><div class="hf-ic
   return `<div class="auth"><section class="auth-hero"><div class="hero-top"><div class="hero-mk">${ic('gatewise',26)}</div>GateWise</div><div><h1>Tu comunidad, segura y al día.</h1><p>Control de acceso, pagos, avisos y tienda para residenciales y condominios, en una sola app.</p>${f('shield','Control de acceso','Pases con PIN, portería y aviso al residente cuando su visita ingresa.')}${f('wallet','Pagos y mora','Cuotas, comprobantes, cobro a domicilio y reportes en PDF.')}${f('mega','Comunidad','Avisos, reclamos, directorio y tienda entre vecinos.')}</div><small>© ${new Date().getFullYear()} GateWise</small></section><div class="auth-main">${html}</div></div>`}
 Object.assign(I18N,{"Más opciones":"More options","Plataforma":"Platform","Menú":"Menu","Tu comunidad, segura y al día.":"Your community, safe and up to date.","Control de acceso, pagos, avisos y tienda para residenciales y condominios, en una sola app.":"Access control, payments, notices and a marketplace for residential communities and condos, in one app.","Control de acceso":"Access control","Pases con PIN, portería y aviso al residente cuando su visita ingresa.":"PIN passes, gatehouse check-in and a heads-up to the resident when their visitor arrives.","Pagos y mora":"Payments and arrears","Cuotas, comprobantes, cobro a domicilio y reportes en PDF.":"Dues, receipts, home collection and PDF reports.","Comunidad":"Community","Avisos, reclamos, directorio y tienda entre vecinos.":"Notices, complaints, a directory and a neighbor marketplace.","Español / English":"Español / English"});
 
-</script>
-<script data-origen="js/app/14-opiniones.js">
 /* =========================================================
    OPINIONES: CALIFICACIÓN 1–5 ESTRELLAS DE TIENDAS Y SERVICIOS
    ========================================================= */
@@ -2201,8 +1864,6 @@ function seedResenas(db){const rs=db.usuarios.filter(u=>u.rol==='residente');con
   db.resenas=L}
 Object.assign(I18N,{"Opiniones":"Reviews","Calificar":"Rate","Editar mi opinión":"Edit my review","Malo":"Poor","Regular":"Fair","Bueno":"Good","Muy bueno":"Very good","Excelente":"Excellent","Toca las estrellas para calificar":"Tap the stars to rate","Comentario":"Comment","Publicar opinión":"Post review","Eliminar mi opinión":"Delete my review","Se publicará como":"It will be posted as",". Todos los residentes podrán verla.":". All residents will be able to see it.","opinión(es)":"review(s)","Aún no hay opiniones. ¡Sé el primero en calificar!":"No reviews yet. Be the first to rate!","Podrás calificar esta tienda después de recibir un pedido.":"You can rate this shop after you receive an order.","✓ Compra verificada":"✓ Verified purchase","Oculta":"Hidden","respondió":"replied","Responder":"Reply","Editar respuesta":"Edit reply","Ocultar":"Hide","Mostrar":"Show","Responder opinión":"Reply to review","Tu respuesta (pública)":"Your reply (public)","Publicar respuesta":"Post reply","Quitar respuesta":"Remove reply","Opiniones de vecinos":"Neighbor reviews","Aún no hay opiniones":"No reviews yet","Sin opiniones aún":"No reviews yet","☆ Sin opiniones · sé el primero":"☆ No reviews · be the first","Ver todas las opiniones":"See all reviews","⭐ Para calificar esta tienda, primero haz un pedido. Cuando lo recibas y confirmes la entrega, aparecerá el botón":"⭐ To rate this shop, place an order first. Once you receive it and confirm delivery, the button","aquí y en el pedido.":"will appear here and in the order.","¿Cómo te fue con tu pedido?":"How was your order?","Califica la tienda de 1 a 5 estrellas. Tu opinión ayuda a otros vecinos a elegir.":"Rate the shop from 1 to 5 stars. Your review helps other neighbors choose.","Calificar tienda":"Rate shop","Tu opinión de esta tienda:":"Your review of this shop:","Ordenar:":"Sort:","Recomendados":"Recommended","⭐ Mejor calificados":"⭐ Top rated","Mejor calificados":"Top rated","Calificación":"Rating","Opiniones de mis clientes":"Customer reviews","Elige de 1 a 5 estrellas":"Choose 1 to 5 stars","Cuéntanos brevemente qué pasó para ayudar a otros vecinos":"Briefly tell us what happened to help other neighbors","¡Gracias! Tu opinión ayuda a otros vecinos":"Thanks! Your review helps other neighbors","Opinión eliminada":"Review deleted","Opinión oculta para los residentes":"Review hidden from residents","Opinión visible otra vez":"Review visible again","Podrás calificar después de recibir un pedido de esta tienda":"You can rate after receiving an order from this shop","Solo los residentes pueden calificar":"Only residents can rate","¿Qué tal el producto, la atención y la entrega?":"How were the product, service and delivery?","¿Qué trabajo te hicieron? ¿Fue puntual, ordenado y cobró lo acordado?":"What work did they do? Were they on time, tidy, and did they charge what was agreed?"});
 
-</script>
-<script data-origen="js/app/15-votaciones.js">
 /* =========================================================
    VOTACIONES: ELECCIÓN DE DIRECTIVA Y APROBACIÓN DE PROYECTOS
    Un voto por casa (propietario). Cada voto se guarda en su propia
@@ -2444,8 +2105,6 @@ function seedVotaciones(db){const hoy=new Date();const iso=(d,h='18:00')=>{const
   hab.slice(0,7).forEach((c,i)=>votar(p0,c,{q:i<5?'si':i===5?'no':'abs'},-22))}
 Object.assign(I18N,{"Votaciones":"Voting","Votación":"Vote","Nueva":"New","Activas":"Active","Finalizadas":"Closed","Borradores":"Drafts","Aprobación de proyecto":"Project approval","Elección de directiva":"Board election","Borrador":"Draft","Abierta":"Open","Finalizada":"Closed","Cancelada":"Cancelled","Aprobado":"Approved","Rechazado":"Rejected","Sin quórum":"No quorum","Falta tu voto":"Your vote is missing","✓ Tu casa ya votó":"✓ Your house voted","Tu casa ya votó":"Your house already voted","Participación":"Turnout","✓ Quórum alcanzado":"✓ Quorum reached","Tu voto":"Your vote","Revisar y votar":"Review and vote","Voto en blanco":"Blank vote","Sí, apruebo":"Yes, I approve","No apruebo":"I do not approve","Me abstengo":"I abstain","¿Aprueba este proyecto?":"Do you approve this project?","Confirmar voto":"Confirm vote","Confirmar mi voto":"Confirm my vote","Volver a revisar":"Go back","¡Voto registrado!":"Vote recorded!","Gracias por participar":"Thanks for taking part","Comprobante":"Receipt","Listo":"Done","Resultados":"Results","Resultados en vivo":"Live results","Resultados al cierre":"Results at closing","Para no influir en el voto, los resultados se publican cuando termina la votación.":"To avoid influencing the vote, results are published when voting ends.","✓ PROYECTO APROBADO":"✓ PROJECT APPROVED","✕ PROYECTO RECHAZADO":"✕ PROJECT REJECTED","SIN QUÓRUM":"NO QUORUM","Empate":"Tie","Administración":"Administration","Abrir votación":"Open voting","Editar":"Edit","Eliminar":"Delete","Ver quién falta":"See who's missing","Cerrar ahora":"Close now","Cancelar votación":"Cancel voting","Acta de resultados (PDF)":"Results record (PDF)","Voto por casa":"Vote by house","Actualizar la directiva con los ganadores":"Update the board with the winners","Nueva votación":"New voting","Título":"Title","Descripción":"Description","Costo total":"Total cost","Aporte por casa":"Contribution per house","Costo del proyecto":"Project cost","Aportación de fondos de la residencial":"Contribution from community funds","Fondos de la residencial":"Community funds","Aportación por casa":"Contribution per house","· cubierto con fondos de la residencial":"· covered by community funds","Escribe el costo: la aportación por casa se calcula sola con lo que no cubren los fondos.":"Enter the cost: the per-house contribution is calculated from what the funds don't cover.","✓ Los fondos de la residencial cubren todo el proyecto. Las casas no aportan nada (aportación por casa en cero).":"✓ Community funds cover the whole project. Houses contribute nothing (zero per house).","Forma de pago del aporte (opcional)":"How the contribution is paid (optional)","Cotización o presupuesto (foto o PDF, opcional)":"Quote or budget (photo or PDF, optional)","Forma de elección":"Election method","Cargos a elegir":"Positions to elect","Cierra el día":"Closes on","Hora":"Time","Quórum mínimo (%)":"Minimum quorum (%)","Para aprobar":"To approve","Mayoría simple":"Simple majority","2/3 de los votos":"2/3 of votes","Voto secreto":"Secret ballot","Se sabe qué casas votaron, pero no por quién.":"It shows which houses voted, but not how.","Mostrar resultados en vivo":"Show live results","Si lo desactivas, se publican al cerrar (recomendado).":"If off, results are published at closing (recommended).","Solo votan casas al día":"Only houses up to date can vote","Las casas en mora no pueden votar.":"Houses in arrears cannot vote.","Crear borrador":"Create draft","Guardar cambios":"Save changes","Agregar candidato":"Add candidate","Agregar planilla":"Add slate","Nueva planilla":"New slate","Nombre de la planilla":"Slate name","Nombre completo":"Full name","Propuesta o presentación (opcional)":"Platform or introduction (optional)","Propuesta (opcional)":"Platform (optional)","Foto (opcional)":"Photo (optional)","Abrir y notificar":"Open and notify","Participación por casa":"Turnout by house","Faltan":"Missing","Ya votaron":"Already voted","¡Todas las casas votaron!":"Every house voted!","Cerrar votación":"Close voting","Votar ahora":"Vote now","Solo los propietarios votan":"Only owners vote","El voto lo emite el propietario de la casa":"The house owner casts the vote","Tu casa no puede votar en esta votación":"Your house cannot vote in this election","Documento":"Document","Ver cotización / presupuesto":"View quote / budget","Quórum":"Quorum","Quién vota":"Who votes","Gana":"Winner","Voto":"Ballot","Cierra":"Closes","Cierre":"Closing","Cerró":"Closed","No hay votaciones abiertas en este momento":"There are no open votes right now","Sin votaciones":"No votes"});
 
-</script>
-<script data-origen="js/app/16-dueno-app.js">
 /* =========================================================
    ADMINISTRADOR DE LA APP: SOLO EL CORREO DEL DUEÑO
    El acceso se valida con Firebase Authentication (correo y clave).
@@ -2474,8 +2133,6 @@ function cuentaDueno(){sheet('Mi cuenta',`<div class="card kv"><span>Nombre</spa
 async function resetDueno(){try{await esperarFirebase();await firebase.auth().sendPasswordResetEmail(OWNER());closeSheet();toast('Te enviamos el correo a '+OWNER())}catch(e){toast('No se pudo enviar: '+(e&&e.message||e))}}
 Object.assign(I18N,{"Correo del Administrador de la APP":"APP Administrator email","Solo el dueño de la app puede entrar como Administrador de la APP":"Only the app owner can sign in as APP Administrator","Correo o clave incorrectos":"Wrong email or password","Verificando…":"Verifying…","Enviarme correo para cambiar la contraseña":"Email me a password reset link","Único Administrador de la APP":"Sole APP Administrator","Vuelve a entrar con tu correo de Administrador de la APP":"Sign in again with your APP Administrator email"});
 
-</script>
-<script data-origen="js/app/17-menu-lateral.js">
 /* =========================================================
    UI 3: MENÚ LATERAL PROFESIONAL (PC, TABLET Y TELÉFONO)
    ≥1100px menú completo (se puede contraer) · 768–1099px riel de íconos
@@ -2588,8 +2245,6 @@ function shellHTML(u,navs,V,isSub,nl,body){const mas=masEntradas(V);const masN=m
   const nav=`<nav class="nav" aria-label="Menú">${navs.map(n=>{const on=n.id===S.tab||(isSub&&n.id===(BACK[S.tab]||'mas'));return n.id==='mas'?`<button class="${on?'on':''}" onclick="sbAbrir()" aria-label="Abrir menú"><span class="ni">${ic('bars')}${masN?'<i class="nb"></i>':''}</span><span class="nl">Menú</span></button>`:`<button class="${on?'on':''}" onclick="go('${n.id}')"${on?' aria-current="page"':''}><span class="ni">${ic(n.i)}</span><span class="nl">${n.l}</span></button>`}).join('')}</nav>`;
   return `${sideHTML3(u,navs,mas,isSub)}<div class="shell">${head}${S.imp?impBanner():''}<main class="wrap">${body}</main></div>${nav}`}
 
-</script>
-<script data-origen="js/app/18-precios.js">
 /* =========================================================
    PRECIOS: PLANES EDITABLES POR RANGO DE CASAS + PRECIO ACORDADO
    Cada plan: nombre, desde, hasta y precio mensual. El promedio por casa
@@ -2631,7 +2286,7 @@ Object.assign(I18N,{"Planes y precios":"Plans and prices","Precio mensual acorda
 
 
 /* ---------- Versión y actualización ---------- */
-const APP_VERSION='2026.11.05-25';
+const APP_VERSION='2026.10.29-22';
 async function buscarActualizacion(){toast('Buscando la versión más reciente…');try{if(navigator.serviceWorker){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}setTimeout(()=>{location.href=location.pathname+'?v='+Date.now()},400)}
 const versionHTML=()=>`<p class="note" style="text-align:center;margin-top:18px">GateWise · versión ${APP_VERSION} · <a href="#" onclick="buscarActualizacion();return false" style="color:var(--pri);font-weight:700">Buscar actualización</a></p>`;
 try{if(navigator.serviceWorker){navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!window.__gwRecargado){window.__gwRecargado=1;if(!S.user||!document.querySelector('#ov'))location.reload()}})}}catch(e){}
@@ -2677,9 +2332,6 @@ function filtroPagosRep(){if(S.rep!=='pagos')return'';const sel=`<label class="f
 Object.assign(I18N,{"Buscar por fechas":"Search by date","Hoy":"Today","Mes anterior":"Last month","Cobrado en el periodo":"Collected in period","Recibos":"Receipts","Ver e imprimir PDF":"View and print PDF","Todos los cobradores":"All collectors","Cierres revisados":"Reviewed closings","No hay cobros a domicilio en esas fechas":"No home collections in that period","Pagos por periodo":"Payments by period","Forma de pago":"Payment method","Todas":"All","Ver propuesta (PDF)":"View platform (PDF)","Propuesta en PDF (opcional)":"Platform PDF (optional)"});
 
 let CANDPDF;function verPropCand(vid,pid,oid){const v=vot(vid);const o=v&&v.preguntas.find(x=>x.id===pid).opciones.find(x=>x.id===oid);verArchivo(o&&o.propPdf,'Propuesta de '+(o?o.nombre:''))}
-
-</script>
-<script data-origen="js/app/19-movimiento.js">
 /* =========================================================
    UI 4 · MOVIMIENTO Y ACABADO (principios de Emil Kowalski)
    - Curvas propias, nada de ease-in, animaciones de UI < 300 ms
@@ -2792,8 +2444,6 @@ function recordatoriosRes(u){const cid=u.casaId;const rows=[];const fila=(i,c,t,
   return `<div class="card rec"><div class="rec-h"><span class="mic c-teal" style="width:30px;height:30px;border-radius:9px">${ic('calendar',16)}</span><b class="grow">Recordatorios</b><span class="sm muted">${fFecha(ymd())}</span></div>${rows.join('')}</div>`}
 Object.assign(I18N,{"Recordatorios":"Reminders","Pagos atrasados":"Overdue payments","Pagar":"Pay","Pendiente":"Pending","Pago en revisión":"Payment under review","Pagos al día":"Payments up to date","Al día":"Up to date","Gracias por mantener tus pagos al día":"Thanks for keeping your payments up to date","Inquilinos por vencer":"Tenants expiring","Pedidos en camino":"Orders on the way","Votaciones pendientes":"Pending votes","Votar":"Vote","Notificaciones sin leer":"Unread notifications","La administración está validando tu comprobante":"Management is reviewing your receipt"});
 
-</script>
-<script data-origen="js/app/20-profundidad.js">
 /* =========================================================
    UI 5 · DISEÑO CON PROFUNDIDAD (Emil Kowalski)
    Fondo aurora, íconos con color, portada en el inicio, barra
@@ -2970,8 +2620,6 @@ if(typeof sbToggle==='function'){const t5=sbToggle;sbToggle=function(){const r=t
 addEventListener('resize',()=>{clearTimeout(window.__rz5);window.__rz5=setTimeout(()=>{try{for(const k in IND5)delete IND5[k];if(S.user)indicadores5()}catch(e){}},150)});
 Object.assign(I18N,{"Buenos días":"Good morning","Buenas tardes":"Good afternoon","Buenas noches":"Good evening","Nuevo pase":"New pass","Pagar cuota":"Pay fee","Emergencias":"Emergencies","En mora":"Overdue","Cuota pendiente":"Fee pending","Al día":"Up to date","Portones":"Gates","Al día este mes":"Paid this month","Residencial":"Community","Reportes":"Reports","Avisos":"Notices","Administración":"Management","Presidente":"President","Casas":"Houses","Tienda":"Store","Pagos":"Payments"});
 
-</script>
-<script data-origen="js/app/21-comunidad.js">
 /* =========================================================
    COMUNIDAD 6 · ACADEMIAS, EVENTOS (FIESTAS Y TORNEOS) Y RESERVAS
    Datos escritos por varias casas a la vez (confirmaciones, equipos,
@@ -3675,8 +3323,6 @@ Object.assign(I18N,{"Academias":"Academies","Academia":"Academy","Nueva academia
 "Eventos":"Events","Evento":"Event","Eventos y torneos":"Events and tournaments","Nuevo evento":"New event","Próximos":"Upcoming","Anteriores":"Past","Fiesta":"Party","Torneo":"Tournament","Otro evento":"Other event","Confirmaciones abiertas":"RSVP open","Confirmaciones cerradas":"RSVP closed","Inscripciones abiertas":"Registration open","Inscripciones cerradas":"Registration closed","En curso":"In progress","Finalizado":"Finished","Cancelado":"Cancelled","Borrador":"Draft","Nombre del evento":"Event name","Descripción":"Description","Fecha de inicio":"Start date","Hora":"Time","Hora del primer partido":"First match time","Hora de finalización (opcional)":"End time (optional)","Otro lugar…":"Other place…","Apartar el área en Reservas ese día":"Book the area in Reservations that day","Fecha límite de inscripción":"Registration deadline","Fecha límite para confirmar":"RSVP deadline","Guardar borrador":"Save draft","Asistentes y presupuesto":"Attendees and budget","Preguntar cuántos niños asistirán (aparte de los adultos)":"Ask how many children will attend (besides adults)","Costo estimado por adulto":"Estimated cost per adult","Costo estimado por niño":"Estimated cost per child","Gastos fijos (decoración, sonido…)":"Fixed costs (decoration, sound…)","Aporte de fondos de la residencial":"Contribution from community funds","Máximo de personas por casa (opcional)":"Max people per house (optional)","Deporte":"Sport","Formato":"Format","Liga (todos contra todos)":"League (round robin)","Eliminación directa":"Single elimination","Grupos y eliminatoria":"Groups and knockout","Máximo de equipos":"Max teams","Cuota por equipo (opcional)":"Fee per team (optional)","Mínimo de integrantes":"Min players","Máximo de integrantes":"Max players","Permitir integrantes que no viven en la residencial":"Allow players who don't live in the community","Jugar partido por el tercer lugar":"Play a third-place match","Liga a ida y vuelta":"Home and away league","Premios y reglas (opcional)":"Prizes and rules (optional)","Enviar invitación a todos":"Send invitation to everyone","Abrir inscripciones y avisar":"Open registration and notify","Cerrar inscripciones y armar calendario":"Close registration and build schedule","Cerrar confirmaciones":"Close RSVP","Recordar":"Remind","Reabrir confirmaciones":"Reopen RSVP","Marcar como realizado":"Mark as done","Rehacer calendario":"Rebuild schedule","Armar fase final":"Build final stage","Finalizar y anunciar campeón":"Finish and announce champion","Cancelar evento":"Cancel event","¿Asistirán de tu casa?":"Will your household attend?","Tu respuesta (puedes cambiarla)":"Your answer (you can change it)","Sí, asistiremos":"Yes, we'll attend","No podremos":"We can't make it","Adultos":"Adults","Niños":"Children","Enviar confirmación":"Send RSVP","Actualizar respuesta":"Update answer","Casas asisten":"Houses attending","Personas":"People","Sin responder":"No answer","Respuestas":"Responses","Asisten":"Attending","No asistirán":"Not attending","Presupuesto estimado":"Estimated budget","Gastos fijos":"Fixed costs","Total estimado":"Estimated total","Aporte de la residencial":"Community contribution","Por cubrir":"To cover","Por casa que asiste":"Per attending house","Por persona":"Per person","Adultos / niños":"Adults / children","Casas":"Houses","Aún nadie confirma":"No confirmations yet","Nadie ha dicho que no":"Nobody has declined","¡Todas las casas respondieron!":"Every house answered!","Lista de asistentes y presupuesto (PDF)":"Attendee list and budget (PDF)","Tu casa asistirá":"Your household will attend","Tu casa indicó que no asistirá":"Your household won't attend","Falta tu confirmación":"Your RSVP is missing","Información":"Information","Equipos":"Teams","Partidos":"Matches","Tabla":"Standings","Llaves":"Bracket","Mi equipo":"My team","Inscribir mi equipo":"Register my team","Integrantes":"Players","Próximo partido":"Next match","Goleadores":"Top scorers","Mejores anotadores":"Top scorers","Agregar equipo":"Add team","Por aprobar":"Pending approval","Inscritos":"Registered","Rechazados":"Rejected","Aprobado":"Approved","Rechazado":"Rejected","Inscribir equipo":"Register team","Editar equipo":"Edit team","Nombre del equipo":"Team name","Color del equipo":"Team color","Capitán o responsable":"Captain","Agregar integrante":"Add player","De afuera":"Outside","Enviar inscripción":"Send registration","Aprobar equipo":"Approve team","Quitar equipo":"Remove team","Armar calendario":"Build schedule","Primer día de juego":"First game day","Días de juego":"Game days","Minutos por partido (con descanso)":"Minutes per match (with break)","Canchas disponibles":"Available fields","Partidos por cancha cada día":"Matches per field per day","Número de grupos":"Number of groups","Pasan por grupo":"Qualify per group","Sortear el orden de los equipos":"Shuffle team order","Generar y publicar calendario":"Generate and publish schedule","Tabla de posiciones":"Standings","Jornada":"Round","Final":"Final","Semifinal":"Semifinal","Cuartos de final":"Quarterfinals","Octavos de final":"Round of 16","Tercer lugar":"Third place","Por definir":"TBD","Pasa directo a la siguiente ronda":"Advances directly","Anotadores (opcional)":"Scorers (optional)","Agregar anotador":"Add scorer","Programación":"Scheduling","Cancha (opcional)":"Field (optional)","Guardar":"Save","Borrar resultado":"Delete result","Anotaciones":"Scoring","Puntos":"Points","Jugador":"Player","Equipo":"Team",
 "Reservas":"Reservations","Reservas de áreas comunes":"Common area reservations","Reservas de áreas":"Area reservations","Área":"Area","Aprobada":"Approved","Rechazada":"Rejected","Cancelada":"Cancelled","Sin pagar":"Unpaid","Reglamento de uso":"Rules of use","Área inactiva":"Inactive area","Reservado":"Booked","Hoy":"Today","Libre todo el día.":"Free all day.","Reservar este día":"Book this day","Apartar para la administración o una casa":"Book for management or a house","Mis reservas":"My reservations","Aún no tienes reservas":"You don't have reservations yet","Próximas reservas aprobadas":"Upcoming approved reservations","Reporte de reservas del mes (PDF)":"Monthly reservations report (PDF)","Para":"For","Administración":"Management","Motivo":"Reason","Cumpleaños":"Birthday","Reunión familiar":"Family gathering","Reunión de trabajo":"Work meeting","Actividad religiosa":"Religious activity","Otro":"Other","Detalle (opcional)":"Details (optional)","Acepto el reglamento de uso":"I accept the rules of use","Apartar":"Book","Reservar":"Book","Uso del área":"Area use","Depósito (se devuelve)":"Deposit (refundable)","Total":"Total","Reserva":"Reservation","Reservó":"Booked by","Costo":"Cost","Depósito":"Deposit","Devuelto":"Returned","Por devolver":"To be returned","Solicitado":"Requested","Aprobar":"Approve","Cancelar reserva":"Cancel reservation","Marcar depósito devuelto":"Mark deposit returned","Nueva área común":"New common area","Editar área":"Edit area","Abre":"Opens","Cierra":"Closes","Capacidad (personas)":"Capacity (people)","Máximo de horas por reserva":"Max hours per reservation","Costo de uso":"Usage cost","Días de anticipación mínima":"Minimum days in advance","La administración aprueba cada reserva":"Management approves each reservation","Solo casas al día pueden reservar":"Only houses up to date can book","Área disponible para reservar":"Area available for booking","Crear área":"Create area","Hoy y próximos días":"Today and upcoming days","Próximos 7 días":"Next 7 days","Sin reservas hoy":"No reservations today","Sin reservas":"No reservations","Reservas de hoy":"Today's reservations","Responder":"Reply","Academias: pago pendiente":"Academies: payment pending","Por pagar":"To pay"});
 
-</script>
-<script data-origen="js/app/22-casas-autorizadas.js">
 /* =========================================================
    CASAS 7 · CASAS AUTORIZADAS + CARGA MASIVA DE PERFILES
    - Cada residencial tiene un número de casas autorizadas (lo define el
@@ -3738,1071 +3384,14 @@ if(typeof buscarVig==='function'){const bv=buscarVig;buscarVig=function(q){const
 function setCasasAut(id,v){const r=PLAT.residenciales.find(x=>x.id===id);const d=leerDB(id);const n=d?d.casas.length:0;v=Math.floor(+v||0);if(v<n){toast('No puede ser menor que las '+n+' casas ya registradas');render();return}setRes(id,'casasAut',v)}
 Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":"Registered now","Nuevas que entran":"New ones added","Total después de importar":"Total after import","Límite de casas":"House limit","Pedir más casas por WhatsApp":"Request more houses via WhatsApp","Datos de la casa":"House details","Editar datos de la casa":"Edit house details","Teléfono 2 / WhatsApp":"Phone 2 / WhatsApp","Placas":"Plates","Placas de vehículos":"Vehicle plates","Habitantes":"Residents","Notas":"Notes","Vehículos registrados":"Registered vehicles","Completo":"Full","Residente":"Resident"});
 
-</script>
-<script data-origen="js/app/23-botones.js">
-/* =========================================================
-   UI 6 · SISTEMA DE BOTONES Y CONFIRMACIONES
-   - Una sola fuente de estilos para los botones (css/botones.css):
-     al arrancar se retiran las reglas de botón de las capas anteriores.
-   - Íconos automáticos según la acción (Aprobar ✓, Eliminar 🗑, Nuevo +…)
-     y flecha de avance en las acciones principales.
-   - Onda al tocar, vibración corta en Android y foco visible con teclado.
-   - "Cargando" en el botón mientras el servidor responde, y bloqueo de
-     doble envío (dos toques seguidos no crean dos registros).
-   - confirmar() y pedirTexto(): ventanas propias en lugar de las del navegador.
-   ========================================================= */
-(function () {
-  /* ---------- 1. Íconos que faltaban ---------- */
-  Object.assign(ICON, {
-    arr: '<path d="M5 12h14M13 6l6 6-6 6"/>',
-    eye: '<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
-    edit: '<path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/>',
-    send: '<path d="M21 3 10 14"/><path d="M21 3l-7 18-4-7-7-4z"/>',
-    upload: '<path d="M12 16V4M7 9l5-5 5 5M5 20h14"/>',
-    copy: '<rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/>',
-    refresh: '<path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/>',
-  });
-  if (!ICON.download) ICON.download = '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>';
-
-  /* ---------- 2. Una sola fuente de estilos para .btn ---------- */
-  const esDeBoton = sel => /^\.btns?\b/.test(sel.trim());
-  function limpiarReglas(lista) {
-    for (let i = lista.length - 1; i >= 0; i--) {
-      const r = lista[i];
-      if (r.cssRules && !r.selectorText) { limpiarReglas(r.cssRules); continue; }
-      if (!r.selectorText || !/\.btns?\b/.test(r.selectorText)) continue;
-      const partes = r.selectorText.split(',');
-      const quedan = partes.filter(p => !esDeBoton(p));
-      if (quedan.length === partes.length) continue;
-      try { if (!quedan.length) (r.parentRule || r.parentStyleSheet).deleteRule(i); else r.selectorText = quedan.join(','); } catch (e) { }
-    }
-  }
-  function unificarEstilos() {
-    for (const sh of document.styleSheets) {
-      const n = sh.ownerNode;
-      if (n && n.href && /botones\.css/.test(n.href)) continue;
-      if (n && n.id === 'botones-css') continue;
-      try { limpiarReglas(sh.cssRules); } catch (e) { /* hoja externa (fuentes) */ }
-    }
-    const link = document.querySelector('link[href*="botones.css"],style#botones-css');
-    if (link && link !== document.head.lastElementChild) document.head.appendChild(link);
-  }
-  unificarEstilos();
-
-  /* ---------- 3. Íconos automáticos según la acción ---------- */
-  const REGLAS = [
-    [/^(cerrar sesión|salir|sign out|log out)/i, 'out'],
-    [/^(aprobar|aceptar|confirmar|listo|entendido|marcar (como )?pagad|marcar ingreso|approve|accept|confirm|done|got it)/i, 'check'],
-    [/^(guardar|save)/i, 'check'],
-    [/^(rechazar|reject|decline)/i, 'x'],
-    [/^(cancelar|cerrar|cancel|close)\b/i, 'x'],
-    [/^(eliminar|borrar|quitar|delete|remove)/i, 'trash', 'b-danger'],
-    [/^(ver|abrir|view|open|see)\b/i, 'eye'],
-    [/^(descargar|download)/i, 'download'],
-    [/^(compartir|share)/i, 'share'],
-    [/^(editar|cambiar|modificar|edit|change)/i, 'edit'],
-    [/^(\+|nuevo|nueva|agregar|añadir|crear|registrar|invitar|new|add|create|invite)/i, 'plus'],
-    [/^(enviar|publicar|send|publish|post)/i, 'send'],
-    [/^(subir|importar|adjuntar|upload|import|attach)/i, 'upload'],
-    [/^(ir a pagar|pagar|pay)/i, 'card'],
-    [/^(llamar|call)\b/i, 'phone'],
-    [/^(copiar|copy)/i, 'copy'],
-    [/^(buscar|search)/i, 'search'],
-    [/^(reporte|reportar|report)/i, 'doc'],
-    [/^(soy propietario|crear mi cuenta|i'?m an owner|create my account)/i, 'userplus'],
-    [/^(quiero la app|solicitar|i want the app|request)/i, 'building'],
-    [/^(whatsapp)/i, 'chat'],
-    [/^(renovar|regenerar|generar|actualizar|renew|regenerate|update)/i, 'refresh'],
-  ];
-  const AVANZA = /^(ingresar|entrar|continuar|siguiente|comenzar|empezar|sign in|log in|continue|next|start)/i;
-  const tieneIcono = b => !!b.querySelector('svg,img,.mic,.b-ar');
-  const esRelleno = b => !/\b(sec|ghost|bad)\b/.test(b.className);
-
-  function envolverTexto(b) {
-    b.childNodes.forEach(n => {
-      if (n.nodeType === 3 && n.textContent.trim()) { const s = document.createElement('span'); s.className = 'b-tx'; s.textContent = n.textContent; n.replaceWith(s); }
-    });
-  }
-  function procesar(b) {
-    b.dataset.b6 = '1';
-    const txt = (b.textContent || '').replace(/\s+/g, ' ').trim();
-    // emoji al inicio (🗑️ Borrar…): se cambia por el ícono equivalente
-    const sinEmoji = txt.replace(/^[\u{1F300}-\u{1FAFF}☀-➿️\s]+/u, '');
-    if (txt && txt.length <= 42 && !tieneIcono(b)) {
-      const regla = REGLAS.find(([re]) => re.test(sinEmoji));
-      if (regla) {
-        if (sinEmoji !== txt || /^\+\s*/.test(txt)) {
-          // quitar el emoji o el "+" del texto, ya que se muestra como ícono
-          const limpio = sinEmoji.replace(/^\+\s*/, '');
-          if (b.children.length === 0) b.textContent = limpio;
-        }
-        b.insertAdjacentHTML('afterbegin', ic(regla[1], 18));
-        if (regla[2] && /\bghost\b/.test(b.className)) b.classList.add(regla[2]);
-      } else if (esRelleno(b) && /\bblock\b/.test(b.className) && (AVANZA.test(txt) || (b.form && b.type === 'submit'))) {
-        envolverTexto(b);
-        b.insertAdjacentHTML('beforeend', `<span class="b-ar" aria-hidden="true">${ic('arr', 16)}</span>`);
-      }
-    }
-    if (/\bghost\b/.test(b.className) && /color:\s*var\(--bad\)/.test(b.getAttribute('style') || '')) { b.classList.add('b-danger'); b.style.color = ''; }
-    envolverTexto(b);
-  }
-  let pendiente = false;
-  function procesarTodo() {
-    pendiente = false;
-    document.querySelectorAll('.btn:not([data-b6])').forEach(b => { try { procesar(b); } catch (e) { b.dataset.b6 = '1'; } });
-  }
-  new MutationObserver(() => { if (!pendiente) { pendiente = true; requestAnimationFrame(procesarTodo); } })
-    .observe(document.documentElement, { childList: true, subtree: true });
-
-  /* ---------- 4. Onda al tocar y vibración corta ---------- */
-  const menosMov6 = () => window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  document.addEventListener('pointerdown', e => {
-    const b = e.target.closest && e.target.closest('.btn');
-    if (!b || b.disabled || b.classList.contains('is-busy') || e.button > 0) return;
-    if (!menosMov6()) {
-      const r = b.getBoundingClientRect(); const s = document.createElement('span');
-      s.className = 'b-rip'; s.style.left = (e.clientX - r.left) + 'px'; s.style.top = (e.clientY - r.top) + 'px';
-      s.style.setProperty('--b-rs', Math.ceil(Math.hypot(r.width, r.height) * 2 / 12));
-      b.appendChild(s); setTimeout(() => s.remove(), 600);
-    }
-    if (e.pointerType === 'touch' && esRelleno(b) && navigator.vibrate) { try { navigator.vibrate(8); } catch (x) { } }
-  }, { passive: true });
-
-  /* ---------- 5. Cargando + bloqueo de doble envío ---------- */
-  let n = 0; const ocupados = new Set();
-  const B = window.GW_BUSY = {
-    inc() { n++; },
-    dec() { n = Math.max(0, n - 1); if (!n) liberarTodo(); },
-    get activos() { return n; },
-  };
-  function ponerOcupado(b) {
-    if (!b || !b.isConnected || b.classList.contains('is-busy')) return;
-    envolverTexto(b);
-    if (!b.querySelector('.b-spin')) b.insertAdjacentHTML('beforeend', '<span class="b-spin" aria-hidden="true"><i></i></span>');
-    b.classList.add('is-busy'); b.setAttribute('aria-busy', 'true'); b._b6t = Date.now(); ocupados.add(b);
-    b._b6max = setTimeout(() => liberar(b), 20000);
-  }
-  function liberar(b) {
-    const falta = Math.max(0, 380 - (Date.now() - (b._b6t || 0)));   // que no parpadee
-    setTimeout(() => { b.classList.remove('is-busy'); b.removeAttribute('aria-busy'); clearTimeout(b._b6max); ocupados.delete(b); }, falta);
-  }
-  function liberarTodo() { [...ocupados].forEach(liberar); }
-  function vigilar(b) {
-    // si a los 120 ms el botón sigue en pantalla y hay algo pendiente en el servidor, mostrar "cargando"
-    setTimeout(() => { if (n > 0 && b && b.isConnected) ponerOcupado(b); }, 120);
-  }
-  const ultimoEnvio = new WeakMap();
-  document.addEventListener('submit', e => {
-    const f = e.target; const sb = e.submitter || f.querySelector('button:not([type=button]),.btn[type=submit]');
-    const ahora = Date.now(); const prev = ultimoEnvio.get(f) || 0;
-    const repetido = ahora - prev < 150 || (ahora - prev < 1500 && n > 0);   // doble toque, o el anterior aún espera al servidor
-    if ((sb && sb.classList.contains('is-busy')) || repetido) { e.preventDefault(); e.stopImmediatePropagation(); return; }
-    ultimoEnvio.set(f, ahora);
-    if (sb && sb.classList.contains('btn')) vigilar(sb);
-  }, true);
-  document.addEventListener('click', e => {
-    const b = e.target.closest && e.target.closest('.btn');
-    if (!b) return;
-    if (b.classList.contains('is-busy')) { e.preventDefault(); e.stopImmediatePropagation(); return; }
-    const envia = b.form && (b.type === 'submit');   // los envíos de formulario se vigilan en 'submit'
-    if (!envia) vigilar(b);
-  }, true);
-
-  /* ---------- 6. Confirmaciones propias (en lugar de confirm/prompt del navegador) ---------- */
-  let cbConf = null;
-  // opts: {icono, tono:'bad'|'warn'|'pri'|'ok', no:'texto del botón de volver'}
-  window.confirmar = function (titulo, texto, boton, cb, opts) {
-    opts = opts || {}; cbConf = cb;
-    const tono = opts.tono || 'bad';
-    const col = { bad: 'var(--bad)', warn: 'var(--warn)', pri: 'var(--pri)', ok: 'var(--ok)' }[tono] || 'var(--bad)';
-    const cls = tono === 'bad' ? 'btn bad' : tono === 'ok' ? 'btn ok' : 'btn';
-    const icono = opts.icono || (tono === 'bad' ? 'trash' : 'alert');
-    sheet(titulo, `<div class="b-conf" style="--b-c:${col}"><div class="b-conf-ic">${ic(icono, 26)}</div><p>${texto}</p>
-      <div class="btns"><button class="${cls}" data-b6="1" onclick="GW_CONF.si()">${ic(tono === 'bad' ? 'trash' : 'check', 18)}<span class="b-tx">${esc(boton)}</span></button><button class="btn ghost" data-b6="1" onclick="closeSheet()"><span class="b-tx">${esc(opts.no || 'Cancelar')}</span></button></div></div>`);
-  };
-  window.pedirTexto = function (titulo, label, def, cb, opts) {
-    opts = opts || {}; cbConf = cb;
-    sheet(titulo, `<form onsubmit="event.preventDefault();GW_CONF.texto()"><label class="f">${label}<textarea id="b6tx" required>${esc(def || '')}</textarea></label>
-      <div class="btns"><button class="btn bad" data-b6="1">${ic('x', 18)}<span class="b-tx">${esc(opts.boton || 'Confirmar')}</span></button><button type="button" class="btn ghost" data-b6="1" onclick="closeSheet()"><span class="b-tx">Volver</span></button></div></form>`);
-    setTimeout(() => { const t = document.getElementById('b6tx'); if (t) { t.focus(); t.select(); } }, 60);
-  };
-  window.GW_CONF = {
-    si() { const f = cbConf; cbConf = null; closeSheet(); if (f) f(); },
-    texto() { const t = document.getElementById('b6tx'); const v = t ? t.value.trim() : ''; if (!v) return toast('Escribe el motivo'); const f = cbConf; cbConf = null; closeSheet(); if (f) f(v); },
-  };
-
-  Object.assign(I18N, {
-    '¿Generar un código nuevo?': 'Generate a new code?', 'El código anterior dejará de funcionar.': 'The previous code will stop working.', 'Generar código': 'Generate code',
-    'Rechazar pago': 'Reject payment', 'Motivo (lo verá el residente)': 'Reason (the resident will see it)', 'Rechazar solicitud': 'Reject request', 'Motivo (lo verá la persona)': 'Reason (the person will see it)',
-    '¿Eliminar este aviso?': 'Delete this notice?', 'Dejará de verse para todos los residentes.': 'It will no longer be visible to residents.', 'Eliminar aviso': 'Delete notice', 'Aviso eliminado': 'Notice deleted',
-    'La casa ya tiene propietario': 'The house already has an owner', 'Aprobar y reemplazar': 'Approve and replace',
-    '¿Cancelar este pase?': 'Cancel this pass?', 'El PIN dejará de funcionar en portería.': 'The PIN will stop working at the gate.', 'Cancelar pase': 'Cancel pass', 'Mantener pase': 'Keep pass',
-    'Volver': 'Back', 'Escribe el motivo': 'Write the reason',
-  });
-})();
-
-</script>
-<script data-origen="js/app/24-residente.js">
-/* =========================================================
-   UI 7 · PANTALLAS DEL RESIDENTE E INQUILINO
-   Inicio nuevo, pensado también para personas mayores:
-   - estado de cuenta claro arriba ("¡Estás al día!" o "Debes $35.00")
-     con un botón grande para pagar
-   - "¿Qué necesitas hoy?": botones grandes con ícono, título y explicación
-   - llamar a portería con un toque; emergencia en rojo, a todo lo ancho
-   - tamaño de letra ajustable (Normal / Grande / Muy grande)
-   Estilos en css/residente.css
-   ========================================================= */
-(function () {
-  ICON.aa = '<path d="M3 19 8.5 5h1L15 19M5.2 14h7.6"/><path d="M16 19l2.6-7h.8L22 19M16.9 16.8h4.2"/>';
-  const esVecino = u => !!u && (u.rol === 'residente' || u.rol === 'inquilino');
-
-  /* ---------- Tamaño de letra (se guarda en este teléfono) ---------- */
-  const LKEY = 'gw_letra';
-  let letra = 0; try { letra = Math.max(0, Math.min(2, +localStorage.getItem(LKEY) || 0)); } catch (e) { }
-  function aplicarLetra() { const h = document.documentElement; h.classList.remove('letra-1', 'letra-2'); if (letra) h.classList.add('letra-' + letra); }
-  aplicarLetra();
-  window.verLetra = function () {
-    const op = [['Normal', 15], ['Grande', 19], ['Muy grande', 23]];
-    sheet('Tamaño de letra', `<p class="note" style="margin-top:0">Elige cómo se ve más cómodo. Se guarda en este teléfono.</p>
-      <div class="r7-letras">${op.map(([t, px], i) => `<button class="${letra === i ? 'on' : ''}" onclick="ponerLetra(${i})"><b style="font-size:${px + 6}px">Aa</b><span>${t}</span></button>`).join('')}</div>`);
-  };
-  window.ponerLetra = function (i) { letra = i; try { localStorage.setItem(LKEY, String(i)); } catch (e) { } aplicarLetra(); closeSheet(); render(); toast(['Letra normal', 'Letra grande', 'Letra muy grande'][i]); };
-
-  /* ---------- Estado de cuenta de la casa ---------- */
-  function estado7(cid) {
-    const m = moraCasa(cid), p = pendCasa(cid);
-    const todas = cuotasCasa(cid).filter(q => q.estado === 'pendiente');
-    if (m.length) return { c: 'bad', i: 'alert', t: m.length === 1 ? 'Tienes 1 mes atrasado' : `Tienes ${m.length} meses atrasados`, s: m.map(c => perL(c.periodo)).join(', ') + ' · incluye recargo', monto: sum(todas, montoCuota), ml: todas.length > m.length ? `Total (${todas.length} meses)` : 'Total', pagar: true };
-    if (p.length) {
-      const vf = vence(periodoActual()); const d = Math.ceil((new Date(vf + 'T23:59') - new Date()) / 864e5);
-      return { c: 'warn', i: 'clock', t: 'Cuota de ' + perL(periodoActual()), s: 'Vence el ' + fFecha(vf) + (d >= 0 ? (d === 0 ? ' · hoy' : d === 1 ? ' · mañana' : ` · en ${d} días`) : ''), monto: sum(todas, montoCuota), ml: 'Por pagar', pagar: true };
-    }
-    if (cuotasCasa(cid).some(q => q.estado === 'revision')) return { c: 'info', i: 'info', t: 'Pago en revisión', s: 'La administración está validando tu comprobante' };
-    const c = casa(cid); const nx = addMonths(periodoActual(), 1);
-    return { c: 'ok', i: 'check', t: '¡Estás al día!', s: 'Próxima cuota: ' + fFecha(vence(nx)), monto: (c && c.cuota) || DB.config.cuota, ml: 'Cuota' };
-  }
-  const estHTML = e => `<div class="r7-est ${e.c}"><span class="r7-ei">${ic(e.i, 26)}</span><b class="r7-tt">${e.t}</b>${e.monto != null ? `<span class="r7-monto"><small>${e.ml || ''}</small>${money(e.monto)}</span>` : ''}<span class="r7-sub">${e.s}</span></div>`;
-
-  /* ---------- Portada ---------- */
-  function hero7(u) {
-    let est = '';
-    if (u.rol === 'residente' && u.casaId) {
-      const e = estado7(u.casaId);
-      est = estHTML(e) + (e.pagar ? `<button class="r7-pagar" onclick="S.sel=null;go('pagos')">${ic('card', 22)}<span>Pagar mi cuota</span></button>` : '');
-    } else if (u.rol === 'inquilino' && u.hasta) {
-      est = estHTML({ c: 'ok', i: 'key', t: 'Tu acceso está activo', s: 'Hasta el ' + fFecha(u.hasta) });
-    }
-    return `<section class="r7-hero"><div class="r7-top"><small>${fechaLarga5()}</small><button class="r7-aa" onclick="verLetra()" aria-label="Cambiar tamaño de letra"><b>Aa</b>Letra</button></div>
-      <h2>${saludo5()}, ${esc(u.nombre.split(' ')[0])}</h2><p class="r7-casa">${u.casaId ? esc(casaNom(u.casaId)) + ' · ' : ''}${esc(DB.residencial.nombre)}</p>${est}</section>`;
-  }
-
-  /* ---------- Botones grandes ---------- */
-  const tile = (o) => {
-    const inner = `<span class="r7-ti">${ic(o.i, 27)}</span><span><b>${o.t}</b><small>${o.s}</small></span>${o.badge ? `<span class="r7-bd">${o.badge}</span>` : ''}`;
-    return o.href ? `<a class="r7-t c-${o.c}" href="${o.href}">${inner}</a>` : `<button class="r7-t c-${o.c}" onclick="${o.on}">${inner}</button>`;
-  };
-  function tiles7(u) {
-    const V = VIEWS[u.rol] || {}; const T = [];
-    T.push({ i: 'ticket', c: 'teal', t: 'Dar acceso a una visita', s: 'Crea un pase y compártelo', on: 'elegirPase7()' });
-    if (V.pagos) { const e = estado7(u.casaId); T.push({ i: 'wallet', c: 'indigo', t: 'Pagar mi cuota', s: e.pagar ? money(e.monto) + ' pendiente' : 'Ver mis pagos y recibos', on: "S.sel=null;go('pagos')", badge: e.pagar ? '!' : '' }); }
-    const tel = ((DB.residencial.vigilancia || {}).telefono || '').trim();
-    T.push(tel ? { i: 'phone', c: 'green', t: 'Llamar a portería', s: esc(tel), href: 'tel:' + tel.replace(/[^\d+]/g, '') } : { i: 'phone', c: 'green', t: 'Números de la residencial', s: 'Portería y administración', on: "go('directorio')" });
-    const sem = addDays(ymd(), -7); const nAv = DB.avisos.filter(a => String(a.fecha).slice(0, 10) >= sem).length;
-    T.push({ i: 'mega', c: 'amber', t: 'Avisos', s: nAv ? (nAv === 1 ? '1 nuevo esta semana' : nAv + ' nuevos esta semana') : 'Noticias de la residencial', on: "go('avisos')", badge: nAv || '' });
-    if (V.reservas) T.push({ i: 'calendar', c: 'violet', t: 'Reservar un área', s: 'Salón, cancha y más', on: "go('reservas')" });
-    if (V.reclamos) T.push({ i: 'chatalert', c: 'orange', t: 'Reportar un problema', s: 'Fugas, luces, ruido…', on: "go('reclamos')" });
-    if (T.length % 2 && V.eventos) T.push({ i: 'party', c: 'pink', t: 'Eventos', s: 'Fiestas y torneos', on: "go('eventos')" });
-    if (T.length % 2 && V.tienda) T.push({ i: 'store', c: 'sky', t: 'Tienda', s: 'Compra a vecinos', on: "go('tienda')" });
-    return `<div class="r7-grid">${T.map(tile).join('')}<button class="r7-t r7-sos" onclick="S.dseg='emergencia';go('directorio')"><span class="r7-ti">${ic('siren', 27)}</span><span><b>Emergencias</b><small>911, policía, bomberos y números de la residencial</small></span><span class="r7-sos-ch">${ic('chev', 22)}</span></button></div>`;
-  }
-
-  /* ---------- Elegir el tipo de pase ---------- */
-  const DESC = { personal: 'Empleada, jardinero, técnico', entrega: 'Repartidor de comida', correo: 'Mensajero o encomienda', visita: 'Familia o amigos' };
-  window.elegirPase7 = function () {
-    sheet('¿A quién vas a dar acceso?', `<div class="r7-tipos">${Object.entries(TIPOS).map(([k, t]) => `<button class="r7-tipo" onclick="nuevoPase('${k}')"><span class="ti-big ti-${k}">${ic(t.i, 26)}</span><span><b>${t.l}</b><small>${DESC[k] || ''}</small></span>${ic('chev', 20)}</button>`).join('')}</div>`);
-  };
-
-  /* ---------- Inicio ---------- */
-  let ultimaPestana = '';
-  function vInicio7() {
-    const u = S.user, cid = u.casaId;
-    const aut = DB.autorizaciones.filter(a => a.casaId === cid && a.estado === 'esperando');
-    const hoyP = DB.pases.filter(p => p.casaId === cid && (vigenteHoy(p) || dentro(p)));
-    let h = hero7(u);
-    if (aut.length) h += `<h3>Te esperan en portería</h3>` + aut.map(autCard).join('');
-    h += `<div class="r7-q">¿Qué necesitas hoy?</div>` + tiles7(u);
-    let rec = recordatoriosRes(u);
-    if (u.rol === 'residente') rec = rec.replace(/<button class="rr" onclick="(?:S\.sel=null;)?go\('pagos'\)">[\s\S]*?<\/button>/, '');
-    if (!/class="rr"/.test(rec)) rec = '';
-    h += rec + votHomeRes();
-    h += `<h3>Visitas de hoy</h3>` + (hoyP.map(paseItem).join('') || `<div class="r7-vacio"><span class="mic c-teal">${ic('ticket', 22)}</span><p><b>No tienes visitas para hoy</b>Cuando esperes a alguien, toca «Dar acceso a una visita».</p></div>`);
-    const av = DB.avisos.slice().sort((a, b) => b.fecha.localeCompare(a.fecha)).slice(0, 2);
-    if (av.length) h += `<h3>Últimos avisos</h3>` + av.map(a => avisoCard(a, false)).join('');
-    const animar = ultimaPestana !== 'inicio'; ultimaPestana = 'inicio';
-    return `<div class="r7${animar && !menosMov() ? ' r7-in' : ''}">${h}</div>`;
-  }
-  ['residente', 'inquilino'].forEach(r => { if (VIEWS[r]) VIEWS[r].inicio = vInicio7; });
-
-  /* ---------- Mis pagos: estado grande arriba con los botones de pago ---------- */
-  if (VIEWS.residente && VIEWS.residente.pagos) {
-    const basePagos = VIEWS.residente.pagos;
-    VIEWS.residente.pagos = function () {
-      let h = basePagos.apply(this, arguments);
-      try {
-        const cid = S.user.casaId; const cs = cuotasCasa(cid); const pend = cs.filter(c => c.estado === 'pendiente'); const m = moraCasa(cid);
-        const viejo = m.length ? alertBox('bad', `En mora: ${m.length} mes(es) · ${money(sum(m, montoCuota))}`, `${m.map(c => perL(c.periodo)).join(', ')}. Incluye recargo de ${money(DB.config.recargo)} por mes vencido.`)
-          : pend.length ? alertBox('warn', 'Cuota pendiente', `Vence el ${fFecha(vence(periodoActual()))}.`) : alertBox('ok', 'Estás al día ✓', '');
-        const e = estado7(cid);
-        const card = `<div class="r7-pago ${e.c}">${estHTML(e)}${pend.length ? `<button class="r7-pagar" onclick="pagarLink()">${ic('card', 22)}<span>Pagar en línea</span></button><button class="r7-sec" onclick="pagarTransf()">${ic('upload', 20)}<span>Ya transferí · enviar comprobante</span></button>` : ''}</div>`;
-        if (h.includes(viejo)) h = h.replace(viejo, card);
-      } catch (x) { }
-      return h;
-    };
-  }
-
-  /* ---------- Menú: tamaño de letra para todos ---------- */
-  Object.keys(VIEWS).forEach(r => {
-    const V = VIEWS[r]; if (!V || !V.mas) return; const b = V.mas;
-    V.mas = function () {
-      const h = b.apply(this, arguments); const it = menuItem('aa', 'Tamaño de letra', 'verLetra()', '');
-      const i = h.indexOf('<h3>Sesión</h3>'); return i >= 0 ? h.slice(0, i + 15) + it + h.slice(i + 15) : h + it;
-    };
-  });
-  if (typeof ICOL !== 'undefined') ICOL.aa = 'indigo';
-
-  /* ---------- Cada vez que se dibuja la pantalla ---------- */
-  const r7base = render;
-  render = function () {
-    if (S.tab !== 'inicio') ultimaPestana = S.tab;
-    r7base.apply(this, arguments);
-    try {
-      document.body.classList.toggle('rol-vecino', esVecino(S.user));
-      // descripción corta en los tipos de pase (pantalla Accesos)
-      document.querySelectorAll('.tipos button').forEach(bt => {
-        if (bt.querySelector('.r7-d')) return; const m = (bt.getAttribute('onclick') || '').match(/nuevoPase\('(\w+)'\)/);
-        if (m && DESC[m[1]]) bt.insertAdjacentHTML('beforeend', `<small class="r7-d">${DESC[m[1]]}</small>`);
-      });
-    } catch (e) { }
-  };
-
-  Object.assign(I18N, {
-    'Tamaño de letra': 'Text size', 'Elige cómo se ve más cómodo. Se guarda en este teléfono.': 'Choose what is most comfortable. It is saved on this phone.', 'Normal': 'Normal', 'Grande': 'Large', 'Muy grande': 'Extra large',
-    'Letra normal': 'Normal text', 'Letra grande': 'Large text', 'Letra muy grande': 'Extra large text', 'Letra': 'Text',
-    '¡Estás al día!': "You're up to date!", 'Pago en revisión': 'Payment under review', 'La administración está validando tu comprobante': 'The administration is checking your receipt',
-    'Tienes 1 mes atrasado': 'You have 1 overdue month', 'Pagar mi cuota': 'Pay my fee', 'Ver mis pagos y recibos': 'See my payments and receipts',
-    '¿Qué necesitas hoy?': 'What do you need today?', 'Dar acceso a una visita': 'Let a visitor in', 'Crea un pase y compártelo': 'Create a pass and share it',
-    'Llamar a portería': 'Call the gate', 'Números de la residencial': 'Community numbers', 'Portería y administración': 'Gate and administration',
-    'Noticias de la residencial': 'Community news', '1 nuevo esta semana': '1 new this week', 'Reservar un área': 'Book an area', 'Salón, cancha y más': 'Hall, court and more',
-    'Reportar un problema': 'Report a problem', 'Fugas, luces, ruido…': 'Leaks, lights, noise…', 'Fiestas y torneos': 'Parties and tournaments', 'Compra a vecinos': 'Buy from neighbors',
-    '911, policía, bomberos y números de la residencial': '911, police, firefighters and community numbers',
-    '¿A quién vas a dar acceso?': 'Who are you letting in?', 'Empleada, jardinero, técnico': 'Housekeeper, gardener, technician', 'Repartidor de comida': 'Food delivery',
-    'Mensajero o encomienda': 'Courier or parcel', 'Familia o amigos': 'Family or friends', 'Te esperan en portería': 'Someone is waiting at the gate', 'Visitas de hoy': "Today's visitors",
-    'No tienes visitas para hoy': 'No visitors today', 'Cuando esperes a alguien, toca «Dar acceso a una visita».': 'When you expect someone, tap “Let a visitor in”.',
-    'Pagar en línea': 'Pay online', 'Ya transferí · enviar comprobante': 'I already transferred · send receipt', 'Tu acceso está activo': 'Your access is active',
-  });
-})();
-
-</script>
-<script data-origen="js/app/99-arranque.js">
 /* ---------------- Arranque ---------------- */
 document.addEventListener('input',e=>{const t=e.target;if(!t||!t.name||!/(^|\.)dui$/.test(t.name)||esCondo()||paisRes()!=='SV')return;const d=t.value.replace(/\D/g,'').slice(0,9);t.value=d.length>8?d.slice(0,8)+'-'+d.slice(8):d});
-if(window.GATEWISE_MODO!=='produccion'){
 loadPlat();if(PLAT)load();
 (()=>{if(!PLAT)return;const ses=getSes()||'';const[r,id]=ses.split('|');if(!id)return;if(r==='plat'){if(!cfgNube())return;const u=PLAT.superadmins.find(x=>x.id===id&&x.id==='owner');if(u)S.user=u;return}if(PLAT.residenciales.some(x=>x.id===r)){load(r);const u=usuario(id);if(u&&!puedeEntrar(u))S.user=u}})();
 render();
 iniciarNube();
 window.addEventListener('storage',e=>{if(e.key===PKEY){loadPlat()}else if(e.key===dbKey(RES)){try{DB=JSON.parse(e.newValue)||DB}catch(x){return}}else return;if(S.user&&S.user.rol!=='superadmin')S.user=usuario(S.user.id)||null;const a=document.activeElement;if(!a||!['INPUT','TEXTAREA','SELECT'].includes(a.tagName)){const co=S.chatOpen;if(co&&document.getElementById('chatBox'))refrescarChat();else render()}else if(S.chatOpen)refrescarChat()});
-}
 if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(r=>{try{r.update()}catch(e){}document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){try{r.update()}catch(e){}}})}).catch(()=>{});
-
 </script>
-<!-- Modo producción (Firestore + Authentication); no hace nada en modo demo -->
-<script data-origen="js/prod.js">
-/* =====================================================================
-   GateWise · MODO PRODUCCIÓN
-   Se activa solo si config.js tiene  window.GATEWISE_MODO = "produccion".
-   - Ingreso con Firebase Authentication (usuario + clave; la clave nunca
-     se guarda en la base de datos).
-   - Cloud Firestore: cada registro es un documento; cada persona descarga
-     solo lo que su rol le permite (las reglas lo hacen cumplir en el servidor).
-   - Usuarios, registro de propietarios y bajas pasan por Cloud Functions.
-   - Notificaciones push con Firebase Cloud Messaging.
-   ===================================================================== */
-(function () {
-  if (window.GATEWISE_MODO !== 'produccion') return;
-  const CFG = window.GATEWISE_FIREBASE_PROD || null;
-  const SDK = 'https://www.gstatic.com/firebasejs/10.12.5/';
-  const OWNER_EMAIL = String(window.GATEWISE_OWNER_EMAIL || '').trim().toLowerCase();
-  const REGION = 'us-east1';
-  const PKEY_PROD = 'gw_prod_plat';
-
-  /* ---------- Mapa de datos: colección de Firestore por clave de la app ---------- */
-  const PROMC = {
-    casas: ['numero', 'pasaje', 'duenoId'], casasPriv: [], miembros: ['rol', 'casaId', 'padreId', 'activo', 'nombre'], perfiles: [],
-    cuotas: ['casaId', 'periodo', 'estado', 'monto'], pagos: ['casaId', 'estado', 'monto', 'metodo', 'cobradorId'],
-    visitasCobro: ['casaId', 'estado', 'cobradorId'], cierres: ['cobradorId', 'estado'], pases: ['casaId'],
-    autorizaciones: ['casaId', 'estado'], acadIngresos: [], avisos: [], reclamos: ['casaId'], notifs: ['userId', 'leida'],
-    solicitudes: ['casaId', 'estado'], votaciones: [], eventos: [], areas: ['aprobacion'], academias: [],
-    alumnos: ['casaId', 'tipo'], acadPagos: ['casaId', 'alumnoId'], resenas: ['userId', 'tipo', 'ref'],
-    tiendaProductos: ['vendedorId'], tiendaPedidos: ['casaId', 'vendedorId', 'compradorId', 'estado'],
-    kvVoto: ['casaId'], kvBoleta: [], kvRsvp: ['casaId'], kvEquipo: ['capId', 'casaId', 'estado'],
-    kvReserva: ['casaId', 'estado', 'areaId'], kvSolAcad: ['casaId', 'estado'], meta: [],
-  };
-  const ARR = ['cuotas', 'pagos', 'visitasCobro', 'cierres', 'pases', 'autorizaciones', 'acadIngresos', 'avisos', 'reclamos', 'notifs', 'solicitudes', 'votaciones', 'eventos', 'areas', 'academias', 'alumnos', 'acadPagos', 'resenas'];
-  const KVP = { vto: 'kvVoto', vtb: 'kvBoleta', evr: 'kvRsvp', evq: 'kvEquipo', rsv: 'kvReserva', acs: 'kvSolAcad' };
-  const KVRE = /^(vto|vtb|evr|evq|rsv|acs)_/;
-  const CASA_PRIV = ['codigo', 'prop', 'placas', 'habitantes', 'nota'];
-  const U_PRIV = ['tel', 'dui', 'email', 'user'];
-  const TODAS = Object.keys(PROMC).filter(c => c !== 'meta').concat(['meta']);
-
-  /* ---------- Utilidades (deben coincidir con functions/core.js) ---------- */
-  const slugUser = u => String(u || '').trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9._-]+/g, '-').replace(/^[-.]+|[-.]+$/g, '').slice(0, 60);
-  const emailDe = (user, rid) => slugUser(user) + '@' + String(rid).toLowerCase().replace(/[^a-z0-9-]/g, '') + '.u.gatewise.app';
-  const claveAuth = p => 'gw:' + String(p || '');
-  function ordenar(v) { if (Array.isArray(v)) return v.map(x => x === undefined ? null : ordenar(x)); if (v && typeof v === 'object') { const o = {}; Object.keys(v).sort().forEach(k => { if (v[k] !== undefined && typeof v[k] !== 'function') o[k] = ordenar(v[k]); }); return o; } return v; }
-  const estable = o => JSON.stringify(ordenar(o));
-  const clon = o => JSON.parse(JSON.stringify(o));
-  const RP = (rid, ...p) => ['r', rid, ...p].join('/');
-  const partesDe = path => { const s = path.split('/'); return { rid: s[1], col: s[2], id: s.slice(3).join('/') }; };
-
-  const P = {
-    app: null, auth: null, fs: null, fn: null, msg: null, on: false,
-    rid: null, rol: null, uid: null, claims: {}, owner: false, listo: false,
-    server: new Map(), sent: new Map(), subs: [], cargadas: new Set(), pend: { casasPriv: new Map(), perfiles: new Map() },
-    creando: new Set(), timer: null, corriendo: false, otraVez: false, avisos: new Set(), cache: {}, platSent: {}, resDocs: {}, perfilSubs: new Set(),
-  };
-  window.GW_PROD = P;
-  const FS = () => P.fs;
-  const avisarUnaVez = (k, t) => { if (P.avisos.has(k)) return; P.avisos.add(k); setTimeout(() => P.avisos.delete(k), 8000); toast(t); };
-
-  /* ---------- Documento <-> registro ---------- */
-  function sobre(col, rec) {
-    const r = ordenar(rec);
-    const o = { d: JSON.stringify(r), _u: P.uid, _t: firebase.firestore.FieldValue.serverTimestamp() };
-    (PROMC[col] || []).forEach(k => { if (r[k] !== undefined) o[k] = r[k]; });
-    return o;
-  }
-  function leerDoc(data) {
-    let r = {}; try { r = JSON.parse(data.d || '{}'); } catch (e) { r = {}; }
-    Object.keys(data).forEach(k => { if (k !== 'd' && k[0] !== '_') r[k] = data[k]; });
-    return r;
-  }
-  const kvCol = k => KVP[k.slice(0, 3)];
-  function kvRec(k, v) {
-    const o = (v && typeof v === 'object' && !Array.isArray(v)) ? Object.assign({}, v) : { __v: v };
-    if (/^(vto|evr)_/.test(k)) o.casaId = k.slice(k.lastIndexOf('_') + 1);
-    return o;
-  }
-  function partirCasa(c) { const pub = {}, priv = { id: c.id }; Object.keys(c).forEach(k => { if (CASA_PRIV.includes(k)) priv[k] = c[k]; else pub[k] = c[k]; }); return { pub, priv }; }
-  function partirU(u) {
-    const pub = {}, priv = {};
-    Object.keys(u).forEach(k => { if (k === 'pass') return; if (U_PRIV.includes(k)) priv[k] = u[k]; else pub[k] = u[k]; });
-    if (u.rol === 'vendedor' && u.tel) pub.tel = u.tel;
-    return { pub, priv };
-  }
-  const reemplazar = (obj, rec, conservar) => { Object.keys(obj).forEach(k => { if (!(k in rec) && !(conservar || []).includes(k)) delete obj[k]; }); Object.assign(obj, rec); return obj; };
-
-  /* ---------- Esqueleto vacío de una residencial ---------- */
-  function esqueleto(rid) {
-    const pub = ((PLAT && PLAT.residenciales) || []).find(r => r.id === rid) || {};
-    return {
-      version: 1, inicioCobro: periodoActual(),
-      residencial: { nombre: pub.nombre || '', municipio: pub.municipio || '', tipo: pub.tipo || 'residencial', pais: pub.pais || 'SV', portones: [], equipo: [], banco: {}, vigilancia: {}, presidente: {}, admin: {}, portonTipo: {} },
-      config: { cuota: 0, diaVence: 10, recargo: 0, linkPago: '', diasAviso: 5 },
-      casas: [], usuarios: [], cuotas: [], pagos: [], pases: [], avisos: [], reclamos: [], notifs: [], solicitudes: [], autorizaciones: [],
-      recordados: {}, recaudoBase: {}, visitasCobro: [], reciboSeq: 0, cierres: [], directorio: { emergencia: [], servicios: [] },
-      tienda: { seq: 0, productos: [], pedidos: [] }, resenas: [], votaciones: [], areas: [], academias: [], alumnos: [], acadPagos: [], acadIngresos: [], eventos: [],
-      tiendaSeeded: true, comunidadSeed: true,
-    };
-  }
-
-  /* ---------- Aplicar un documento del servidor a un DB en memoria ---------- */
-  function aplicar(D, path, rec) {
-    const { col, id } = partesDe(path);
-    const arrPut = (arr, r) => { const i = arr.findIndex(x => x && String(x.id) === String(id)); if (!r) { if (i >= 0) arr.splice(i, 1); return; } if (i >= 0) reemplazar(arr[i], r); else if (r.fecha) arr.unshift(r); else arr.push(r); };
-    if (ARR.includes(col)) { D[col] = D[col] || []; arrPut(D[col], rec); return; }
-    if (col === 'casas') {
-      D.casas = D.casas || [];
-      const i = D.casas.findIndex(x => x.id === id);
-      if (!rec) { if (i >= 0) D.casas.splice(i, 1); return; }
-      if (i >= 0) reemplazar(D.casas[i], rec, CASA_PRIV); else { D.casas.push(rec); }
-      const pp = P.pend.casasPriv.get(D === DB ? id : '!'); if (pp) { Object.assign(rec, pp); P.pend.casasPriv.delete(id); }
-      return;
-    }
-    if (col === 'casasPriv') {
-      const c = (D.casas || []).find(x => x.id === id);
-      if (!c) { if (rec && D === DB) P.pend.casasPriv.set(id, rec); return; }
-      CASA_PRIV.forEach(k => { if (!rec || !(k in rec)) delete c[k]; else c[k] = rec[k]; });
-      return;
-    }
-    if (col === 'miembros') {
-      D.usuarios = D.usuarios || [];
-      const i = D.usuarios.findIndex(x => x.id === id);
-      if (!rec) { if (i >= 0) D.usuarios.splice(i, 1); return; }
-      const r = Object.assign({ id }, rec);
-      let u;
-      if (i >= 0) u = reemplazar(D.usuarios[i], r, U_PRIV); else { u = r; D.usuarios.push(u); }
-      if (!('user' in u)) u.user = '';
-      const pp = D === DB && P.pend.perfiles.get(id); if (pp) { Object.assign(u, pp); P.pend.perfiles.delete(id); }
-      if (D === DB && !P.owner && P.rol === 'residente' && u.padreId === P.uid) escucharPerfil(id);
-      return;
-    }
-    if (col === 'perfiles') {
-      const u = (D.usuarios || []).find(x => x.id === id);
-      if (!u) { if (rec && D === DB) P.pend.perfiles.set(id, rec); return; }
-      U_PRIV.forEach(k => { if (!rec || !(k in rec)) { if (k !== 'tel' || u.rol !== 'vendedor') delete u[k]; } else u[k] = rec[k]; });
-      if (!('user' in u)) u.user = '';
-      return;
-    }
-    if (col === 'tiendaProductos' || col === 'tiendaPedidos') {
-      D.tienda = D.tienda || { seq: 0, productos: [], pedidos: [] };
-      const k = col === 'tiendaProductos' ? 'productos' : 'pedidos'; D.tienda[k] = D.tienda[k] || []; arrPut(D.tienda[k], rec); return;
-    }
-    if (col.startsWith('kv')) { if (!rec) delete D[id]; else D[id] = rec.__v !== undefined ? rec.__v : rec; return; }
-    if (col === 'meta') {
-      if (id === 'tiendaSeq') { D.tienda = D.tienda || { seq: 0, productos: [], pedidos: [] }; if (rec) D.tienda.seq = rec.v; return; }
-      if (rec) D[id] = rec.v;
-    }
-  }
-  function ordenarArrays(D) {
-    const porFecha = (a, b) => String(b.fecha || '').localeCompare(String(a.fecha || ''));
-    ARR.forEach(k => { if (Array.isArray(D[k]) && D[k].some(x => x && x.fecha)) D[k].sort(porFecha); });
-    if (Array.isArray(D.cuotas)) D.cuotas.sort((a, b) => String(a.casaId).localeCompare(String(b.casaId)) || String(a.periodo).localeCompare(String(b.periodo)));
-    if (D.tienda && Array.isArray(D.tienda.pedidos)) D.tienda.pedidos.sort(porFecha);
-    if (Array.isArray(D.casas)) D.casas.sort((a, b) => String(a.pasaje).localeCompare(String(b.pasaje)) || String(a.numero).localeCompare(String(b.numero), undefined, { numeric: true }));
-  }
-
-  /* ---------- Lo que la app quiere guardar ---------- */
-  function docsDe(rid, D, conPriv) {
-    const out = new Map(), cols = new Set();
-    const put = (col, id, rec) => { out.set(RP(rid, col, String(id)), { col, rec }); cols.add(col); };
-    ARR.forEach(k => {
-      cols.add(k);
-      (D[k] || []).forEach(rec => {
-        if (!rec || rec.id == null || String(rec.id).includes('/')) return;
-        let r = rec;
-        if (k === 'acadPagos' && !r.casaId) { const al = (D.alumnos || []).find(a => a.id === r.alumnoId); r = Object.assign({}, r, { casaId: (al && al.casaId) || '' }); }
-        if (k === 'areas' && r.aprobacion === undefined) r = Object.assign({}, r, { aprobacion: true });
-        put(k, rec.id, r);
-      });
-    });
-    cols.add('casas'); if (conPriv) cols.add('casasPriv');
-    (D.casas || []).forEach(c => { const { pub, priv } = partirCasa(c); put('casas', c.id, pub); if (conPriv) put('casasPriv', c.id, priv); });
-    const t = D.tienda || {};
-    cols.add('tiendaProductos'); cols.add('tiendaPedidos');
-    (t.productos || []).forEach(p => p && p.id != null && put('tiendaProductos', p.id, p));
-    (t.pedidos || []).forEach(p => p && p.id != null && put('tiendaPedidos', p.id, p));
-    Object.values(KVP).forEach(c => cols.add(c));
-    cols.add('meta');
-    Object.keys(D).forEach(k => {
-      if (KVRE.test(k)) { if (D[k] != null) put(kvCol(k), k, kvRec(k, D[k])); return; }
-      if (ARR.includes(k) || ['casas', 'usuarios', 'tienda'].includes(k)) return;
-      put('meta', k, { v: D[k] === undefined ? null : D[k] });
-    });
-    if (t.seq !== undefined) put('meta', 'tiendaSeq', { v: t.seq });
-    return { out, cols };
-  }
-
-  /* ---------- Escrituras ---------- */
-  function revertir(path) {
-    const rec = P.server.get(path);
-    P.sent.set(path, rec ? estable(rec) : undefined); if (!rec) P.sent.delete(path);
-    aplicar(DB, path, rec ? clon(rec) : null);
-  }
-  function fallo(t, e) {
-    const code = String((e && e.code) || '');
-    console.warn('GateWise · no se guardó', t.path, code, e && e.message);
-    if (/permission/.test(code)) { revertir(t.path); avisarUnaVez('perm', 'Ese cambio no está permitido para tu usuario'); programarRefresco(); }
-    else if (/invalid-argument|failed-precondition/.test(code)) { revertir(t.path); avisarUnaVez('inv', 'No se pudo guardar: ' + (e.message || code)); programarRefresco(); }
-  }
-  async function ejecutar(tareas, enLote) {
-    if (!tareas.length) return;
-    const uno = async t => { try { const ref = FS().doc(t.path); if (t.tipo === 'del') await ref.delete(); else await ref.set(sobre(t.col, t.rec)); } catch (e) { fallo(t, e); } };
-    if (!enLote) { await Promise.all(tareas.map(uno)); return; }
-    for (let i = 0; i < tareas.length; i += 400) {
-      const parte = tareas.slice(i, i + 400); const b = FS().batch();
-      parte.forEach(t => { const ref = FS().doc(t.path); if (t.tipo === 'del') b.delete(ref); else b.set(ref, sobre(t.col, t.rec)); });
-      try { await b.commit(); } catch (e) { console.warn('lote rechazado, se reintenta uno por uno', e.code); await Promise.all(parte.map(uno)); }
-    }
-  }
-  const ocupado = pr => { const B = window.GW_BUSY; if (!B) return pr; B.inc(); return Promise.resolve(pr).finally(() => B.dec()); };
-  // Mientras una función del servidor responde, el botón que la pidió muestra "cargando" (23-botones.js)
-  const llamar = async (nombre, datos) => { const B = window.GW_BUSY; B && B.inc(); try { return (await P.fn.httpsCallable(nombre)(datos)).data; } finally { B && B.dec(); } };
-
-  async function syncUsuarios(rid, D, sent, server, opts) {
-    const nuevos = [], claves = [], cambios = [], tareas = [], borrar = [];
-    const vistos = new Set();
-    (D.usuarios || []).forEach(u => {
-      if (!u || !u.id) return;
-      const mp = RP(rid, 'miembros', u.id), pp = RP(rid, 'perfiles', u.id); vistos.add(mp);
-      if (!server.has(mp)) { if (u.pass && !P.creando.has(u.id)) nuevos.push(u); return; }
-      if (u.pass) claves.push(u);
-      const { pub, priv } = partirU(u); const sv = server.get(mp) || {}; const spv = server.get(pp);
-      const cb = {};
-      ['rol', 'casaId', 'padreId'].forEach(k => { if ((pub[k] == null ? null : pub[k]) !== (sv[k] == null ? null : sv[k])) cb[k] = pub[k] == null ? null : pub[k]; });
-      if (spv && priv.user !== undefined && priv.user !== '' && String(priv.user).toLowerCase() !== String(spv.user || '').toLowerCase()) cb.user = priv.user;
-      if (Object.keys(cb).length) { if (opts.admin) cambios.push({ uid: u.id, cambios: Object.assign({}, cb, { nombre: u.nombre }) }); else { revertir(mp); } return; }
-      if (estable(pub) !== sent.get(mp)) tareas.push({ tipo: 'set', path: mp, col: 'miembros', rec: pub });
-      if (spv) { const pr = Object.assign({}, priv); if (pr.user === '') delete pr.user; if (estable(pr) !== sent.get(pp) && estable(pr) !== estable(spv)) tareas.push({ tipo: 'set', path: pp, col: 'perfiles', rec: Object.assign({}, spv, pr) }); }
-    });
-    for (const p of server.keys()) if (p.startsWith(RP(rid, 'miembros') + '/') && !vistos.has(p)) borrar.push(p.split('/').pop());
-    let fallaron = false;
-    if (nuevos.length) {
-      nuevos.forEach(u => P.creando.add(u.id));
-      try {
-        const r = await llamar('usuarios', { accion: 'crear', rid, legado: !!opts.legado, usuarios: nuevos.map(u => Object.assign({}, u)) });
-        (r.res || []).forEach(x => { const u = D.usuarios.find(y => y.id === x.id); if (x.ok) { if (u) delete u.pass; } else { fallaron = true; toast('No se creó el usuario: ' + x.error); } });
-      } catch (e) { fallaron = true; toast(e.message || 'No se pudo crear el usuario'); }
-      nuevos.forEach(u => P.creando.delete(u.id));
-    }
-    for (const u of claves) {
-      try { await llamar('usuarios', { accion: 'clave', rid, uid: u.id, pass: u.pass }); toast('Clave actualizada'); }
-      catch (e) { toast(e.message || 'No se pudo cambiar la clave'); }
-      delete u.pass;
-    }
-    for (const c of cambios) { try { await llamar('usuarios', Object.assign({ accion: 'actualizar', rid }, c)); } catch (e) { fallaron = true; toast(e.message || 'No se pudo actualizar el usuario'); } }
-    if (borrar.length > 5) { console.warn('Borrado masivo de usuarios bloqueado', borrar); avisarUnaVez('bm', 'Se bloqueó un borrado masivo de usuarios por seguridad'); fallaron = true; }
-    else for (const id of borrar) { try { await llamar('usuarios', { accion: 'borrar', rid, uid: id }); } catch (e) { fallaron = true; toast(e.message || 'No se pudo borrar el usuario'); } }
-    return { tareas, fallaron };
-  }
-
-  function planTareas(rid, D, sent, conPriv, permitirBorrar) {
-    const { out, cols } = docsDe(rid, D, conPriv);
-    const tareas = [];
-    for (const [path, x] of out) { const j = estable(x.rec); if (sent.get(path) === j) continue; tareas.push({ tipo: 'set', path, col: x.col, rec: x.rec, j }); }
-    if (permitirBorrar) {
-      const porCol = {};
-      for (const path of sent.keys()) {
-        const { col } = partesDe(path);
-        if (!cols.has(col) || out.has(path) || !path.startsWith(RP(rid) + '/')) continue;
-        (porCol[col] = porCol[col] || []).push(path);
-      }
-      Object.entries(porCol).forEach(([col, ps]) => {
-        const total = [...sent.keys()].filter(p => partesDe(p).col === col).length;
-        if (ps.length > 20 && ps.length > total * 0.3) { console.warn('Borrado masivo bloqueado en', col, ps.length); avisarUnaVez('bd' + col, 'Se bloqueó un borrado masivo en ' + col + ' por seguridad'); return; }
-        ps.forEach(p => tareas.push({ tipo: 'del', path: p, col }));
-      });
-    }
-    return tareas;
-  }
-
-  async function sincronizar() {
-    if (!P.on || !P.listo || !DB || !P.rid) return;
-    if (P.corriendo) { P.otraVez = true; return; }
-    P.corriendo = true;
-    try {
-      const adm = P.owner || P.rol === 'admin';
-      const u = await syncUsuarios(P.rid, DB, P.sent, P.server, { admin: adm });
-      if (u.fallaron) { reconstruir(); programarRefresco(); return; }
-      const tareas = u.tareas.concat(planTareas(P.rid, DB, P.sent, adm && P.cargadas.has('casasPriv'), true));
-      tareas.forEach(t => { if (t.tipo === 'del') P.sent.delete(t.path); else P.sent.set(t.path, t.j || estable(t.rec)); });
-      await ejecutar(tareas, adm);
-    } finally { P.corriendo = false; if (P.otraVez) { P.otraVez = false; programar(); } }
-  }
-  function programar() { clearTimeout(P.timer); P.timer = setTimeout(sincronizar, 250); }
-  let refrT = null;
-  function programarRefresco() { clearTimeout(refrT); refrT = setTimeout(() => { try { refrescarVista(); } catch (e) { } }, 60); }
-
-  function reconstruir() {
-    const D = esqueleto(P.rid); P.pend.casasPriv.clear(); P.pend.perfiles.clear();
-    const orden = p => { const c = partesDe(p).col; return c === 'casas' || c === 'miembros' ? 0 : 1; };
-    [...P.server.keys()].sort((a, b) => orden(a) - orden(b)).forEach(p => aplicar(D, p, clon(P.server.get(p))));
-    ordenarArrays(D); DB = D;
-    P.sent = new Map([...P.server.entries()].map(([p, r]) => [p, estable(r)]));
-  }
-
-  /* ---------- Lectura en vivo, según el rol ---------- */
-  function plan(rol, uid, casa) {
-    const full = c => ({ col: c }), w = (c, f, v) => ({ col: c, f, v });
-    const comunes = ['casas', 'miembros', 'avisos', 'meta'].map(full);
-    const yo = [w('notifs', 'userId', uid), { doc: 'perfiles/' + uid }];
-    if (P.owner || rol === 'admin') return TODAS.filter(c => c !== 'notifs').map(full).concat([w('notifs', 'userId', uid)]);
-    if (rol === 'residente' || rol === 'inquilino') {
-      const q = comunes.concat(['votaciones', 'eventos', 'areas', 'academias', 'resenas', 'tiendaProductos', 'kvVoto', 'kvBoleta', 'kvRsvp', 'kvEquipo', 'kvReserva'].map(full), yo);
-      if (casa) {
-        (rol === 'residente' ? ['cuotas', 'pagos', 'visitasCobro'] : []).concat(['pases', 'autorizaciones', 'reclamos', 'alumnos', 'acadPagos', 'tiendaPedidos', 'kvSolAcad'])
-          .forEach(c => q.push(w(c, 'casaId', casa)));
-        q.push({ doc: 'casasPriv/' + casa });
-      }
-      return q;
-    }
-    if (rol === 'vigilante') return comunes.concat(['perfiles', 'casasPriv', 'pases', 'autorizaciones', 'acadIngresos', 'academias', 'areas', 'eventos', 'kvReserva'].map(full), [w('alumnos', 'tipo', 'ext'), w('notifs', 'userId', uid)]);
-    if (rol === 'cobrador') return comunes.concat(['perfiles', 'casasPriv', 'cuotas', 'pagos', 'visitasCobro', 'cierres'].map(full), [w('notifs', 'userId', uid)]);
-    if (rol === 'vendedor') return comunes.concat(['tiendaProductos', 'resenas'].map(full), [w('tiendaPedidos', 'vendedorId', uid)], yo);
-    return comunes.concat(yo);
-  }
-  function recibir(path, data) {
-    if (!data) { P.server.delete(path); P.sent.delete(path); aplicar(DB, path, null); return true; }
-    const rec = leerDoc(data); const j = estable(rec);
-    P.server.set(path, rec);
-    if (P.sent.get(path) === j) return false;
-    P.sent.set(path, j); aplicar(DB, path, clon(rec)); return true;
-  }
-  function escuchar(rid, q) {
-    const fs = FS(); let ref;
-    if (q.doc) ref = fs.doc(RP(rid, q.doc));
-    else { ref = fs.collection(RP(rid, q.col)); if (q.f) ref = ref.where(q.f, '==', q.v); }
-    return new Promise(res => {
-      let primera = true;
-      const un = ref.onSnapshot(snap => {
-        if (rid !== P.rid) return;
-        let cambio = false;
-        if (q.doc) cambio = recibir(RP(rid, q.doc), snap.exists ? snap.data() : null) || cambio;
-        else snap.docChanges().forEach(ch => { cambio = recibir(RP(rid, q.col, ch.doc.id), ch.type === 'removed' ? null : ch.doc.data()) || cambio; });
-        P.cargadas.add(q.col || q.doc.split('/')[0]);
-        if (primera) { primera = false; res(); } else if (cambio && P.listo) programarRefresco();
-      }, err => { console.warn('GateWise · sin acceso a', q.col || q.doc, err.code); if (primera) { primera = false; res(); } });
-      P.subs.push(un);
-    });
-  }
-  function escucharPerfil(id) { if (P.perfilSubs.has(id) || !P.rid) return; P.perfilSubs.add(id); escuchar(P.rid, { doc: 'perfiles/' + id }); }
-  function cerrarRes() { P.subs.forEach(u => { try { u(); } catch (e) { } }); P.subs = []; P.perfilSubs.clear(); P.server.clear(); P.sent.clear(); P.cargadas.clear(); P.listo = false; P.pend.casasPriv.clear(); P.pend.perfiles.clear(); }
-  function pantallaCarga(t) { const a = document.getElementById('app'); if (a) a.innerHTML = `<div class="login" style="align-items:center;text-align:center"><div class="logo">${ic('gatewise', 36)}</div><h2 style="margin:16px 0 6px">${esc(t || 'Cargando su residencial…')}</h2><p class="muted">Un momento, por favor.</p></div>`; }
-  async function abrirRes(rid, rol, uid, casa) {
-    cerrarRes(); P.rid = rid; P.rol = rol; RES = rid; DB = esqueleto(rid);
-    pantallaCarga();
-    await Promise.all(plan(rol, uid, casa).map(q => escuchar(rid, q)));
-    ordenarArrays(DB);
-    // Punto de partida: lo descargado (y los valores por defecto) no se vuelve a escribir;
-    // solo se suben los cambios que haga la persona a partir de aquí.
-    const adm = P.owner || rol === 'admin';
-    for (const [path, x] of docsDe(rid, DB, adm && P.cargadas.has('casasPriv')).out) if (!P.sent.has(path) || x.col === 'meta') P.sent.set(path, estable(x.rec));
-    P.listo = true;
-    if (adm) { ensureCuotas(); programar(); }
-  }
-
-  /* ---------- Plataforma (lista de residenciales, negocio) ---------- */
-  function platVacia() { return { version: 1, ultima: '', superadmins: [], residenciales: [], solicitudes: [], demo: false }; }
-  function duenoObj() { return { id: 'owner', rol: 'superadmin', nombre: 'Administrador de la APP', user: OWNER_EMAIL, email: OWNER_EMAIL, activo: true }; }
-  function publicoDe(r) { return { id: r.id, nombre: r.nombre, municipio: r.municipio || '', estado: r.estado || 'activa', vencePrueba: r.vencePrueba || null, casasAut: (typeof casasAutDe === 'function' ? casasAutDe(r, null) : null) || null, tipo: (r.init && r.init.tipo) || r.tipo || 'residencial', pais: (r.init && r.init.pais) || r.pais || 'SV' }; }
-  function guardarCachePlat() { try { localStorage.setItem(PKEY_PROD, JSON.stringify({ residenciales: (PLAT.residenciales || []).map(publicoDe) })); } catch (e) { } }
-  async function syncPlat() {
-    if (!P.on || !P.owner || !P.platListo) return;
-    const priv = clon(PLAT); delete priv.superadmins; delete priv.solicitudes; delete priv.ultima; (priv.residenciales || []).forEach(r => { if (r.init) delete r.init.adminPass; });
-    const tareas = [];
-    const jp = estable(priv); if (P.platSent.privado !== jp) { P.platSent.privado = jp; tareas.push(FS().doc('plataforma/privado').set({ d: jp, _t: firebase.firestore.FieldValue.serverTimestamp() })); }
-    const pub = { residenciales: (PLAT.residenciales || []).map(publicoDe) }; const jpu = estable(pub);
-    if (P.platSent.publico !== jpu) { P.platSent.publico = jpu; tareas.push(FS().doc('plataforma/publico').set({ d: jpu, _t: firebase.firestore.FieldValue.serverTimestamp() })); }
-    (PLAT.residenciales || []).forEach(r => {
-      const o = { nombre: r.nombre, estado: r.estado || 'activa', casasAut: (typeof casasAutDe === 'function' ? casasAutDe(r, null) : null) || null, vencePrueba: r.vencePrueba || null };
-      const j = estable(o); if (P.platSent['r_' + r.id] !== j) { P.platSent['r_' + r.id] = j; tareas.push(FS().doc('r/' + r.id).set(o, { merge: true })); }
-    });
-    (PLAT.solicitudes || []).forEach(s => { const j = estable(s); if (P.platSent['s_' + s.id] !== j) { P.platSent['s_' + s.id] = j; tareas.push(FS().doc('solicitudesRes/' + s.id).set({ d: j, _t: firebase.firestore.FieldValue.serverTimestamp() })); } });
-    try { await Promise.all(tareas); } catch (e) { console.warn('plataforma', e); toast('No se guardó la plataforma: ' + e.message); }
-  }
-  let platT = null;
-  async function iniciarDueno() {
-    P.owner = true; P.platListo = false;
-    pantallaCarga('Cargando la plataforma…');
-    const fs = FS();
-    await new Promise(res => {
-      let n = 0; const fin = () => { if (++n === 3) res(); };
-      P.subs.push(fs.doc('plataforma/privado').onSnapshot(s => {
-        if (s.exists) { try { const o = JSON.parse(s.data().d || '{}'); Object.assign(PLAT, o); P.platSent.privado = estable(o); } catch (e) { } }
-        PLAT.superadmins = [duenoObj()]; guardarCachePlat(); if (P.platListo) programarRefresco(); fin();
-      }, () => fin()));
-      P.subs.push(fs.collection('solicitudesRes').onSnapshot(s => {
-        PLAT.solicitudes = s.docs.map(d => { try { const o = JSON.parse(d.data().d); P.platSent['s_' + d.id] = estable(o); return o; } catch (e) { return null; } }).filter(Boolean).sort((a, b) => String(b.fecha).localeCompare(String(a.fecha)));
-        if (P.platListo) programarRefresco(); fin();
-      }, () => fin()));
-      P.subs.push(fs.collection('r').onSnapshot(s => { s.docs.forEach(d => { P.resDocs[d.id] = d.data(); }); if (P.platListo) programarRefresco(); fin(); }, () => fin()));
-    });
-    P.platListo = true;
-    S.user = PLAT.superadmins[0]; S.modoPlat = false; S.tab = 'inicio'; S.imp = null; render();
-  }
-
-  /* ---------- Caché ligera de otra residencial (panel del dueño) ---------- */
-  async function cargarLigero(rid) {
-    const fs = FS(); const D = esqueleto(rid); const server = new Map();
-    const tomar = async (col, f, v) => { let ref = fs.collection(RP(rid, col)); if (f) ref = ref.where(f, '==', v); const s = await ref.get(); s.docs.forEach(d => { const rec = leerDoc(d.data()); server.set(RP(rid, col, d.id), rec); }); };
-    await Promise.all([tomar('meta'), tomar('casas'), tomar('miembros'), tomar('cuotas', 'estado', 'pendiente')]);
-    await Promise.all([tomar('casasPriv'), tomar('perfiles')]);
-    const orden = p => { const c = partesDe(p).col; return c === 'casas' || c === 'miembros' ? 0 : 1; };
-    [...server.keys()].sort((a, b) => orden(a) - orden(b)).forEach(p => aplicar(D, p, clon(server.get(p))));
-    ordenarArrays(D);
-    P.cache[rid] = { d: D, server, sent: new Map([...server.entries()].map(([p, r]) => [p, estable(r)])) };
-    return D;
-  }
-  const colaSubir = {};
-  function subirDB(rid, D, legado) { const p = (colaSubir[rid] || Promise.resolve()).then(() => subirDB1(rid, D, legado)); colaSubir[rid] = p.catch(() => { }); return p; }
-  async function subirDB1(rid, D, legado) {
-    if (rid === P.rid && P.listo) { DB = D; save(); return; }
-    if (!P.owner) return toast('Solo el Administrador de la APP');
-    const c = P.cache[rid] || { server: new Map(), sent: new Map() };
-    await FS().doc('r/' + rid).set({ nombre: (D.residencial && D.residencial.nombre) || '' }, { merge: true });
-    const u = await syncUsuarios(rid, D, c.sent, c.server, { admin: true, legado: legado !== false });
-    const tareas = u.tareas.concat(planTareas(rid, D, c.sent, true, false));
-    tareas.forEach(t => c.sent.set(t.path, t.j || estable(t.rec)));
-    const viejoRid = P.rid; P.rid = rid; try { await ejecutar(tareas, true); } finally { P.rid = viejoRid; }
-    P.cache[rid] = Object.assign(c, { d: D });
-    try { await cargarLigero(rid); } catch (e) { console.warn('recarga', e); }   // la caché queda igual que el servidor
-    return u.fallaron ? false : true;
-  }
-
-  /* ---------- Push ---------- */
-  async function activarPush() {
-    try {
-      if (!('Notification' in window) || !('serviceWorker' in navigator)) return toast(esIOS() && !esStandalone() ? 'En iPhone, primero agrega GateWise a tu pantalla de inicio' : 'Este teléfono no permite notificaciones desde la web');
-      if (!window.GATEWISE_VAPID || /PEGAR/.test(window.GATEWISE_VAPID)) return toast('Falta configurar la clave de notificaciones (VAPID) en config.js');
-      if (!firebase.messaging) await cargarJS(SDK + 'firebase-messaging-compat.js');
-      const perm = await Notification.requestPermission();
-      if (perm !== 'granted') return toast('Las notificaciones quedaron desactivadas');
-      const reg = await navigator.serviceWorker.register('firebase-messaging-sw.js');
-      P.msg = P.msg || firebase.messaging();
-      const token = await P.msg.getToken({ vapidKey: window.GATEWISE_VAPID, serviceWorkerRegistration: reg });
-      if (!token) return toast('No se pudo activar');
-      await FS().doc('tokens/' + P.uid).set({ tokens: firebase.firestore.FieldValue.arrayUnion(token), rid: P.rid || 'plataforma', _t: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true });
-      P.msg.onMessage(m => { const n = m.notification || {}; toast((n.title ? n.title + ' · ' : '') + (n.body || '')); });
-      render(); toast('Notificaciones activadas');
-    } catch (e) { console.warn(e); toast('No se pudo activar: ' + (e.message || e)); }
-  }
-  const esIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  const esStandalone = () => (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
-  let instalarEv = null;
-  window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); instalarEv = e; });
-  async function instalar() { if (instalarEv) { instalarEv.prompt(); instalarEv = null; return; } guiaInstalar(); }
-  function guiaInstalar() {
-    sheet('Instalar GateWise', esIOS()
-      ? `<ol style="padding-left:20px;line-height:1.7;margin-top:0"><li>Abre esta página en <b>Safari</b>.</li><li>Toca el botón <b>Compartir</b> (el cuadro con la flecha hacia arriba).</li><li>Elige <b>Agregar a pantalla de inicio</b> y toca <b>Agregar</b>.</li><li>Abre GateWise desde el ícono nuevo y activa las notificaciones en Menú.</li></ol><p class="note">Las notificaciones en iPhone necesitan iOS 16.4 o más reciente.</p>`
-      : `<ol style="padding-left:20px;line-height:1.7;margin-top:0"><li>Abre esta página en <b>Chrome</b>.</li><li>Toca el menú <b>⋮</b> y elige <b>Instalar aplicación</b> o <b>Agregar a pantalla principal</b>.</li><li>Abre GateWise desde el ícono nuevo.</li></ol>`);
-  }
-
-  /* ---------- Eliminar mi cuenta (requisito de Play Store) ---------- */
-  function pedirEliminarCuenta() {
-    sheet('Eliminar mi cuenta', `${alertBox('bad', 'Esto no se puede deshacer', 'Se borra tu acceso a la app y tus datos personales (teléfono, DUI, correo). Los registros de la residencial, como pagos y visitas, se conservan para la administración.')}<label class="f">Escribe ELIMINAR para confirmar<input id="elimOk" autocomplete="off"></label><button class="btn bad block" onclick="GW_PROD.eliminarCuenta()">Eliminar mi cuenta</button>`);
-  }
-  P.eliminarCuenta = async function () {
-    const v = (document.getElementById('elimOk') || {}).value; if (String(v).trim().toUpperCase() !== 'ELIMINAR') return toast('Escribe ELIMINAR para confirmar');
-    try { await llamar('eliminarMiCuenta', {}); closeSheet(); await P.auth.signOut(); toast('Tu cuenta fue eliminada'); } catch (e) { toast(e.message || 'No se pudo eliminar'); }
-  };
-
-  /* =================== Reemplazos de funciones de la app =================== */
-  const base = { entrar, salir, render, impersonar: window.impersonar, editarRes: window.editarRes, resStats: window.resStats, vLogin: window.vLogin, ensureCuotas };
-  loadPlat = function () {
-    PLAT = platVacia();
-    try { const c = JSON.parse(localStorage.getItem(PKEY_PROD) || 'null'); if (c && Array.isArray(c.residenciales)) PLAT.residenciales = c.residenciales; } catch (e) { }
-  };
-  savePlat = function () { if (!PLAT) return; guardarCachePlat(); if (P.owner) { clearTimeout(platT); platT = setTimeout(syncPlat, 300); } };
-  load = function (id) {
-    if (P.listo && DB && id === P.rid) return;
-    id = id || RES || (PLAT && PLAT.ultima) || ((PLAT && PLAT.residenciales[0]) || {}).id;
-    if (!id) { DB = null; RES = null; return; }
-    RES = id; if (PLAT) PLAT.ultima = id; DB = esqueleto(id);
-  };
-  save = function () { if (!DB || !RES) return; programar(); };
-  ensureCuotas = function () {
-    if (!(P.owner || P.rol === 'admin') || !DB) return;
-    const fin = periodoActual();
-    DB.casas.forEach(c => { let p = c.desde || DB.inicioCobro, g = 0; while (p <= fin && g < 240) { if (!DB.cuotas.some(q => q.casaId === c.id && q.periodo === p)) DB.cuotas.push({ id: 'q_' + c.id + '_' + p, casaId: c.id, periodo: p, monto: c.cuota || DB.config.cuota, estado: 'pendiente' }); p = addMonths(p, 1); g++; } });
-  };
-  leerDB = function (id) {
-    if (id === P.rid && P.listo) return DB;
-    if (P.cache[id]) return P.cache[id].d;
-    if (P.owner && !P['_cargando' + id]) { P['_cargando' + id] = true; cargarLigero(id).then(() => { P['_cargando' + id] = false; programarRefresco(); }).catch(e => { P['_cargando' + id] = false; console.warn(e); }); }
-    return null;
-  };
-  escribirDB = function (id, d) { subirDB(id, d).then(ok => { if (ok !== false) programarRefresco(); }); };
-  resStats = function (r) {
-    if ((r.id === P.rid && P.listo) || (P.cache[r.id])) return base.resStats(r);
-    const s = (P.resDocs[r.id] || {}).stats;
-    return s ? { casas: s.casas || 0, usuarios: s.usuarios || 0, mora: s.mora || 0, conDueno: s.conDueno || 0 } : { casas: (r.init && +r.init.casas) || 0, usuarios: 0, mora: 0, conDueno: 0 };
-  };
-  editarRes = async function (id) { if (!leerDB(id)) { toast('Cargando datos de la residencial…'); await cargarLigero(id); } return base.editarRes(id); };
-  impersonar = async function (id, uidx) {
-    const sa = S.imp || S.user;
-    await abrirRes(id, 'admin', P.uid, '');
-    const ad = (uidx && usuario(uidx)) || DB.usuarios.find(u => u.rol === 'admin' && u.activo) || DB.usuarios.find(u => u.rol === 'admin');
-    if (!ad) { cerrarRes(); S.user = sa; render(); return toast('Esta residencial aún no tiene usuario de administración'); }
-    S.imp = sa; S.user = ad; S.tab = 'inicio'; S.sub = null; render(); window.scrollTo(0, 0);
-  };
-  eliminarRes = async function (id) {
-    const r = PLAT.residenciales.find(x => x.id === id); if (!r) return;
-    sheet('Eliminar residencial', `${alertBox('bad', 'Se borra todo y no se puede recuperar', `Se eliminan todos los datos y usuarios de <b>${esc(r.nombre)}</b>.`)}<label class="f">Escribe el nombre de la residencial para confirmar<input id="elimRes" autocomplete="off"></label><button class="btn bad block" onclick="GW_PROD.eliminarResOk('${id}')">Eliminar definitivamente</button>`);
-  };
-  P.eliminarResOk = async function (id) {
-    const r = PLAT.residenciales.find(x => x.id === id); const v = (document.getElementById('elimRes') || {}).value;
-    if (String(v).trim().toLowerCase() !== String(r.nombre).trim().toLowerCase()) return toast('El nombre no coincide');
-    try { toast('Eliminando…'); await llamar('eliminarResidencial', { rid: id }); PLAT.residenciales = PLAT.residenciales.filter(x => x.id !== id); delete P.cache[id]; savePlat(); closeSheet(); S.tab = 'residenciales'; S.sub = null; render(); toast('Residencial eliminada'); }
-    catch (e) { toast(e.message || 'No se pudo eliminar'); }
-  };
-  cachearResidenciales = function () { };
-  nubeSetRes = function (rid, d) {   // crearResidencial y otras pantallas del dueño
-    try { localStorage.removeItem(dbKey(rid)); } catch (e) { }
-    subirDB(rid, d, false).then(ok => {
-      const r = (PLAT.residenciales || []).find(x => x.id === rid);
-      if (r && r.init && r.init.adminPass) { delete r.init.adminPass; savePlat(); }
-      if (ok !== false) toast('Residencial guardada en la nube'); programarRefresco();
-    }).catch(e => toast('No se guardó en la nube: ' + (e.message || e)));
-  };
-  nubeBorrarRes = function () { }; nubePlat = function () { }; nubeRes = function () { };
-  iniciarNube = function () { };
-  if (typeof nubeBorrarTodo === 'function') nubeBorrarTodo = function () { toast('No disponible en producción'); };
-  resetDemo = function () { toast('No disponible en producción: los datos reales no se pueden reemplazar con datos de ejemplo'); };
-  if (typeof resetDemo2 === 'function') resetDemo2 = resetDemo;
-  if (typeof limpiarDatos === 'function') limpiarDatos = function () { toast('No disponible en producción'); };
-  entrarId = function () { toast('No disponible en producción'); };
-  verificarSesionDueno = function () { };
-
-  /* ---------- Ingreso ---------- */
-  function msgAuth(err) {
-    const c = String((err && err.code) || '');
-    return /wrong-password|invalid-credential|invalid-login|user-not-found|invalid-email/.test(c) ? 'Usuario o clave incorrectos'
-      : /user-disabled/.test(c) ? 'Tu usuario está desactivado. Comunícate con la administración'
-        : /too-many-requests/.test(c) ? 'Demasiados intentos. Espera unos minutos e intenta de nuevo'
-          : /network/.test(c) ? 'Sin conexión a internet' : 'No se pudo entrar: ' + ((err && err.message) || c);
-  }
-  login = async function (e) {
-    e.preventDefault(); const f = new FormData(e.target); const un = String(f.get('user')).trim().toLowerCase(); const pw = String(f.get('pass') || '');
-    if (S.modoPlat || !PLAT.residenciales.length) return loginDueno(un, pw);
-    if (!RES) return toast('Elige tu residencial');
-    if (!P.on) return toast('Conectando… intenta de nuevo en un momento');
-    try { toast('Verificando…'); await ocupado(P.auth.signInWithEmailAndPassword(emailDe(un, RES), claveAuth(pw))); }
-    catch (err) { toast(msgAuth(err)); }
-  };
-  if (typeof loginRolOk === 'function') loginRolOk = function (e, rol) { closeSheet(); return login(e); };
-  loginDueno = async function (email, pass) {
-    email = String(email || '').trim().toLowerCase();
-    if (email !== OWNER_EMAIL) return toast('Solo el dueño de la app puede entrar como Administrador de la APP');
-    try { toast('Verificando…'); await ocupado(P.auth.signInWithEmailAndPassword(email, pass)); } catch (err) { toast(msgAuth(err).replace('Usuario', 'Correo')); }
-  };
-  cerrarDueno = function () { };
-  salir = function () {
-    closeSheet();
-    if (S.imp) { const sa = S.imp; cerrarRes(); P.rid = null; RES = null; DB = null; S.imp = null; S.user = sa; S.tab = 'residenciales'; S.sub = null; render(); return; }
-    const eraDueno = S.user && S.user.rol === 'superadmin';
-    S.user = null; S.tab = 'inicio'; S.modoPlat = eraDueno; cerrarRes(); P.rid = null;
-    const r = PLAT.ultima; if (r) load(r);
-    render(); if (P.auth) P.auth.signOut().catch(() => { });
-  };
-  cambiarPass = async function (e) {
-    e.preventDefault(); const f = new FormData(e.target); const a = String(f.get('a') || ''), n = String(f.get('n') || '');
-    if (n.length < 6) return toast('La nueva clave debe tener al menos 6 caracteres');
-    try { const u = P.auth.currentUser; await u.reauthenticateWithCredential(firebase.auth.EmailAuthProvider.credential(u.email, P.owner ? a : claveAuth(a))); await u.updatePassword(P.owner ? n : claveAuth(n)); e.target.reset(); toast('Contraseña actualizada'); }
-    catch (err) { toast(/wrong|invalid-credential/.test(String(err.code)) ? 'La contraseña actual no es correcta' : 'No se pudo cambiar: ' + (err.message || err.code)); }
-  };
-
-  /* ---------- Registro de propietarios y solicitudes ---------- */
-  irRegistro = async function () {
-    if (!RES) return toast('Primero elige tu residencial');
-    try { toast('Cargando casas…'); const r = await llamar('registroInfo', { rid: RES }); DB = esqueleto(RES); DB.casas = (r.casas || []).map(c => ({ id: c.id, numero: c.numero, pasaje: c.pasaje, torre: c.torre, piso: c.piso, duenoId: c.ocupada ? 'ocupada' : null, codigo: '' })); }
-    catch (e) { return toast(e.message || 'No se pudo cargar'); }
-    S.tab = 'registro'; S.reto = null; SELFIE = null; render(); window.scrollTo(0, 0);
-  };
-  enviarRegistro = async function (e) {
-    e.preventDefault(); const f = new FormData(e.target); const c = casa(f.get('casa'));
-    if (!c) return toast('Elige tu casa');
-    if (!duiValido(String(f.get('dui')).trim())) return toast('El DUI debe tener 9 dígitos: 00000000-0');
-    if (String(f.get('pass') || '').length < 6) return toast('La clave debe tener al menos 6 caracteres');
-    if (!SELFIE) return toast('Falta la foto en tiempo real');
-    let doc, duif, foto; try { doc = await leerArchivo(f.get('doc')); duif = await leerArchivo(f.get('duif')); foto = await leerArchivo(f.get('foto')); } catch (x) { return toast('Archivo no válido. Usa foto o PDF'); }
-    const un = String(f.get('user')).trim().toLowerCase();
-    try {
-      toast('Enviando…');
-      await llamar('registro', { rid: RES, casaId: c.id, codigo: String(f.get('codigo') || '').trim(), nombre: f.get('nombre'), familia: String(f.get('familia') || '').trim(), dui: f.get('dui'), tel: f.get('tel'), email: f.get('email'), user: un, pass: f.get('pass'), documento: doc, duiFoto: duif, foto, selfie: SELFIE });
-    } catch (err) { return toast(err.message || 'No se pudo enviar'); }
-    SELFIE = null; S.tab = 'inicio'; DB = esqueleto(RES); render();
-    sheet('Solicitud enviada', `<p>Tu solicitud para <b>${casaNom(c.id)}</b> quedó en revisión. La administración validará tus documentos y tu foto, y te avisará. Después podrás ingresar con tu usuario <b>${esc(un)}</b>.</p><button class="btn block" onclick="closeSheet()">Entendido</button>`);
-  };
-  aprobarSol = async function (id, ok) {
-    const s = DB.solicitudes.find(x => x.id === id); if (!s) return; const c = casa(s.casaId);
-    if (c && c.duenoId && !ok) return confirmar('La casa ya tiene propietario', `${esc(duenoNom(c.id))} y sus inquilinos quedarán desactivados.`, 'Aprobar y reemplazar', () => aprobarSol(id, true), { icono: 'userplus', tono: 'warn' });
-    const reemplazar = !!(c && c.duenoId);
-    try { toast('Aprobando…'); await llamar('aprobarRegistro', { rid: P.rid, solId: id, reemplazar }); toast('Propietario aprobado. Ya puede ingresar con su usuario'); }
-    catch (e) { toast(e.message || 'No se pudo aprobar'); }
-  };
-  enviarSolRes = async function (e) {
-    e.preventDefault(); const f = new FormData(e.target);
-    const s = { id: uid(), nombre: f.get('nombre'), municipio: f.get('municipio'), casas: +f.get('casas'), contacto: { nombre: f.get('cn'), tel: f.get('ct'), email: f.get('ce') }, mensaje: f.get('m'), fecha: nowISO(), estado: 'pendiente' };
-    try { await ocupado(FS().doc('solicitudesRes/' + s.id).set({ d: estable(s), _t: firebase.firestore.FieldValue.serverTimestamp() })); }
-    catch (err) { return toast('No se pudo enviar: ' + (err.message || err.code)); }
-    S.tab = 'inicio'; render(); sheet('Solicitud enviada', '<p>Gracias. Te contactaremos para crear la cuenta de tu residencial.</p><button class="btn block" onclick="closeSheet()">Listo</button>');
-  };
-
-  /* ---------- Menú: notificaciones, instalar, eliminar cuenta ---------- */
-  function itemsProd() {
-    const perm = ('Notification' in window) ? Notification.permission : 'na';
-    let h = '';
-    if (perm !== 'granted') h += menuItem('bell', 'Activar notificaciones', 'GW_PROD.activarPush()');
-    if (!esStandalone()) h += menuItem('download', 'Instalar la app en este teléfono', 'GW_PROD.instalar()');
-    if (!P.owner) h += menuItem('trash', 'Eliminar mi cuenta', 'GW_PROD.pedirEliminarCuenta()');
-    return h;
-  }
-  Object.keys(VIEWS).forEach(r => {
-    const V = VIEWS[r]; if (!V || !V.mas || r === 'superadmin') return; const b = V.mas;
-    V.mas = function () { const h = b.apply(this, arguments); const i = h.indexOf('<h3>Sesión</h3>'); const it = itemsProd(); return i >= 0 ? h.slice(0, i) + '<h3>Este teléfono</h3>' + it + h.slice(i) : h + it; };
-  });
-  vLogin = function () {
-    let h = base.vLogin.apply(this, arguments);
-    h = h.replace(/<button class="btn ghost block"[^>]*onclick="entrarId[^"]*"[^>]*>[\s\S]*?<\/button>/g, '');
-    try { h = h.split(nubeTxt()).join(P.on ? '🔒 Conexión segura · datos protegidos' : 'Conectando…').replace(/onclick="verNube\(\)"/g, ''); } catch (e) { }
-    if (!esStandalone()) h += `<div class="card" style="margin-top:12px;text-align:left"><b>${esIOS() ? 'Instala GateWise en tu iPhone' : 'Instala GateWise en tu teléfono'}</b><p class="sm muted" style="margin:6px 0 10px">${esIOS() ? 'En Safari toca Compartir › Agregar a pantalla de inicio. Así se abre como app y puedes recibir notificaciones.' : 'Ábrela como una app desde tu pantalla de inicio.'}</p><button class="btn sec block" onclick="GW_PROD.instalar()">Cómo instalar</button></div>`;
-    return h;
-  };
-  Object.assign(P, { activarPush, instalar, pedirEliminarCuenta, sincronizar, reconstruir, cargarLigero, subirDB, abrirRes, cerrarRes, emailDe, claveAuth, estable, leerDoc, plan });
-  if (typeof ICON !== 'undefined' && !ICON.download) ICON.download = '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>';
-  Object.assign(I18N, { 'Activar notificaciones': 'Turn on notifications', 'Instalar la app en este teléfono': 'Install the app on this phone', 'Eliminar mi cuenta': 'Delete my account', 'Este teléfono': 'This phone', 'Cargando su residencial…': 'Loading your community…', 'Un momento, por favor.': 'One moment, please.', 'Instala GateWise en tu iPhone': 'Install GateWise on your iPhone', 'Instala GateWise en tu teléfono': 'Install GateWise on your phone', 'Cómo instalar': 'How to install', '🔒 Conexión segura · datos protegidos': '🔒 Secure connection · data protected' });
-
-  /* ---------- Menú del dueño: sin opciones de demostración ---------- */
-  if (VIEWS.superadmin && VIEWS.superadmin.mas) {
-    const bSA = VIEWS.superadmin.mas;
-    VIEWS.superadmin.mas = function () {
-      let h = bSA.apply(this, arguments);
-      ['verNube()', 'verRecuperar()', 'borrarRegistros()', 'resetDemo()'].forEach(fn => { h = h.replace(new RegExp('<[^<]*?onclick="' + fn.replace(/[()]/g, '\\$&') + '"[\\s\\S]*?</(button|div|a)>'), ''); });
-      h = h.replace(/<p class="note nubeEstado"[\s\S]*?<\/p>/, '');
-      const i = h.indexOf('<h3>Sesión</h3>'); const it = itemsProd();
-      return i >= 0 ? h.slice(0, i) + '<h3>Este teléfono</h3>' + it + h.slice(i) : h + it;
-    };
-  }
-  resetDueno = async function () { try { await P.auth.sendPasswordResetEmail(OWNER_EMAIL); closeSheet(); toast('Te enviamos el correo a ' + OWNER_EMAIL); } catch (e) { toast('No se pudo enviar: ' + (e.message || e)); } };
-
-  /* ---------- Claves de al menos 6 caracteres (Firebase) ---------- */
-  new MutationObserver(() => {
-    document.querySelectorAll('input[name=pass][minlength="4"],input[name=n][minlength="4"],input[name=adminPass]').forEach(i => { i.minLength = 6; if (/^\d{4}$/.test(i.value)) i.value = ''; });
-  }).observe(document.documentElement, { childList: true, subtree: true });
-
-  /* =================== Arranque =================== */
-  async function arrancar() {
-    loadPlat(); if (PLAT.residenciales.length) load(PLAT.residenciales[0].id);
-    S.user = null; render();
-    if (!CFG || !CFG.apiKey || /PEGAR/.test(CFG.apiKey)) { toast('Falta la configuración de Firebase de producción en config.js'); return; }
-    try {
-      if (!window.firebase || !firebase.firestore) {
-        await cargarJS(SDK + 'firebase-app-compat.js'); await cargarJS(SDK + 'firebase-auth-compat.js');
-        await cargarJS(SDK + 'firebase-firestore-compat.js'); await cargarJS(SDK + 'firebase-functions-compat.js');
-      }
-      P.app = firebase.apps.length ? firebase.app() : firebase.initializeApp(CFG);
-      P.auth = firebase.auth(); P.fs = firebase.firestore();
-      try { await P.fs.enablePersistence({ synchronizeTabs: true }); } catch (e) { /* otra pestaña o navegador sin soporte */ }
-      P.fn = P.app.functions(REGION);
-      P.on = true;
-      if (typeof NUBE !== 'undefined') { NUBE.on = true; NUBE.estado = 'conectado'; }
-      P.fs.doc('plataforma/publico').onSnapshot(s => {
-        if (P.owner) return;
-        try { const o = s.exists ? JSON.parse(s.data().d || '{}') : { residenciales: [] }; PLAT.residenciales = o.residenciales || []; guardarCachePlat(); } catch (e) { }
-        if (!S.user) { if (!RES && PLAT.residenciales.length) load(PLAT.residenciales[0].id); render(); }
-      }, e => console.warn('publico', e.code));
-      P.auth.onAuthStateChanged(async user => {
-        if (!user) { P.uid = null; P.owner = false; if (S.user) { cerrarRes(); S.user = null; S.imp = null; render(); } return; }
-        P.uid = user.uid;
-        if (String(user.email || '').toLowerCase() === OWNER_EMAIL) { await iniciarDueno(); return; }
-        P.owner = false;
-        const tok = await user.getIdTokenResult(true); P.claims = tok.claims || {};
-        const rid = P.claims.rid;
-        if (!rid) { await P.auth.signOut(); return toast('Tu usuario no tiene una residencial asignada'); }
-        await abrirRes(rid, P.claims.rol, user.uid, P.claims.casa || '');
-        const u = usuario(user.uid);
-        if (!u || u.activo === false) { await P.auth.signOut(); cerrarRes(); S.user = null; render(); return toast('Tu usuario no está activo'); }
-        const er = puedeEntrar(u); if (er) { await P.auth.signOut(); cerrarRes(); S.user = null; render(); return toast(er); }
-        base.entrar(u);
-      });
-      document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') sincronizar(); });
-    } catch (e) { console.error(e); toast('No se pudo conectar: ' + (e.message || e)); }
-  }
-  window.GW_PROD_ARRANCAR = arrancar;
-})();
-
-</script>
-<script>if(window.GW_PROD_ARRANCAR)GW_PROD_ARRANCAR()</script>
 </body>
 </html>
