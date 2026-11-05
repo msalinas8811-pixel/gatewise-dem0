@@ -560,6 +560,49 @@ body.rol-vecino .chk input[type=checkbox]{width:24px;height:24px}
 .pv-fotos img{width:96px;height:96px;object-fit:cover;border-radius:14px;box-shadow:inset 0 0 0 1px var(--line);cursor:zoom-in}
 
 </style>
+<style data-origen="css/respaldos.css">
+/* =====================================================================
+   GateWise · RESPALDOS Y RESTAURACIÓN
+   ===================================================================== */
+.rs-hero{position:relative;isolation:isolate;overflow:hidden;border-radius:24px;padding:18px;color:#fff;
+  background:radial-gradient(110% 80% at 100% 0%,rgba(255,255,255,.16),transparent 60%),linear-gradient(150deg,#0f766e,#115e59 55%,#134e4a);
+  box-shadow:0 18px 36px -22px rgba(15,118,110,.95)}
+.rs-hero.warn{background:radial-gradient(110% 80% at 100% 0%,rgba(255,255,255,.18),transparent 60%),linear-gradient(150deg,#d97706,#b45309 60%,#92400e);box-shadow:0 18px 36px -22px rgba(180,83,9,.9)}
+.rs-hero::after{content:"";position:absolute;z-index:-1;width:220px;height:220px;right:-70px;bottom:-90px;border-radius:50%;border:34px solid rgba(255,255,255,.07)}
+.rs-top{display:flex;align-items:center;gap:14px}
+.rs-top .rs-ic{flex:none;display:grid;place-items:center;width:54px;height:54px;border-radius:18px;background:#fff;color:#0f766e;box-shadow:0 8px 18px -10px rgba(0,0,0,.5)}
+.rs-hero.warn .rs-top .rs-ic{color:#b45309}
+.rs-top .rs-ic svg{width:28px;height:28px}
+.rs-top b{display:block;font-size:19px;line-height:1.25}
+.rs-top span{display:block;font-size:14.5px;opacity:.92;margin-top:2px}
+.rs-datos{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 4px}
+.rs-datos div{padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.13);box-shadow:inset 0 0 0 1px rgba(255,255,255,.2)}
+.rs-datos small{display:block;font-size:12px;opacity:.85;font-weight:600;letter-spacing:.02em}
+.rs-datos b{display:block;font-size:15.5px;margin-top:2px}
+.rs-hero .btns .btn:not(.sec):not(.ghost):not(.bad){--b-tone:#ffffff;--b-fg:#115e59;background:#fff;color:#115e59;box-shadow:0 8px 18px -12px rgba(0,0,0,.5)}
+.rs-hero.warn .btns .btn:not(.sec):not(.ghost):not(.bad){color:#92400e;--b-fg:#92400e}
+.rs-hero .btns .btn:not(.sec):not(.ghost):not(.bad)::before{display:none}
+.rs-hero .btns .btn.ghost{--b-bg:rgba(255,255,255,.14);--b-fg:#fff;background:rgba(255,255,255,.14);color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}
+
+.rs-frec{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.rs-frec button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:84px;padding:8px 4px;border:0;border-radius:18px;background:var(--card);color:var(--text);font:inherit;font-size:14px;font-weight:700;cursor:pointer;
+  box-shadow:inset 0 0 0 1px var(--line);transition:transform 160ms var(--b-ease),box-shadow 160ms ease}
+.rs-frec button svg{width:22px;height:22px;color:var(--muted)}
+.rs-frec button small{font-size:11.5px;font-weight:600;color:var(--muted)}
+.rs-frec button.on{box-shadow:inset 0 0 0 2px var(--pri),0 8px 18px -12px var(--pri);background:color-mix(in srgb,var(--pri) 8%,var(--card))}
+.rs-frec button.on svg{color:var(--pri)}
+.rs-frec button:active{transform:scale(.96)}
+.rs-cons{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:15px}
+.rs-cons select{width:auto;min-width:120px;margin:0}
+
+.rs-it .mic{width:44px;height:44px;border-radius:14px}
+.rs-inc{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.rs-inc span{font-size:12.5px;font-weight:600;padding:5px 10px;border-radius:999px;background:color-mix(in srgb,var(--pri) 9%,var(--card));color:color-mix(in srgb,var(--pri) 85%,var(--text));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--pri) 18%,transparent)}
+.rs-aviso{display:flex;gap:12px;align-items:flex-start;padding:14px;border-radius:16px;background:color-mix(in srgb,var(--warn) 12%,var(--card));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--warn) 30%,transparent);font-size:14.5px;line-height:1.5;margin:4px 0 12px}
+.rs-aviso svg{flex:none;color:var(--warn);margin-top:1px}
+@media (max-width:380px){.rs-frec{grid-template-columns:repeat(2,1fr)}}
+
+</style>
 </head>
 <body>
 <div id="app"></div>
@@ -2686,7 +2729,7 @@ Object.assign(I18N,{"Planes y precios":"Plans and prices","Precio mensual acorda
 
 
 /* ---------- Versión y actualización ---------- */
-const APP_VERSION='2026.11.05-26';
+const APP_VERSION='2026.11.05-27';
 async function buscarActualizacion(){toast('Buscando la versión más reciente…');try{if(navigator.serviceWorker){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}setTimeout(()=>{location.href=location.pathname+'?v='+Date.now()},400)}
 const versionHTML=()=>`<p class="note" style="text-align:center;margin-top:18px">GateWise · versión ${APP_VERSION} · <a href="#" onclick="buscarActualizacion();return false" style="color:var(--pri);font-weight:700">Buscar actualización</a></p>`;
 try{if(navigator.serviceWorker){navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!window.__gwRecargado){window.__gwRecargado=1;if(!S.user||!document.querySelector('#ov'))location.reload()}})}}catch(e){}
@@ -4402,6 +4445,264 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
     'Por revisar': 'To review', 'Aprobada': 'Approved', 'Rechazada': 'Rejected', 'Aprobar y crear usuario': 'Approve and create user', 'Datos de acceso': 'Sign-in details',
     'Usuario creado': 'User created', 'Enviarle sus datos por WhatsApp': 'Send their details on WhatsApp', 'Copiar mensaje': 'Copy message', 'Escribirle por WhatsApp': 'Message on WhatsApp',
     'Link copiado': 'Link copied', 'Volver a la app': 'Back to the app', 'No hay solicitudes por revisar': 'No requests to review',
+  });
+})();
+
+</script>
+<script data-origen="js/app/26-respaldos.js">
+/* =========================================================
+   RESPALDOS Y RESTAURACIÓN
+   - Administración de la residencial: Menú › Respaldos y restauración
+   - Administrador de la APP: Más › Respaldos de residenciales (todas, y las
+     eliminadas que tengan respaldo, para devolvérselas a quien las perdió)
+   - Manual ("Crear respaldo ahora") y programado (diario, semanal o mensual,
+     conservando los últimos N automáticos).
+   - Antes de restaurar SIEMPRE se guarda una copia del estado actual.
+   Modo demo: los respaldos se guardan en este dispositivo (IndexedDB) y el
+   programado se ejecuta al abrir la app.
+   Modo producción: Cloud Functions + Cloud Storage (functions/core.js · respaldo);
+   el programado lo hace el servidor cada noche aunque nadie abra la app.
+   ========================================================= */
+(function () {
+  const PROD = () => window.GATEWISE_MODO === 'produccion';
+  const RS = { lista: {}, cargando: {}, todas: null };
+  window.RS = RS;
+  const FREC = [['no', 'Desactivado', 'x', ''], ['diario', 'Diario', 'clock', 'cada noche'], ['semanal', 'Semanal', 'calendar', 'cada 7 días'], ['mensual', 'Mensual', 'calendar', 'cada mes']];
+  const TIPO_L = { manual: 'Manual', automatico: 'Automático', 'antes de restaurar': 'Antes de restaurar', 'antes de eliminar': 'Antes de eliminar' };
+  const TIPO_C = { manual: 'info', automatico: 'ok', 'antes de restaurar': 'warn', 'antes de eliminar': 'bad' };
+  const tam = n => n > 1048576 ? (n / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(n / 1024)) + ' KB';
+  function hace(f) {
+    if (!f) return ''; const m = (Date.now() - new Date(f)) / 60000;
+    return m < 1 ? 'hace un momento' : m < 60 ? `hace ${Math.round(m)} min` : m < 1440 ? `hace ${Math.round(m / 60)} h` : m < 2880 ? 'ayer' : `hace ${Math.round(m / 1440)} días`;
+  }
+  const fechaH = f => f ? `${fFecha(String(f).slice(0, 10))} · ${hora(f)}` : '';
+  const datosDe = rid => rid === RES && DB ? DB : (typeof leerDB === 'function' ? leerDB(rid) : null);
+  const nombreDe = rid => { const r = (PLAT.residenciales || []).find(x => x.id === rid); const d = datosDe(rid); const t = (RS.todas || []).find(x => x.rid === rid); const l = (RS.lista[rid] || [])[0]; return (d && d.residencial && d.residencial.nombre) || (r && r.nombre) || (t && t.nombre) || (l && l.nombre) || rid; };
+  const cfgDe = rid => { const d = datosDe(rid); const c = (d && d.respaldoCfg) || {}; return { frecuencia: c.frecuencia || 'semanal', conservar: +c.conservar || 8 }; };
+
+  /* ================= Modo demo: IndexedDB en este dispositivo ================= */
+  const IDB = {
+    abrir() {
+      if (this.p) return this.p;
+      this.p = new Promise((res, rej) => { try { const q = indexedDB.open('gatewise_respaldos', 1); q.onupgradeneeded = () => { const s = q.result.createObjectStore('r', { keyPath: 'id' }); s.createIndex('rid', 'rid'); }; q.onsuccess = () => res(q.result); q.onerror = () => rej(q.error); } catch (e) { rej(e); } });
+      return this.p;
+    },
+    async tx(modo, fn) { const db = await this.abrir(); return new Promise((res, rej) => { const t = db.transaction('r', modo); const s = t.objectStore('r'); const out = fn(s); t.oncomplete = () => res(out && out.result !== undefined ? out.result : out); t.onerror = () => rej(t.error); }); },
+    put(r) { return this.tx('readwrite', s => s.put(r)); },
+    del(id) { return this.tx('readwrite', s => s.delete(id)); },
+    get(id) { return this.tx('readonly', s => s.get(id)); },
+    async todos() { const db = await this.abrir(); return new Promise((res, rej) => { const q = db.transaction('r').objectStore('r').getAll(); q.onsuccess = () => res(q.result || []); q.onerror = () => rej(q.error); }); },
+  };
+  function contar(d) { let n = 0; Object.values(d || {}).forEach(v => { if (Array.isArray(v)) n += v.length; else if (v && typeof v === 'object') n++; }); return n; }
+  const DEMO = {
+    async crear(rid, tipo) {
+      const d = datosDe(rid); if (!d) throw new Error('La residencial no tiene datos en este dispositivo');
+      const datos = JSON.stringify(d); const fecha = new Date().toISOString();
+      const rec = { id: 'b' + fecha.replace(/\D/g, '').slice(0, 14) + uid().slice(0, 4), rid, nombre: nombreDe(rid), fecha, tipo, por: (S.user && S.user.nombre) || 'Sistema', docs: contar(d), tamano: datos.length, datos, plat: (PLAT.residenciales || []).find(r => r.id === rid) || null };
+      await IDB.put(rec); return { id: rec.id, fecha, tipo, docs: rec.docs, tamano: rec.tamano };
+    },
+    async listar(rid) { return (await IDB.todos()).filter(r => r.rid === rid).map(({ datos, ...m }) => m).sort((a, b) => b.fecha.localeCompare(a.fecha)); },
+    async archivo(rid, id) { const r = await IDB.get(id); if (!r || r.rid !== rid) throw new Error('No se encontró el respaldo'); return { formato: 'gatewise-respaldo', version: 1, modo: 'demo', rid, nombre: r.nombre, fecha: r.fecha, tipo: r.tipo, plat: r.plat, datos: JSON.parse(r.datos) }; },
+    async descargar(rid, id) { bajarJSON(await this.archivo(rid, id)); },
+    async restaurar(rid, a, opts) {
+      if (!a || a.formato !== 'gatewise-respaldo') throw new Error('El archivo no es un respaldo de GateWise');
+      if (a.modo !== 'demo' || !a.datos) throw new Error('Este respaldo es de la versión con base de datos en la nube; restáuralo desde allá');
+      if (a.rid !== rid && !opts.forzar) throw new Error(`Este respaldo es de otra residencial (${a.nombre || a.rid})`);
+      let previo = null; if (datosDe(rid)) previo = (await this.crear(rid, 'antes de restaurar')).id;
+      const nuevo = JSON.parse(JSON.stringify(a.datos)); const actual = datosDe(rid);
+      if (!opts.incluirUsuarios && actual) nuevo.usuarios = actual.usuarios;
+      if (actual && actual.respaldoCfg) nuevo.respaldoCfg = actual.respaldoCfg;
+      if (!(PLAT.residenciales || []).some(r => r.id === rid)) { PLAT.residenciales.push(Object.assign({}, a.plat || { id: rid, nombre: a.nombre, estado: 'activa' }, { id: rid })); savePlat(); }
+      if (rid === RES) { DB = nuevo; save(); } else escribirDB(rid, nuevo);
+      return { ok: true, previo };
+    },
+    async borrar(rid, id) { await IDB.del(id); },
+    async todas() {
+      const por = {}; (await IDB.todos()).forEach(r => { const o = por[r.rid] = por[r.rid] || { rid: r.rid, nombre: r.nombre, total: 0, ultimo: '' }; o.total++; if (r.fecha > o.ultimo) { o.ultimo = r.fecha; o.nombre = r.nombre; } });
+      return Object.values(por);
+    },
+    async crearTodas() { const res = []; for (const r of PLAT.residenciales || []) { try { res.push(Object.assign({ rid: r.id, ok: true }, await this.crear(r.id, 'manual'))); } catch (e) { res.push({ rid: r.id, ok: false, error: e.message }); } } return res; },
+    // respaldo programado: se revisa al abrir la app y cada hora mientras esté abierta
+    async programados() {
+      const todos = await IDB.todos();
+      for (const r of PLAT.residenciales || []) {
+        const d = datosDe(r.id); if (!d) continue; const cfg = cfgDe(r.id); if (cfg.frecuencia === 'no') continue;
+        const autos = todos.filter(x => x.rid === r.id && x.tipo === 'automatico').sort((a, b) => b.fecha.localeCompare(a.fecha));
+        const dias = autos[0] ? (Date.now() - new Date(autos[0].fecha)) / 864e5 : 1e9;
+        if (dias < { diario: .9, semanal: 6.9, mensual: 29.9 }[cfg.frecuencia]) continue;
+        await this.crear(r.id, 'automatico');
+        for (const v of autos.slice(cfg.conservar - 1)) await IDB.del(v.id);
+        delete RS.lista[r.id];
+      }
+    },
+  };
+
+  /* ================= Modo producción: Cloud Functions ================= */
+  const llamarR = async (accion, datos) => {
+    const B = window.GW_BUSY; B && B.inc();
+    try { return (await firebase.app().functions('us-east1').httpsCallable('respaldo')(Object.assign({ accion }, datos || {}))).data; }
+    catch (e) { throw new Error(e.message || 'No se pudo completar'); } finally { B && B.dec(); }
+  };
+  const NUBE = {
+    async crear(rid) { return llamarR('crear', { rid }); },
+    async listar(rid) { return (await llamarR('listar', { rid })).respaldos; },
+    async descargar(rid, id) { const r = await llamarR('descargar', { rid, id }); const a = document.createElement('a'); a.href = r.url; a.rel = 'noopener'; a.target = '_blank'; document.body.appendChild(a); a.click(); a.remove(); },
+    async restaurar(rid, a, opts) {
+      if (opts.id) return llamarR('restaurar', { rid, id: opts.id, incluirUsuarios: !!opts.incluirUsuarios });
+      if (!a || a.formato !== 'gatewise-respaldo') throw new Error('El archivo no es un respaldo de GateWise');
+      if (a.modo !== 'produccion') throw new Error('Este respaldo es de la versión demo y no se puede restaurar aquí');
+      if (!firebase.storage) await cargarJS('https://www.gstatic.com/firebasejs/10.12.5/firebase-storage-compat.js');
+      const ref = firebase.storage().ref(`respaldos/${rid}/subidas/${Date.now()}.json`);
+      const B = window.GW_BUSY; B && B.inc();
+      try { await ref.put(new Blob([JSON.stringify(a)], { type: 'application/json' }), { contentType: 'application/json' }); } finally { B && B.dec(); }
+      return llamarR('restaurar', { rid, ruta: ref.fullPath, incluirUsuarios: !!opts.incluirUsuarios, forzar: !!opts.forzar });
+    },
+    async borrar(rid, id) { return llamarR('borrar', { rid, id }); },
+    async todas() { return (await llamarR('listarTodas')).residenciales; },
+    async crearTodas() { return (await llamarR('crearTodas')).res; },
+  };
+  const B_ = () => PROD() ? NUBE : DEMO;
+
+  function bajarJSON(o) {
+    const blob = new Blob([JSON.stringify(o)], { type: 'application/json' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+    a.download = `gatewise-respaldo-${String(o.nombre || o.rid).toLowerCase().normalize('NFD').replace(/[^\w]+/g, '-')}-${String(o.fecha).slice(0, 16).replace(/[:T]/g, '-')}.json`;
+    document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+  }
+  function refrescar(rid) {
+    if (RS.cargando[rid]) return; RS.cargando[rid] = true;
+    B_().listar(rid).then(l => { RS.lista[rid] = l; }).catch(e => { RS.lista[rid] = []; toast(e.message); }).finally(() => { RS.cargando[rid] = false; render(); });
+  }
+
+  /* ================= Pantalla de respaldos de una residencial ================= */
+  const deUsuario = () => { const u = (S.user && S.user.id) || ''; if (RS.uid !== u) { RS.uid = u; RS.lista = {}; RS.todas = null; } };
+  function vRespaldos(rid, dueno) {
+    deUsuario();
+    const L = RS.lista[rid]; if (!L) refrescar(rid);
+    const d = datosDe(rid); const puede = PROD() || !!d; const cfg = cfgDe(rid); const ult = L && L[0];
+    const ultAuto = L && L.find(x => x.tipo === 'automatico');
+    const prox = cfg.frecuencia === 'no' ? 'Desactivado' : ultAuto ? fFecha(addDays(String(ultAuto.fecha).slice(0, 10), { diario: 1, semanal: 7, mensual: 30 }[cfg.frecuencia])) : (PROD() ? 'Esta noche' : 'Al abrir la app');
+    const viejo = !ult || (Date.now() - new Date(ult.fecha)) / 864e5 > 8;
+    let h = `${dueno ? `<button class="btn ghost smb" style="margin-bottom:10px" onclick="go('respaldos')">${ic('back', 16)} Todas las residenciales</button>` : ''}<h2>Respaldos</h2>
+      <p class="note" style="margin-top:-4px">Una copia de <b>todo</b> lo de ${esc(nombreDe(rid))}, para recuperarlo si algo se borra o se daña.</p>
+      <div class="rs-hero ${L && viejo ? 'warn' : ''}"><div class="rs-top"><span class="rs-ic">${ic('shield', 28)}</span><span><b>${!L ? 'Revisando respaldos…' : ult ? 'Tus datos están respaldados' : 'Todavía no hay respaldos'}</b><span>${ult ? 'Último: ' + hace(ult.fecha) + ' · ' + fechaH(ult.fecha) : 'Crea el primero ahora mismo'}</span></span></div>
+        <div class="rs-datos"><div><small>AUTOMÁTICO</small><b>${FREC.find(f => f[0] === cfg.frecuencia)[1]}</b></div><div><small>PRÓXIMO</small><b>${prox}</b></div></div>
+        <div class="btns"><button class="btn" ${puede ? '' : 'disabled'} onclick="crearRespaldo('${rid}')">${ic('shield', 18)}<span class="b-tx">Crear respaldo ahora</span></button><label class="btn ghost">${ic('upload', 18)}<span class="b-tx">Restaurar desde archivo</span><input type="file" accept=".json,application/json" hidden onchange="archivoRespaldo(this,'${rid}')"></label></div></div>
+      <h3>Respaldo automático</h3>
+      <div class="rs-frec">${FREC.map(([k, l, i, s]) => `<button class="${cfg.frecuencia === k ? 'on' : ''}" ${d ? '' : 'disabled'} onclick="cfgRespaldo('${rid}','frecuencia','${k}')">${ic(i, 22)}<span>${l}</span>${s ? `<small>${s}</small>` : ''}</button>`).join('')}</div>
+      ${cfg.frecuencia !== 'no' ? `<label class="rs-cons">Guardar los últimos<select onchange="cfgRespaldo('${rid}','conservar',this.value)">${[4, 8, 15, 30].map(n => `<option value="${n}" ${cfg.conservar === n ? 'selected' : ''}>${n} automáticos</option>`).join('')}</select></label>` : ''}
+      <p class="note">${PROD() ? 'El servidor hace el respaldo automático en la madrugada, aunque nadie abra la app.' : 'En la demo, el respaldo automático se hace en este dispositivo al abrir la app.'}</p>
+      <h3>Respaldos guardados${L ? ` (${L.length})` : ''}</h3>`;
+    h += !L ? empty('Cargando…') : L.map(r => `<button class="item rs-it" onclick="verRespaldo('${rid}','${r.id}')"><span class="mic c-${r.tipo === 'automatico' ? 'green' : r.tipo === 'manual' ? 'blue' : 'amber'}">${ic(r.tipo === 'automatico' ? 'clock' : r.tipo === 'manual' ? 'shield' : 'reset', 20)}</span><div class="grow"><b>${fechaH(r.fecha)}</b><div class="sm muted">${TIPO_L[r.tipo] || r.tipo} · ${tam(r.tamano)} · ${(r.docs || 0).toLocaleString('es')} registros</div></div>${chip(hace(r.fecha), TIPO_C[r.tipo] || 'info')}</button>`).join('') || empty('Sin respaldos todavía');
+    h += `<h3>Qué se guarda</h3><div class="rs-inc">${['Casas y propietarios', 'Residentes e inquilinos', 'Cuotas y pagos', 'Accesos y pases', 'Avisos y reclamos', 'Reservas', 'Academias', 'Eventos y torneos', 'Tienda y proveedores', 'Votaciones', 'Directorio', 'Configuración'].map(x => `<span>${x}</span>`).join('')}</div>
+      ${PROD() ? '<p class="note">Además, Google guarda cada noche una copia completa de toda la plataforma.</p>' : ''}`;
+    return h;
+  }
+
+  window.crearRespaldo = async function (rid) {
+    try { const r = await B_().crear(rid, 'manual'); delete RS.lista[rid]; render(); toast(`Respaldo creado · ${(r.docs || 0).toLocaleString('es')} registros`); }
+    catch (e) { toast(e.message || 'No se pudo crear el respaldo'); }
+  };
+  window.cfgRespaldo = function (rid, k, v) {
+    const d = datosDe(rid); if (!d) return; d.respaldoCfg = Object.assign({ frecuencia: 'semanal', conservar: 8 }, d.respaldoCfg || {}, { [k]: k === 'conservar' ? +v : v });
+    if (rid === RES) save(); else escribirDB(rid, d);
+    render(); toast(k === 'frecuencia' ? (v === 'no' ? 'Respaldo automático desactivado' : 'Respaldo automático: ' + FREC.find(f => f[0] === v)[1].toLowerCase()) : 'Listo');
+  };
+  window.verRespaldo = function (rid, id) {
+    const r = (RS.lista[rid] || []).find(x => x.id === id); if (!r) return;
+    sheet('Respaldo', `<div class="card kv"><span>Fecha</span><b>${fechaH(r.fecha)}</b><span>Tipo</span><b>${TIPO_L[r.tipo] || r.tipo}</b><span>Tamaño</span><b>${tam(r.tamano)}</b><span>Registros</span><b>${(r.docs || 0).toLocaleString('es')}</b>${r.por ? `<span>Hecho por</span><b>${esc(r.por)}</b>` : ''}</div>
+      <button class="btn block" onclick="pedirRestaurar('${rid}','${id}')">${ic('reset', 18)}<span class="b-tx">Restaurar este respaldo</span></button>
+      <button class="btn sec block" onclick="bajarRespaldo('${rid}','${id}')">${ic('download', 18)}<span class="b-tx">Descargar archivo</span></button>
+      <button class="btn ghost block b-danger" onclick="borrarRespaldo('${rid}','${id}')">${ic('trash', 18)}<span class="b-tx">Eliminar este respaldo</span></button>
+      <p class="note">Guarda el archivo descargado en tu computadora o en Google Drive: es una copia extra fuera de la app.</p>`);
+  };
+  window.bajarRespaldo = async function (rid, id) { try { await B_().descargar(rid, id); toast('Descargando respaldo'); } catch (e) { toast(e.message); } };
+  window.borrarRespaldo = function (rid, id) {
+    confirmar('¿Eliminar este respaldo?', 'Ya no podrás restaurar a esta fecha.', 'Eliminar respaldo', async () => { try { await B_().borrar(rid, id); delete RS.lista[rid]; render(); toast('Respaldo eliminado'); } catch (e) { toast(e.message); } });
+  };
+
+  let ARCH = null;
+  window.archivoRespaldo = function (inp, rid) {
+    const f = inp.files && inp.files[0]; inp.value = ''; if (!f) return;
+    const rd = new FileReader();
+    rd.onload = () => { let a; try { a = JSON.parse(rd.result); } catch (e) { return toast('El archivo no es un respaldo válido'); } if (!a || a.formato !== 'gatewise-respaldo') return toast('El archivo no es un respaldo de GateWise'); ARCH = a; pedirRestaurar(rid, null); };
+    rd.onerror = () => toast('No se pudo leer el archivo'); rd.readAsText(f);
+  };
+  window.pedirRestaurar = function (rid, id) {
+    const r = id ? (RS.lista[rid] || []).find(x => x.id === id) : ARCH;
+    if (!r) return; const otra = !id && r.rid !== rid; const dueno = S.user && S.user.rol === 'superadmin';
+    if (otra && !dueno) return toast(`Este respaldo es de otra residencial (${r.nombre || r.rid})`);
+    sheet('Restaurar respaldo', `<div class="rs-aviso">${ic('alert', 20)}<span>Los datos de <b>${esc(nombreDe(rid))}</b> volverán a como estaban el <b>${fechaH(r.fecha)}</b>. Lo que se haya hecho después se reemplaza.<br>Antes de restaurar se guarda automáticamente una copia del estado actual, por si necesitas deshacerlo.</span></div>
+      ${otra ? `<div class="rs-aviso">${ic('alert', 20)}<span>Este archivo es de <b>${esc(r.nombre || r.rid)}</b>, otra residencial.</span></div>` : ''}
+      <form onsubmit="restaurarOk(event,'${rid}',${id ? `'${id}'` : 'null'})">
+      <label class="pv-chk"><input type="checkbox" name="usuarios"><span><b>Restaurar también los usuarios</b><br><small class="muted">${PROD() ? 'Roles, casas y estado de las cuentas que todavía existen. Las claves no cambian.' : 'Usuarios y claves como estaban en el respaldo.'}</small></span></label>
+      <label class="f" style="margin-top:14px">Escribe <b>RESTAURAR</b> para confirmar<input name="ok" autocomplete="off" autocapitalize="characters" required></label>
+      <div class="btns"><button class="btn bad">${ic('reset', 18)}<span class="b-tx">Restaurar ahora</span></button><button type="button" class="btn ghost" onclick="closeSheet()"><span class="b-tx">Cancelar</span></button></div></form>`);
+  };
+  window.restaurarOk = async function (e, rid, id) {
+    e.preventDefault(); const f = new FormData(e.target);
+    if (String(f.get('ok') || '').trim().toUpperCase() !== 'RESTAURAR') return toast('Escribe RESTAURAR para confirmar');
+    const opts = { id, incluirUsuarios: !!f.get('usuarios'), forzar: S.user && S.user.rol === 'superadmin' };
+    try {
+      const a = id && !PROD() ? await DEMO.archivo(rid, id) : ARCH;
+      const r = await B_().restaurar(rid, a, opts);
+      ARCH = null; closeSheet(); delete RS.lista[rid]; delete RS.todas;
+      if (r && r.plat && !(PLAT.residenciales || []).some(x => x.id === rid)) { PLAT.residenciales.push(Object.assign({}, r.plat, { id: rid })); savePlat(); }
+      const extra = r && r.sinCuenta && r.sinCuenta.length ? `<br><b>${r.sinCuenta.length} usuario(s) necesitan clave nueva</b> (${esc(r.sinCuenta.slice(0, 4).join(', '))}${r.sinCuenta.length > 4 ? '…' : ''}). Asígnala en Usuarios o en Editar residencial.` : '';
+      sheet('Respaldo restaurado', `<div class="b-conf" style="--b-c:var(--ok)"><div class="b-conf-ic">${ic('check', 26)}</div><p>Los datos de <b>${esc(nombreDe(rid))}</b> se restauraron.${extra}</p><p>Si necesitas deshacerlo, en la lista aparece la copia <b>"Antes de restaurar"</b>.</p></div><button class="btn block" onclick="${PROD() && S.user && S.user.rol !== 'superadmin' ? 'location.reload()' : 'closeSheet();render()'}">Entendido</button>`);
+      if (!PROD()) render();
+    } catch (x) { toast(x.message || 'No se pudo restaurar'); }
+  };
+
+  /* ================= Administrador de la APP: todas las residenciales ================= */
+  function vSARespaldos() {
+    deUsuario();
+    if (S.sub) return vRespaldos(S.sub, true);
+    if (!RS.todas && !RS.cargandoT) { RS.cargandoT = true; B_().todas().then(t => { RS.todas = t; }).catch(e => { RS.todas = []; toast(e.message); }).finally(() => { RS.cargandoT = false; render(); }); }
+    const T = RS.todas || []; const by = Object.fromEntries(T.map(x => [x.rid, x]));
+    const activas = (PLAT.residenciales || []).map(r => ({ rid: r.id, nombre: r.nombre, i: by[r.id] }));
+    const borradas = T.filter(x => !(PLAT.residenciales || []).some(r => r.id === x.rid));
+    const fila = o => `<button class="item rs-it" onclick="go('respaldos','${o.rid}')"><span class="mic c-${o.i ? 'teal' : 'amber'}">${ic(o.i ? 'shield' : 'alert', 20)}</span><div class="grow"><b>${esc(o.nombre)}</b><div class="sm muted">${o.i ? `${o.i.total} respaldo(s) · último ${hace(o.i.ultimo)}` : (RS.todas ? 'Sin respaldos' : 'Revisando…')}</div></div>${ic('chev', 18)}</button>`;
+    return `<h2>Respaldos de residenciales</h2><p class="note" style="margin-top:-4px">Si una administración pierde sus datos, desde aquí se los devuelves. También puedes respaldar todas a la vez.</p>
+      <div class="rs-hero"><div class="rs-top"><span class="rs-ic">${ic('shield', 28)}</span><span><b>${activas.filter(o => o.i).length} de ${activas.length} residenciales con respaldo</b><span>Cada una tiene su propio respaldo automático</span></span></div>
+      <div class="btns"><button class="btn" onclick="respaldarTodas()">${ic('shield', 18)}<span class="b-tx">Respaldar todas ahora</span></button></div></div>
+      <h3>Residenciales</h3>${activas.map(fila).join('') || empty('No hay residenciales')}
+      ${borradas.length ? `<h3>Eliminadas con respaldo</h3><p class="note" style="margin-top:-4px">Se pueden restaurar y vuelven a aparecer en tu panel.</p>${borradas.map(x => fila({ rid: x.rid, nombre: x.nombre, i: x })).join('')}` : ''}`;
+  }
+  window.respaldarTodas = async function () {
+    try { const r = await B_().crearTodas(); const ok = r.filter(x => x.ok).length; RS.todas = null; RS.lista = {}; render(); toast(`Respaldadas ${ok} de ${r.length} residenciales`); }
+    catch (e) { toast(e.message); }
+  };
+
+  /* ================= Conectar con la app ================= */
+  if (VIEWS.admin) {
+    VIEWS.admin.respaldos = () => vRespaldos(RES, false);
+    const bm = VIEWS.admin.mas;
+    if (bm) VIEWS.admin.mas = function () { const h = bm.apply(this, arguments); const it = menuItem('shield', 'Respaldos y restauración', "go('respaldos')"); const i = h.indexOf('<h3>Sesión</h3>'); return i >= 0 ? h.slice(0, i) + it + h.slice(i) : h + it; };
+  }
+  if (VIEWS.superadmin) {
+    VIEWS.superadmin.respaldos = vSARespaldos;
+    const bm = VIEWS.superadmin.mas;
+    if (bm) VIEWS.superadmin.mas = function () { const h = bm.apply(this, arguments); const it = menuItem('shield', 'Respaldos de residenciales', "go('respaldos')"); const i = h.indexOf('<h3>'); return i >= 0 ? h.slice(0, i) + it + h.slice(i) : h + it; };
+    const bd = VIEWS.superadmin.resDet;
+    if (bd) VIEWS.superadmin.resDet = function () { const h = bd.apply(this, arguments); const rid = S.sub; return h + `<h3>Respaldos</h3><button class="item" onclick="go('respaldos','${rid}')"><span class="mic c-teal">${ic('shield', 20)}</span><b class="grow">Respaldos y restauración</b>${ic('chev', 18)}</button>`; };
+  }
+  if (typeof ICOL !== 'undefined') ICOL.shield = ICOL.shield || 'teal';
+  // al cambiar de usuario se olvida la lista en memoria
+  const eb = entrar; entrar = function () { RS.lista = {}; RS.todas = null; return eb.apply(this, arguments); };
+  // Demo: antes de eliminar una residencial se guarda un último respaldo (en producción lo hace el servidor)
+  if (!PROD() && typeof eliminarResOk === 'function') { const be = eliminarResOk; eliminarResOk = function (id) { DEMO.crear(id, 'antes de eliminar').catch(() => { }).finally(() => { RS.todas = null; be(id); }); }; }
+  // Respaldo programado en la demo
+  if (!PROD()) { setTimeout(() => DEMO.programados().catch(e => console.warn('respaldo', e)), 4000); setInterval(() => DEMO.programados().catch(() => { }), 3600000); }
+  window.GW_RESPALDOS = { DEMO, NUBE };
+
+  Object.assign(I18N, {
+    'Respaldos': 'Backups', 'Respaldos y restauración': 'Backup and restore', 'Respaldos de residenciales': 'Community backups', 'Crear respaldo ahora': 'Back up now',
+    'Restaurar desde archivo': 'Restore from file', 'Respaldo automático': 'Automatic backup', 'Desactivado': 'Off', 'Diario': 'Daily', 'Semanal': 'Weekly', 'Mensual': 'Monthly',
+    'Respaldos guardados': 'Saved backups', 'Qué se guarda': 'What is saved', 'Tus datos están respaldados': 'Your data is backed up', 'Todavía no hay respaldos': 'No backups yet',
+    'Restaurar este respaldo': 'Restore this backup', 'Descargar archivo': 'Download file', 'Eliminar este respaldo': 'Delete this backup', 'Restaurar respaldo': 'Restore backup',
+    'Restaurar ahora': 'Restore now', 'Respaldo restaurado': 'Backup restored', 'Respaldar todas ahora': 'Back up all now', 'Eliminadas con respaldo': 'Deleted, with backup',
+    'Todas las residenciales': 'All communities', 'Guardar los últimos': 'Keep the last',
   });
 })();
 
