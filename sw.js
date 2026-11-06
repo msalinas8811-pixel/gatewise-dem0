@@ -1,4 +1,4 @@
-const CACHE = 'gatewise-v36';
+const CACHE = 'gatewise-v38';
 const ASSETS = [
   './',
   './index.html',

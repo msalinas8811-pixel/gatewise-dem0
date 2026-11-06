@@ -664,6 +664,18 @@ body.rol-vecino .chk input[type=checkbox]{width:24px;height:24px}
 .ap-col{display:flex;flex-direction:column;gap:6px;align-items:flex-end;flex:none}
 .ap-off{opacity:.62}
 .ap-btn{margin-top:4px}
+.ap-opc{border:1px dashed var(--line);border-radius:16px;padding:12px 14px;margin:6px 0 14px}
+.ap-opc .pv-chk{margin:0}.ap-opc-c{margin-top:10px}
+
+/* ---------- Directorio: botón moderno para agregar (arriba) ---------- */
+.dir-add{display:flex;align-items:center;gap:14px;width:100%;text-align:left;margin:2px 0 14px;padding:14px 14px 14px 14px;border-radius:20px;cursor:pointer;font:inherit;color:var(--text);
+  background:linear-gradient(135deg,color-mix(in srgb,var(--pri) 10%,var(--card)),var(--card) 70%);border:1.5px dashed color-mix(in srgb,var(--pri) 45%,transparent);
+  transition:transform 160ms cubic-bezier(.23,1,.32,1),border-color 160ms ease,box-shadow 160ms ease}
+.dir-add:hover{border-color:var(--pri);box-shadow:0 8px 24px -12px color-mix(in srgb,var(--pri) 55%,transparent)}
+.dir-add:active{transform:scale(.97)}
+.dir-add-ic{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;flex:none;background:color-mix(in srgb,var(--c,var(--pri)) 15%,transparent);color:var(--c,var(--pri))}
+.dir-add-tx{flex:1;min-width:0}.dir-add-tx b{display:block;font-size:16px}.dir-add-tx small{display:block;color:var(--muted);margin-top:2px;line-height:1.35}
+.dir-add-plus{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;flex:none;background:var(--pri);color:var(--onpri,#fff);box-shadow:0 6px 16px -6px color-mix(in srgb,var(--pri) 70%,transparent)}
 
 </style>
 <style data-origen="css/respaldos.css">
@@ -1763,11 +1775,13 @@ function seedDirectorio(d,ejemplo){const r=d.residencial;const em=[{id:uid(),cat
   const sv=ejemplo?[{id:uid(),nombre:'Ramón Castillo',oficio:'Plomero',telefono:'7123-1111',dui:'04567123-4',zona:'Lun–Sáb 7:00–17:00',nota:'Ha trabajado en la residencial desde 2022.',verificado:true,solvencia:true,fecha:ymd(),foto:null},{id:uid(),nombre:'Carmen Alas',oficio:'Empleada de casa',telefono:'7222-3333',dui:'05678234-5',zona:'Por día o permanente',nota:'Referencias de 3 familias de la residencial.',verificado:true,solvencia:true,fecha:ymd(),foto:null},{id:uid(),nombre:'Electro Servicios Ayala',oficio:'Electricista',telefono:'7333-4444',dui:'',zona:'Emergencias 24 h',nota:'',verificado:false,solvencia:false,fecha:ymd(),foto:null}]:[];
   d.directorio={emergencia:em,servicios:sv}}
 function telRow(t){const n=String(t||'').replace(/[^\d+]/g,'');return `<a class="btn smb sec" href="tel:${esc(n)}">${ic('phone',14)} ${esc(t)}</a>`}
+// Botón moderno para agregar (arriba de la lista, solo administración)
+const dirAdd=(on,icon,t,d,c)=>`<button type="button" class="dir-add" onclick="${on}"><span class="dir-add-ic c-${c}">${ic(icon,22)}</span><span class="dir-add-tx"><b>${t}</b><small>${d}</small></span><span class="dir-add-plus" aria-hidden="true">${ic('plus',20)}</span></button>`;
 function vDirectorio(){const adm=S.user.rol==='admin';const D=dirDB();S.dseg=S.dseg||'emergencia';
   let h=`<h2>Directorio</h2>${seg('dseg',[['emergencia','🚨 Emergencias'],['servicios','🛠️ Servicios de confianza']])}`;
-  if(S.dseg==='emergencia'){h+=`<p class="note" style="margin-top:-4px">Números importantes de la residencial y de emergencia.${adm?' Agrega o corrige los que necesites.':''}</p>`+(D.emergencia.slice().sort((a,b)=>CAT_EM.indexOf(a.categoria)-CAT_EM.indexOf(b.categoria)).map(e=>`<div class="item"><div class="av">${/911|Polic|Bomb|Ambul|Civil/.test(e.categoria)?'🚨':'📞'}</div><div class="grow"><b>${esc(e.nombre)}</b><div class="sm muted">${esc(e.categoria)}${e.nota?' · '+esc(e.nota):''}</div><div style="margin-top:6px">${telRow(e.telefono)}</div></div>${adm?`<button class="btn smb ghost" onclick="editarEm('${e.id}')">Editar</button>`:''}</div>`).join('')||empty('Sin números registrados'))+(adm?`<button class="btn block" onclick="editarEm()">${ic('plus',18)} Agregar número</button>`:'')}
+  if(S.dseg==='emergencia'){h+=`<p class="note" style="margin-top:-4px">Números importantes de la residencial y de emergencia.${adm?' Agrega o corrige los que necesites.':''}</p>${adm?dirAdd('editarEm()','phone','Agregar número','Policía, bomberos, portería, administración…','red'):''}`+(D.emergencia.slice().sort((a,b)=>CAT_EM.indexOf(a.categoria)-CAT_EM.indexOf(b.categoria)).map(e=>`<div class="item"><div class="av">${/911|Polic|Bomb|Ambul|Civil/.test(e.categoria)?'🚨':'📞'}</div><div class="grow"><b>${esc(e.nombre)}</b><div class="sm muted">${esc(e.categoria)}${e.nota?' · '+esc(e.nota):''}</div><div style="margin-top:6px">${telRow(e.telefono)}</div></div>${adm?`<button class="btn smb ghost" onclick="editarEm('${e.id}')">Editar</button>`:''}</div>`).join('')||empty('Sin números registrados'))}
   else{S.dof=S.dof||'';const ofs=[...new Set(D.servicios.map(s=>s.oficio))];const l=D.servicios.filter(s=>(adm||s.activo!==false)&&(!S.dof||s.oficio===S.dof)).sort((a,b)=>(S.dord==='rating'?scoreR('serv',b.id)-scoreR('serv',a.id):0)||(b.verificado?1:0)-(a.verificado?1:0)||a.nombre.localeCompare(b.nombre));
-    h+=`<p class="note" style="margin-top:-4px">Personas y empresas revisadas por la administración.${adm?' Tú decides quién aparece aquí.':' Contáctalas directamente.'}</p>${ofs.length>1?`<div class="months" style="margin-bottom:10px"><button class="chip ${!S.dof?'info':''}" style="border:0" onclick="S.dof='';render()">Todos</button>${ofs.map(o=>`<button class="chip ${S.dof===o?'info':''}" style="border:0" onclick="S.dof='${esc(o)}';render()">${esc(o)}</button>`).join('')}</div>`:''}`+(l.length>1?ordenBar('dord'):'')+(l.map(s=>servCard(s,adm)).join('')||empty('Aún no hay servicios registrados'))+(adm?`<button class="btn block" onclick="editarServ()">${ic('plus',18)} Agregar persona o empresa</button>`:'')}
+    h+=`<p class="note" style="margin-top:-4px">Personas y empresas revisadas por la administración.${adm?' Tú decides quién aparece aquí.':' Contáctalas directamente.'}</p>${adm?dirAdd('editarServ()','userplus','Agregar persona o empresa','Técnico, empleada de casa, empresa de confianza','teal'):''}${ofs.length>1?`<div class="months" style="margin-bottom:10px"><button class="chip ${!S.dof?'info':''}" style="border:0" onclick="S.dof='';render()">Todos</button>${ofs.map(o=>`<button class="chip ${S.dof===o?'info':''}" style="border:0" onclick="S.dof='${esc(o)}';render()">${esc(o)}</button>`).join('')}</div>`:''}`+(l.length>1?ordenBar('dord'):'')+(l.map(s=>servCard(s,adm)).join('')||empty('Aún no hay servicios registrados'))}
   return h}
 function servCard(s,adm){const ini=s.nombre.split(' ').map(w=>w[0]).slice(0,2).join('');const tel=String(s.telefono||'').replace(/\D/g,'');
   return `<div class="card"><div class="row">${s.foto&&s.foto.data?`<img src="${s.foto.data}" alt="" style="width:52px;height:52px;border-radius:50%;object-fit:cover;flex:none">`:`<div class="av" style="width:52px;height:52px;border-radius:50%">${esc(ini)}</div>`}<div class="grow"><b>${esc(s.nombre)}</b><div class="sm muted">${esc(s.oficio)}${s.zona?' · '+esc(s.zona):''}</div><div class="months">${s.verificado?chip('✓ Verificado por la administración','ok'):chip('Sin verificar','warn')}${solvChip(s)}${s.antecedentes?chip('Antecedentes ✓','info'):''}${adm&&s.activo===false?chip('Oculto','mut'):''}</div><div style="margin-top:6px">${rateLine('serv',s.id,true)}</div></div></div>${s.nota?`<p class="sm" style="margin:8px 0 0">${esc(s.nota)}</p>`:''}
@@ -2916,7 +2930,7 @@ Object.assign(I18N,{"Planes y precios":"Plans and prices","Precio mensual acorda
 
 
 /* ---------- Versión y actualización ---------- */
-const APP_VERSION='2026.11.06-36';
+const APP_VERSION='2026.11.06-38';
 async function buscarActualizacion(){toast('Buscando la versión más reciente…');try{if(navigator.serviceWorker){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}setTimeout(()=>{location.href=location.pathname+'?v='+Date.now()},400)}
 const versionHTML=()=>`<p class="note" style="text-align:center;margin-top:18px">GateWise · versión ${APP_VERSION} · <a href="#" onclick="buscarActualizacion();return false" style="color:var(--pri);font-weight:700">Buscar actualización</a></p>`;
 try{if(navigator.serviceWorker){navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!window.__gwRecargado){window.__gwRecargado=1;if(!S.user||!document.querySelector('#ov'))location.reload()}})}}catch(e){}
@@ -5946,7 +5960,7 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
   const nom = u => u.negocio || u.nombre || 'Proveedor';
   const genClave = () => String(Math.floor(100000 + Math.random() * 900000));
   const waNum = t => { let d = String(t || '').replace(/\D/g, ''); if (d.length === 8) d = '503' + d; return d; };
-  const entradas = u => ((DB.directorio && DB.directorio.servicios) || []).filter(s => s.userId === u.id || (u.provId && s.provId === u.provId));
+  const entradas = u => ((DB.directorio && DB.directorio.servicios) || []).filter(s => s.userId === u.id || (u.provId && s.provId === u.provId) || (!s.userId && window.usuarioDeServ && usuarioDeServ(s.id) === u));
   const solicitud = u => (DB.provSolicitudes || []).find(s => s.userId === u.id || (u.provId && s.id === u.provId));
   const enCurso = u => (DB.servSol || []).filter(s => s.proId === u.id && ACT.includes(s.estado));
   const pasesPend = u => { const ids = new Set(enCurso(u).map(s => s.paseId).filter(Boolean)); return DB.pases.filter(p => p.estado === 'activo' && ids.has(p.id)); };
@@ -5956,6 +5970,9 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
     const s = ((DB.directorio && DB.directorio.servicios) || []).find(x => x.id === dirId); if (!s) return null;
     let u = s.userId && usuario(s.userId);
     if (!u && s.provId) u = DB.usuarios.find(x => x.provId === s.provId);
+    // perfil creado a mano para alguien que ya tiene usuario: se reconoce por el mismo DUI o teléfono
+    const dg = t => String(t || '').replace(/\D/g, '');
+    if (!u) u = DB.usuarios.find(x => x.rol === 'profesional' && ((dg(s.dui).length >= 9 && dg(x.dui) === dg(s.dui)) || (dg(s.telefono).length >= 8 && dg(x.tel) === dg(s.telefono))));
     return esProv(u) ? u : null;
   };
 
@@ -6064,9 +6081,97 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
     const bc = servCard;
     servCard = function (s, adm) {
       let h = bc.apply(this, arguments); if (!adm) return h;
-      const u = usuarioDeServ(s.id); if (!u) return h;
-      if (u.activo === false) h = h.replace('<div class="months">', `<div class="months">${chip('Usuario desactivado', 'bad')}`);
-      const k = h.lastIndexOf('</div></div>'); return k >= 0 ? h.slice(0, k) + btnAcceso(u.id, 'Acceso') + h.slice(k) : h;
+      const u = usuarioDeServ(s.id);
+      if (u && u.activo === false) h = h.replace('<div class="months">', `<div class="months">${chip('Usuario desactivado', 'bad')}`);
+      if (!u) h = h.replace('<div class="months">', `<div class="months">${chip('Sin usuario en la app', 'mut')}`);
+      // Todos los perfiles tienen el botón: con usuario abre su acceso; sin usuario permite ocultarlo o crearle uno
+      const b = u ? btnAcceso(u.id, 'Acceso') : `<button type="button" class="btn ghost smb ap-btn" onclick="accesoDir('${s.id}')">${ic('key', 16)}<span class="b-tx">Acceso</span></button>`;
+      const k = h.lastIndexOf('</div></div>'); return k >= 0 ? h.slice(0, k) + b + h.slice(k) : h;
+    };
+  }
+
+  /* ---------- Perfiles del directorio SIN usuario (creados a mano por la administración) ---------- */
+  const dirServ = id => ((DB.directorio && DB.directorio.servicios) || []).find(x => x.id === id);
+  const sugerir = t => { const base = String(t || 'servicio').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '').slice(0, 14) || 'servicio'; let u = base, i = 2; while (DB.usuarios.some(x => String(x.user || '').toLowerCase() === u)) u = base + i++; return u; };
+  window.accesoDir = function (id) {
+    const s = dirServ(id); if (!s) return; const u = usuarioDeServ(id); if (u) return accesoProv(u.id);
+    const on = s.activo !== false;
+    sheet('Acceso a la app', `<div class="row" style="margin-bottom:12px"><div class="av" style="width:52px;height:52px;border-radius:50%">${esc(String(s.nombre || '').split(' ').map(w => w[0]).slice(0, 2).join(''))}</div><div class="grow"><b style="font-size:18px">${esc(s.nombre)}</b><div class="sm muted">${esc(s.oficio || '')}</div></div>${on ? chip('Visible', 'ok') : chip('Oculto', 'mut')}</div>
+      <div class="ap-est ${on ? 'on' : 'off'}"><span class="ap-est-ic">${ic(on ? 'check' : 'lock', 22)}</span><div class="grow"><b>${on ? 'Los vecinos lo ven en el directorio' : 'Oculto para los vecinos'}</b><small>${on ? 'Pueden llamarle, escribirle y crearle un pase.' : 'Sigue guardado. Puedes mostrarlo de nuevo cuando quieras.'}</small></div></div>
+      ${on ? `<button type="button" class="btn bad block" onclick="ocultarDir('${id}',true)">${ic('lock', 18)}<span class="b-tx">Desactivar (ocultar del directorio)</span></button>` : `<button type="button" class="btn ok block" onclick="ocultarDir('${id}',false)">${ic('check', 18)}<span class="b-tx">Activar de nuevo</span></button>`}
+      <form onsubmit="crearUsuarioDir(event,'${id}')" style="margin-top:18px"><h3 style="margin-top:0">Usuario y contraseña</h3>
+        <p class="note" style="margin-top:0">Este perfil se creó en el directorio y <b>todavía no tiene usuario</b>, por eso no entra a la app. Si se lo creas, podrá recibir pedidos de los vecinos en "Servicios a domicilio", acordar la hora y entrar con código de ingreso.</p>
+        <div class="two"><label class="f">Usuario<input name="user" required autocapitalize="none" autocomplete="off" spellcheck="false" value="${esc(sugerir(s.nombre))}"></label><label class="f">Contraseña<input name="pass" required minlength="6" value="${genClave()}"></label></div>
+        <button class="btn block big-ok">Crear usuario</button></form>`);
+  };
+  window.ocultarDir = function (id, ocultar) {
+    const s = dirServ(id); if (!s) return;
+    const fin = () => { s.activo = !ocultar; save(); render(); accesoDir(id); toast(ocultar ? 'Oculto: los vecinos ya no lo ven' : 'Visible otra vez en el directorio'); };
+    if (ocultar) confirmar('¿Desactivar a ' + s.nombre + '?', 'Dejará de aparecer en el directorio para los vecinos. No se borra: puedes activarlo de nuevo.', 'Desactivar', fin, { no: 'Volver' }); else fin();
+  };
+  const validarCred = (un, pw) => {
+    if (!/^[a-z0-9._-]{3,40}$/.test(un)) return 'Usuario: solo letras, números, punto o guion (3 o más)';
+    if (DB.usuarios.some(x => String(x.user || '').toLowerCase() === un)) return 'Ese usuario ya existe';
+    if (pw.length < 6) return 'La contraseña debe tener al menos 6 caracteres';
+    return '';
+  };
+  // Crea el usuario (rol profesional) para un perfil del directorio
+  function crearUsuarioServ(s, un, pw) {
+    const ini = String(s.nombre || '').split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase();
+    let logo = s.foto && s.foto.data ? s.foto : null; try { if (!logo && typeof genLogo === 'function') logo = genLogo(ini || 'GW', '#c2410c'); } catch (x) { }
+    const u = { id: 'u_' + uid(), rol: 'profesional', nombre: s.nombre, user: un, pass: pw, tel: s.telefono || '', dui: s.dui || '', email: '', activo: s.activo !== false, casaId: '',
+      negocio: s.nombre, categoria: 'Servicios', descripcion: s.nota || '', horario: s.zona || '', oficio: s.oficio || '', logo, zona: '', disponible: true, domicilio: true, retiro: false, viveCasa: '' };
+    DB.usuarios.push(u); s.userId = u.id;
+    DB.servicios = DB.servicios || []; DB.servicios.push({ id: 'ps' + uid(), proId: u.id, nombre: s.oficio || 'Servicio', descripcion: s.nota || '', precioTipo: 'cotizar', precio: '', duracion: '', activo: true });
+    if (s.oficio && typeof recordarOficio === 'function') recordarOficio(s.oficio);
+    return u;
+  }
+  function credServ(s, un, pw) {
+    const msg = `Hola ${String(s.nombre || '').split(' ')[0]} 👋 La administración de *${DB.residencial.nombre}* te creó un usuario en GateWise para que los vecinos te pidan servicios.\n\nEntra aquí: ${location.origin + location.pathname.replace(/index\.html$/, '')}\nResidencial: ${DB.residencial.nombre}\nUsuario: ${un}\nClave: ${pw}\n\nTe recomendamos cambiar la clave al entrar (Menú › Mi perfil).`;
+    window.AP_MSG = msg;
+    sheet('Usuario creado', `<div class="b-conf" style="--b-c:var(--ok)"><div class="b-conf-ic">${ic('check', 26)}</div><p><b>${esc(s.nombre)}</b> ya puede entrar a la app. Revisa en "Servicios a domicilio › ¿Dónde vive?" si vive en la residencial (así no necesita código de ingreso).</p></div>
+      <div class="pv-cred" style="margin-top:14px"><span>Usuario</span><b>${esc(un)}</b><span>Clave</span><b>${esc(pw)}</b></div>
+      ${s.telefono ? `<a class="btn ok block big-ok" href="https://wa.me/${waNum(s.telefono)}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">${ic('chat', 20)} Enviarle sus datos por WhatsApp</a>` : ''}
+      <button class="btn ghost block" onclick="navigator.clipboard&&navigator.clipboard.writeText(AP_MSG).then(()=>toast('Mensaje copiado'),()=>toast('No se pudo copiar'))">Copiar mensaje</button>`);
+  }
+  window.crearUsuarioDir = function (e, id) {
+    e.preventDefault(); const s = dirServ(id); if (!s) return; const f = new FormData(e.target);
+    const un = String(f.get('user') || '').trim().toLowerCase(); const pw = String(f.get('pass') || '').trim();
+    const er = validarCred(un, pw); if (er) return toast(er);
+    crearUsuarioServ(s, un, pw); save(); render(); credServ(s, un, pw);
+  };
+
+  /* ---------- Nuevo perfil / editar perfil del directorio: usuario OPCIONAL ---------- */
+  if (typeof editarServ === 'function') {
+    const be = editarServ;
+    editarServ = function (id) {
+      be.apply(this, arguments);
+      if (id && usuarioDeServ(id)) return; // ya tiene usuario: se maneja con el botón Acceso
+      const form = document.querySelector('#ov form[onsubmit^="guardarServ"]'); if (!form) return;
+      const btn = [...form.querySelectorAll('button')].filter(b => b.type !== 'button').pop(); if (!btn) return;
+      btn.insertAdjacentHTML('beforebegin', `<div class="ap-opc"><label class="pv-chk"><input type="checkbox" name="crearU" onchange="apOpc(this)"><span>Darle usuario y contraseña en la app <small class="muted">(opcional)</small></span></label>
+        <div class="ap-opc-c" hidden><p class="note" style="margin-top:0">Con usuario, podrá recibir pedidos de los vecinos en "Servicios a domicilio", acordar la hora y entrar con código de ingreso. Sin usuario, solo aparece en el directorio con su teléfono.</p>
+        <div class="two"><label class="f">Usuario<input name="apUser" autocapitalize="none" autocomplete="off" spellcheck="false"></label><label class="f">Contraseña<input name="apPass" minlength="6" autocomplete="new-password"></label></div></div></div>`);
+    };
+    window.apOpc = function (chk) {
+      const c = chk.closest('.ap-opc').querySelector('.ap-opc-c'); const f = chk.form; c.hidden = !chk.checked;
+      const u = f.querySelector('[name=apUser]'), p = f.querySelector('[name=apPass]'); u.required = p.required = chk.checked;
+      if (chk.checked) { if (!u.value) u.value = sugerir((f.querySelector('[name=nombre]') || {}).value); if (!p.value) p.value = genClave(); }
+    };
+  }
+  if (typeof guardarServ === 'function') {
+    const bg = guardarServ;
+    guardarServ = function (e, id) {
+      const f = new FormData(e.target); const quiere = !!f.get('crearU');
+      const un = String(f.get('apUser') || '').trim().toLowerCase(), pw = String(f.get('apPass') || '').trim();
+      if (quiere) { const er = validarCred(un, pw); if (er) { e.preventDefault(); return toast(er); } }
+      const antes = new Set(((DB.directorio && DB.directorio.servicios) || []).map(x => x.id));
+      const bs = save; let ok = false; save = function () { ok = true; return bs.apply(this, arguments); };
+      try { bg.apply(this, arguments); } finally { save = bs; }
+      if (!ok || !quiere) return;
+      const L = (DB.directorio && DB.directorio.servicios) || [];
+      const s = id ? L.find(x => x.id === id) : L.find(x => !antes.has(x.id)); if (!s || usuarioDeServ(s.id)) return;
+      crearUsuarioServ(s, un, pw); save(); render(); credServ(s, un, pw);
     };
   }
 
