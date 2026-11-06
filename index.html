@@ -677,6 +677,20 @@ body.rol-vecino .chk input[type=checkbox]{width:24px;height:24px}
 .dir-add-tx{flex:1;min-width:0}.dir-add-tx b{display:block;font-size:16px}.dir-add-tx small{display:block;color:var(--muted);margin-top:2px;line-height:1.35}
 .dir-add-plus{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;flex:none;background:var(--pri);color:var(--onpri,#fff);box-shadow:0 6px 16px -6px color-mix(in srgb,var(--pri) 70%,transparent)}
 
+/* ---------- Bitácora completa de accesos (33-bitacora.js) ---------- */
+.bx-ti{--c:var(--c-teal)}.bx-ti.c-amber{--c:var(--c-amber)}.bx-ti.c-orange{--c:var(--c-orange)}.bx-ti.c-pink{--c:var(--c-pink)}.bx-ti.c-indigo{--c:var(--c-indigo)}.bx-ti.c-green{--c:var(--c-green)}.bx-ti.c-red{--c:var(--c-red)}
+.bx-q{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:0 14px;margin:8px 0 10px;color:var(--muted)}
+.bx-q input{flex:1;min-width:0;border:0;background:transparent;padding:13px 0;font:inherit;color:var(--text);outline:none}
+.bx-cats{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 8px;margin:0 -2px;scrollbar-width:none}.bx-cats::-webkit-scrollbar{display:none}
+.bx-cat{flex:none;display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--text);font:inherit;font-size:14px;cursor:pointer;white-space:nowrap;transition:transform 140ms ease}
+.bx-cat:active{transform:scale(.96)}.bx-cat b{font-size:12px;background:var(--bg);border-radius:999px;padding:1px 7px;color:var(--muted)}
+.bx-cat svg{color:var(--c,var(--pri))}.bx-cat.c-teal{--c:var(--c-teal)}.bx-cat.c-amber{--c:var(--c-amber)}.bx-cat.c-orange{--c:var(--c-orange)}.bx-cat.c-pink{--c:var(--c-pink)}.bx-cat.c-indigo{--c:var(--c-indigo)}.bx-cat.c-green{--c:var(--c-green)}.bx-cat.c-red{--c:var(--c-red)}
+.bx-cat.on{background:var(--pri);border-color:var(--pri);color:var(--onpri,#fff)}.bx-cat.on svg{color:inherit}.bx-cat.on b{background:rgba(255,255,255,.22);color:inherit}
+.bx-dia{margin:16px 2px 6px;font-weight:700;font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.bx-q input,.bx-q input:focus{border:0!important;box-shadow:none!important;background:transparent!important;padding:13px 0!important;margin:0!important;border-radius:0!important}
+.bx-casa{color:var(--text);font-weight:600}
+.bx-row .grow{min-width:0}
+
 </style>
 <style data-origen="css/respaldos.css">
 /* =====================================================================
@@ -2930,7 +2944,7 @@ Object.assign(I18N,{"Planes y precios":"Plans and prices","Precio mensual acorda
 
 
 /* ---------- Versión y actualización ---------- */
-const APP_VERSION='2026.11.06-38';
+const APP_VERSION='2026.11.06-39';
 async function buscarActualizacion(){toast('Buscando la versión más reciente…');try{if(navigator.serviceWorker){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}setTimeout(()=>{location.href=location.pathname+'?v='+Date.now()},400)}
 const versionHTML=()=>`<p class="note" style="text-align:center;margin-top:18px">GateWise · versión ${APP_VERSION} · <a href="#" onclick="buscarActualizacion();return false" style="color:var(--pri);font-weight:700">Buscar actualización</a></p>`;
 try{if(navigator.serviceWorker){navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!window.__gwRecargado){window.__gwRecargado=1;if(!S.user||!document.querySelector('#ov'))location.reload()}})}}catch(e){}
@@ -6187,6 +6201,153 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
       return h;
     };
   }
+})();
+
+</script>
+<script data-origen="js/app/33-bitacora.js">
+/* =========================================================
+   BITÁCORA COMPLETA DE ACCESOS (panel de administración)
+   Junta en un solo lugar todo lo que entra desde afuera de la residencial:
+   visitas, empleados y trabajadores, servicios técnicos con cita, entregas
+   de comida (incluidos los pedidos de la tienda), paquetería, alumnos de
+   afuera de las academias y las personas a las que no se les autorizó la
+   entrada.
+   - Rango: hoy, 7 días, 30 días u otra fecha. Búsqueda por nombre, casa,
+     placa, DUI o PIN. Filtro por tipo con contador.
+   - "Dentro ahora" con la hora de entrada y el tiempo que lleva adentro.
+   - Descarga en Excel (CSV) de lo que se está viendo.
+   La vista de vigilancia no cambia.
+   ========================================================= */
+(function () {
+  const CAT = {
+    visita: { l: 'Visitas', i: 'users', c: 'teal' },
+    personal: { l: 'Empleados y trabajadores', i: 'user', c: 'amber' },
+    servicio: { l: 'Servicios técnicos', i: 'tool', c: 'orange' },
+    comida: { l: 'Comida a domicilio', i: 'bike', c: 'pink' },
+    paquete: { l: 'Paquetería', i: 'box', c: 'indigo' },
+    academia: { l: 'Academias', i: 'book', c: 'green' },
+    rechazado: { l: 'No autorizados', i: 'x', c: 'red' },
+  };
+  const catPase = p => (p.servSolId || p.servicio) ? 'servicio' : p.tipo === 'entrega' ? 'comida' : p.tipo === 'correo' ? 'paquete' : p.tipo === 'visita' ? 'visita' : 'personal';
+  const nomU = id => { const u = id && usuario(id); return u ? u.nombre : ''; };
+  const hm = t => t ? String(t).slice(11, 16) : '';
+  const dur = (a, b) => { const m = Math.max(0, Math.round((new Date(b || Date.now()) - new Date(a)) / 60000)); return m < 60 ? m + ' min' : Math.floor(m / 60) + ' h' + (m % 60 ? ' ' + (m % 60) + ' min' : ''); };
+  const norm = t => String(t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+
+  // Todos los registros de acceso (cada entrada es una fila)
+  function registros() {
+    const R = [];
+    (DB.pases || []).forEach(p => (p.ingresos || []).forEach(i => {
+      if (!i || !i.entrada) return;
+      R.push({ cat: catPase(p), nombre: p.nombre || '', casa: casaNom(p.casaId), detalle: p.detalle || '', porton: portonNom(i.porton || p.porton), entrada: i.entrada, salida: i.salida || null,
+        guardia: nomU(i.guardiaId), autorizo: nomU(p.creadoPor), placa: p.placa || '', dui: p.dui || '', pin: p.pin || '', tel: p.tel || '' });
+    }));
+    if (typeof acDB === 'function') {
+      acDB();
+      (DB.acadIngresos || []).forEach(i => {
+        const al = alumno(i.alumnoId); if (!al || !i.entrada) return; const ac = typeof acad === 'function' ? acad(i.acadId || al.acadId) : null;
+        R.push({ cat: 'academia', nombre: al.nombre, casa: ac ? ac.nombre : 'Academia', detalle: al.resp && al.resp.nombre ? 'Responsable: ' + al.resp.nombre : '', porton: i.porton ? portonNom(i.porton) : '',
+          entrada: i.entrada, salida: i.salida || null, guardia: nomU(i.guardiaId), autorizo: '', placa: '', dui: '', pin: al.codigo || '', tel: (al.resp && al.resp.tel) || '' });
+      });
+    }
+    (DB.autorizaciones || []).filter(a => a.estado === 'rechazado').forEach(a => {
+      const t = a.fechaResp || a.fecha; if (!t) return;
+      R.push({ cat: 'rechazado', nombre: a.nombre || '', casa: casaNom(a.casaId), detalle: (TIPOS[a.tipo] ? TIPOS[a.tipo].l : '') + (a.motivo ? ' · ' + a.motivo : ''), porton: a.porton ? portonNom(a.porton) : '',
+        entrada: t, salida: null, guardia: nomU(a.guardiaId), autorizo: nomU(a.respondidoPor), placa: a.placa || '', dui: a.dui || '', pin: '', tel: '', rechazo: true });
+    });
+    return R.sort((a, b) => String(b.entrada).localeCompare(String(a.entrada)));
+  }
+  function rango() {
+    const r = S.bxR || 'hoy', hoy = ymd();
+    if (r === '7') return [addDays(hoy, -6), hoy]; if (r === '30') return [addDays(hoy, -29), hoy];
+    if (r === 'fecha') { const f = S.bxF || hoy; return [f, f]; } return [hoy, hoy];
+  }
+  function filtrar(R, conCat) {
+    const [d, h] = rango(); const q = norm(S.bxQ);
+    return R.filter(x => { const f = String(x.entrada).slice(0, 10); if (f < d || f > h) return false;
+      if (conCat && S.bxC && S.bxC !== 'todos' && x.cat !== S.bxC) return false;
+      if (q && !norm([x.nombre, x.casa, x.detalle, x.placa, x.dui, x.pin, x.autorizo].join(' ')).includes(q)) return false; return true; });
+  }
+  const av = c => `<div class="av ti bx-ti c-${CAT[c].c}">${ic(CAT[c].i, 20)}</div>`;
+  function fila(x) {
+    const k = CAT[x.cat]; const est = x.rechazo ? chip('No autorizado', 'bad') : x.salida ? chip('Salió', 'mut') : chip('Dentro', 'ok');
+    const linea = x.rechazo ? `🕑 ${hm(x.entrada)} · no se le permitió entrar${x.autorizo ? ' · respondió ' + esc(x.autorizo.split(' ')[0]) : ''}`
+      : `🕑 ${hm(x.entrada)}${x.salida ? ' → ' + hm(x.salida) + ' · ' + dur(x.entrada, x.salida) : ' · lleva ' + dur(x.entrada)}${x.porton ? ' · 🚪 ' + esc(x.porton) : ''}`;
+    const extra = [x.autorizo && !x.rechazo ? 'Autorizó ' + esc(x.autorizo) : '', x.guardia ? 'Vigilante ' + esc(x.guardia.split(' ')[0]) : '', x.placa ? 'Placa ' + esc(x.placa) : ''].filter(Boolean).join(' · ');
+    return `<div class="item bx-row">${av(x.cat)}<div class="grow"><b>${esc(x.nombre)}</b><div class="sm muted"><b class="bx-casa">${esc(x.casa)}</b>${x.rechazo ? '' : ' · ' + k.l}${x.detalle ? ' · ' + esc(x.detalle) : ''}</div><div class="sm">${linea}</div>${extra ? `<div class="sm muted">${extra}</div>` : ''}</div>${est}</div>`;
+  }
+  const diaTxt = f => { const hoy = ymd(); if (f === hoy) return 'Hoy · ' + fFecha(f); if (f === addDays(hoy, -1)) return 'Ayer · ' + fFecha(f); try { return new Date(f + 'T12:00').toLocaleDateString(LANG === 'en' ? 'en-US' : 'es-SV', { weekday: 'long', day: 'numeric', month: 'long' }); } catch (e) { return fFecha(f); } };
+
+  function vBitacoraAdm() {
+    const R = registros(); const base = filtrar(R, false); const L = filtrar(R, true);
+    const den = R.filter(x => !x.salida && !x.rechazo && String(x.entrada).slice(0, 10) >= addDays(ymd(), -1));
+    const cnt = c => base.filter(x => x.cat === c).length;
+    const r = S.bxR || 'hoy';
+    let h = `<h2>Accesos y bitácora</h2><p class="note" style="margin-top:-4px">Todo lo que entra desde afuera: visitas, empleados, técnicos, comida, paquetería y academias.</p>
+      <div class="kpis">${kpi('Dentro ahora', den.length, "document.getElementById('bxDentro')&&document.getElementById('bxDentro').scrollIntoView({behavior:'smooth'})")}${kpi('Ingresos', base.filter(x => !x.rechazo).length, '')}${kpi('No autorizados', cnt('rechazado'), "S.bxC='rechazado';render()")}${kpi('Comida y paquetes', cnt('comida') + cnt('paquete'), "S.bxC='comida';render()")}</div>
+      <h3 id="bxDentro">Dentro de la residencial ahora (${den.length})</h3>${den.slice(0, 30).map(fila).join('') || empty('Nadie de afuera está adentro en este momento')}${den.length > 30 ? `<p class="note">y ${den.length - 30} más</p>` : ''}
+      <h3>Registro</h3>
+      <div class="bx-bar">${seg('bxR', [['hoy', 'Hoy'], ['7', '7 días'], ['30', '30 días'], ['fecha', 'Otra fecha']])}</div>
+      ${r === 'fecha' ? `<label class="f">Fecha<input type="date" value="${S.bxF || ymd()}" max="${ymd()}" onchange="S.bxF=this.value;render()"></label>` : ''}
+      <div class="bx-q">${ic('search', 18)}<input id="bxQ" type="search" placeholder="Buscar nombre, casa, placa, DUI o PIN" value="${esc(S.bxQ || '')}" oninput="bxBuscar(this)"></div>
+      <div class="bx-cats"><button type="button" class="bx-cat ${!S.bxC || S.bxC === 'todos' ? 'on' : ''}" onclick="S.bxC='todos';render()">Todos <b>${base.length}</b></button>${Object.keys(CAT).map(c => `<button type="button" class="bx-cat c-${CAT[c].c} ${S.bxC === c ? 'on' : ''}" onclick="S.bxC='${c}';render()">${ic(CAT[c].i, 15)} ${CAT[c].l} <b>${cnt(c)}</b></button>`).join('')}</div>
+      <div class="row" style="margin:6px 0 4px"><p class="note grow" style="margin:0">${L.length} registro(s)</p>${L.length ? `<button type="button" class="btn ghost smb" onclick="bxDescargar()">${ic('doc', 16)}<span class="b-tx">Descargar Excel</span></button>` : ''}</div>`;
+    const MAX = 400; let dia = '';
+    L.slice(0, MAX).forEach(x => { const f = String(x.entrada).slice(0, 10); if (f !== dia && r !== 'hoy' && r !== 'fecha') { dia = f; h += `<p class="bx-dia">${esc(diaTxt(f))}</p>`; } h += fila(x); });
+    if (!L.length) h += empty(S.bxQ ? 'No hay resultados para esa búsqueda' : 'Sin ingresos en este periodo');
+    if (L.length > MAX) h += `<p class="note">Se muestran los ${MAX} más recientes. Descarga el Excel para ver todos.</p>`;
+    const vig = DB.pases.filter(vigenteHoy);
+    h += `<h3>Pases vigentes hoy (${vig.length})</h3>${vig.map(p => { const e = estadoPase(p); const c = catPase(p); return `<div class="item">${av(c)}<div class="grow"><b>${esc(p.nombre)}</b> <span class="sm muted">· ${casaNom(p.casaId)}</span><div class="sm muted">${CAT[c].l} · ${vigencia(p)}</div></div>${chip(e.l, e.c)}</div>`; }).join('') || empty('No hay pases para hoy')}`;
+    return h;
+  }
+  let tBusca = null;
+  window.bxBuscar = function (inp) {
+    S.bxQ = inp.value; clearTimeout(tBusca);
+    tBusca = setTimeout(() => { const pos = inp.selectionStart; render(); const n = document.getElementById('bxQ'); if (n) { n.focus(); try { n.setSelectionRange(pos, pos); } catch (e) { } } }, 250);
+  };
+  window.bxDescargar = function () {
+    const L = filtrar(registros(), true); const c = v => { v = String(v == null ? '' : v); return /[",\n;]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
+    const rows = [['Fecha', 'Entrada', 'Salida', 'Tiempo adentro', 'Tipo', 'Nombre', 'Casa / academia', 'Detalle', 'Portón', 'Autorizó', 'Vigilante', 'Placa', 'DUI', 'Estado']]
+      .concat(L.map(x => [String(x.entrada).slice(0, 10), hm(x.entrada), hm(x.salida), x.rechazo ? '' : dur(x.entrada, x.salida), CAT[x.cat].l, x.nombre, x.casa, x.detalle, x.porton, x.autorizo, x.guardia, x.placa, x.dui, x.rechazo ? 'No autorizado' : x.salida ? 'Salió' : 'Dentro']));
+    const [d, h] = rango();
+    guardarArchivo(`bitacora-accesos-${d}${d !== h ? '-a-' + h : ''}.csv`, '﻿' + rows.map(r => r.map(c).join(',')).join('\r\n'));
+  };
+
+  /* ---------- Demo: una semana de movimiento en la portería (solo residencial de ejemplo) ---------- */
+  if (window.GATEWISE_MODO !== 'produccion' && typeof load === 'function') {
+    const lb = load;
+    load = function () {
+      const r = lb.apply(this, arguments);
+      try { if (RES === 'r1' && DB && !DB.bxSeed && DB.usuarios.some(u => u.id === 'u_admin') && DB.casas.length) { sembrarBx(DB); DB.bxSeed = true; save(); } } catch (e) { console.warn(e); }
+      return r;
+    };
+  }
+  function sembrarBx(d) {
+    const iso = (dias, h, m) => { const t = new Date(); t.setDate(t.getDate() - dias); t.setHours(h, m, 0, 0); const z = x => String(x).padStart(2, '0'); return `${t.getFullYear()}-${z(t.getMonth() + 1)}-${z(t.getDate())}T${z(h)}:${z(m)}`; };
+    const cs = d.casas.slice(0, 10); const casa = i => cs[i % cs.length]; const res = c => (d.usuarios.find(u => u.casaId === c.id && u.rol === 'residente') || {}).id || '';
+    const pt = t => { try { return portonDe(t); } catch (e) { return ''; } };
+    // [días atrás, hora, min, duración en min (0 = sigue adentro), tipo, nombre, detalle, placa, casa, extra]
+    const L = [
+      [6, 9, 5, 95, 'visita', 'Andrea Funes', 'Visita familiar', 'P 512-883', 0], [6, 12, 40, 12, 'entrega', 'Repartidor Hugo', 'Almuerzo · Pollo Campero', 'M 22-441', 3],
+      [5, 8, 0, 480, 'personal', 'Rosa Pérez', 'Empleada doméstica', '', 4], [5, 10, 15, 6, 'correo', 'Cargo Expreso', 'Paquete', 'C 118-220', 1],
+      [5, 15, 30, 70, 'personal', 'Ernesto Valle', 'Electricista · Revisión de tomacorrientes', 'P 123-456', 6, { servicio: true, oficio: 'Electricista', citaHora: '15:30' }],
+      [4, 19, 10, 15, 'entrega', 'Repartidor PedidosYa', 'Cena · Pizza Hut', 'M 31-902', 7], [4, 17, 0, 150, 'visita', 'Familia Orellana', 'Cumpleaños', 'P 771-045', 2],
+      [3, 7, 45, 0 - 1, 'personal', 'Jardines Verdes', 'Jardinero · Poda', '', 5], [3, 11, 20, 8, 'correo', 'DHL', 'Sobre de documentos', 'C 300-118', 8],
+      [2, 13, 5, 10, 'entrega', 'Repartidor Hugo', 'Almuerzo · Pupusería', 'M 22-441', 9], [2, 16, 0, 55, 'personal', 'Plomería Castillo', 'Plomero · Reparación de fugas', 'P 640-210', 0, { servicio: true, oficio: 'Plomero', citaHora: '16:00' }],
+      [1, 9, 30, 180, 'visita', 'Jorge Mejía', 'Visita', 'P 902-334', 1], [1, 20, 15, 14, 'entrega', 'Repartidor Uber Eats', 'Cena · Sushi', 'M 47-119', 4],
+      [0, 7, 50, 0, 'personal', 'Rosa Pérez', 'Empleada doméstica', '', 4], [0, 10, 5, 7, 'correo', 'Correos de El Salvador', 'Paquete', '', 6], [0, 12, 30, 11, 'entrega', 'Repartidor PedidosYa', 'Almuerzo · Wendy\'s', 'M 31-902', 2],
+    ];
+    L.forEach(([dd, h, m, du, tipo, nombre, det, placa, ci, extra], k) => {
+      const c = casa(ci); const ent = iso(dd, h, m); const fin = du > 0 ? (() => { const t = new Date(ent); t.setMinutes(t.getMinutes() + du); const z = x => String(x).padStart(2, '0'); return `${t.getFullYear()}-${z(t.getMonth() + 1)}-${z(t.getDate())}T${z(t.getHours())}:${z(t.getMinutes())}`; })() : du < 0 ? iso(dd, 16, 30) : null;
+      d.pases.push(Object.assign({ id: 'pbx' + k, casaId: c.id, creadoPor: res(c), tipo, nombre, dui: '', detalle: det, placa, horario: '', desde: ent.slice(0, 10), hasta: ent.slice(0, 10), pin: String(300000 + k * 7919 % 600000),
+        porton: pt(tipo), estado: 'activo', ingresos: [{ entrada: ent, salida: fin, guardiaId: 'u_vig', porton: pt(tipo) }], demoBx: true }, extra || {}));
+    });
+    d.autorizaciones = d.autorizaciones || [];
+    d.autorizaciones.push({ id: 'abx1', casaId: casa(3).id, nombre: 'Vendedor de puerta en puerta', dui: '', tipo: 'visita', motivo: 'Ofrecía productos de limpieza', placa: '', estado: 'rechazado', fecha: iso(3, 14, 20), fechaResp: iso(3, 14, 22), guardiaId: 'u_vig', respondidoPor: res(casa(3)) });
+    d.autorizaciones.push({ id: 'abx2', casaId: casa(8).id, nombre: 'Persona sin identificación', dui: '', tipo: 'personal', motivo: 'Dijo venir a reparar el techo', placa: 'P 455-010', estado: 'rechazado', fecha: iso(1, 10, 5), fechaResp: iso(1, 10, 9), guardiaId: 'u_vig', respondidoPor: res(casa(8)) });
+  }
+  if (VIEWS.admin) VIEWS.admin.accesos = vBitacoraAdm;
+  window.bitacoraRegistros = registros;
 })();
 
 </script>
