@@ -559,6 +559,40 @@ body.rol-vecino .chk input[type=checkbox]{width:24px;height:24px}
 .pv-fotos{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 12px}
 .pv-fotos img{width:96px;height:96px;object-fit:cover;border-radius:14px;box-shadow:inset 0 0 0 1px var(--line);cursor:zoom-in}
 
+/* ---------- Paso 4: ¿vives en la residencial? ---------- */
+.pv-ubi .pv-q{margin:0 0 12px;font-size:17px;font-weight:800;letter-spacing:-.01em;color:var(--text)}
+.pv-opc{display:grid;gap:10px}
+.pv-op{position:relative;display:flex;align-items:center;gap:14px;min-height:86px;padding:14px 16px;border-radius:20px;cursor:pointer;
+  background:var(--card);box-shadow:inset 0 0 0 1.5px var(--line);
+  transition:box-shadow 200ms ease,background-color 200ms ease,transform 160ms var(--b-ease,cubic-bezier(.23,1,.32,1));-webkit-tap-highlight-color:transparent}
+.pv-op input{position:absolute;opacity:0;width:1px;height:1px;margin:0;pointer-events:none}
+.pv-op:active{transform:scale(.98)}
+.pv-op-ic{flex:none;display:grid;place-items:center;width:52px;height:52px;border-radius:16px;
+  background:color-mix(in srgb,var(--c,var(--pri)) 13%,var(--card));color:var(--c,var(--pri));transition:transform 220ms var(--b-ease,cubic-bezier(.23,1,.32,1))}
+.pv-op-tx{flex:1;min-width:0}
+.pv-op-tx b{display:block;font-size:16.5px;line-height:1.25;color:var(--text)}
+.pv-op-tx small{display:block;margin-top:3px;font-size:14px;line-height:1.4;color:var(--muted)}
+.pv-op-ck{flex:none;width:26px;height:26px;border-radius:50%;box-shadow:inset 0 0 0 2px var(--line);transition:background-color 180ms ease,box-shadow 180ms ease,transform 220ms var(--b-ease,cubic-bezier(.23,1,.32,1))}
+.pv-op:has(input:checked){background:color-mix(in srgb,var(--c-op,var(--pri)) 7%,var(--card));box-shadow:inset 0 0 0 2.5px var(--c-op,var(--pri)),0 12px 24px -18px var(--c-op,var(--pri))}
+.pv-op:has(input:checked) .pv-op-ic{transform:scale(1.06)}
+.pv-op:has(input:checked) .pv-op-ck{transform:scale(1.04);box-shadow:none;background:var(--c-op,var(--pri)) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center/15px no-repeat}
+.pv-op:has(input[value=si]){--c-op:var(--c-green,#15803d)}
+.pv-op:has(input[value=no]){--c-op:var(--c-blue,#2563eb)}
+.pv-op:has(input:focus-visible){outline:2px solid var(--pri);outline-offset:2px}
+@media (hover:hover) and (pointer:fine){.pv-op:hover{box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--pri) 35%,var(--line))}}
+/* panel que se despliega según la respuesta */
+.pv-rev{display:grid;grid-template-rows:0fr;opacity:0;transform:translateY(-6px);transition:grid-template-rows 260ms cubic-bezier(.23,1,.32,1),opacity 200ms ease,transform 260ms cubic-bezier(.23,1,.32,1)}
+.pv-rev.on{grid-template-rows:1fr;opacity:1;transform:none}
+.pv-rev-in{overflow:hidden;min-height:0}
+.pv-rev-in>.f:first-child{margin-top:16px}
+.pv-rev .f select{font-size:17px;min-height:52px}
+.pv-nota{display:flex;gap:10px;align-items:flex-start;margin:2px 0 0;padding:12px 14px;border-radius:14px;font-size:14px;line-height:1.45;color:var(--muted);background:color-mix(in srgb,var(--pri) 6%,var(--card))}
+.pv-nota svg{flex:none;margin-top:1px;color:var(--pri)}
+/* aviso cuando falta responder */
+.pv-ubi.pv-err{box-shadow:inset 0 0 0 2px var(--bad),0 1px 2px rgba(16,24,40,.05);animation:pv-tiembla 360ms cubic-bezier(.36,.07,.19,.97)}
+@keyframes pv-tiembla{20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
+@media (prefers-reduced-motion:reduce){.pv-rev,.pv-op,.pv-op-ic,.pv-op-ck{transition:none}.pv-ubi.pv-err{animation:none}}
+
 </style>
 <style data-origen="css/respaldos.css">
 /* =====================================================================
@@ -2809,7 +2843,7 @@ Object.assign(I18N,{"Planes y precios":"Plans and prices","Precio mensual acorda
 
 
 /* ---------- Versión y actualización ---------- */
-const APP_VERSION='2026.11.05-31';
+const APP_VERSION='2026.11.05-32';
 async function buscarActualizacion(){toast('Buscando la versión más reciente…');try{if(navigator.serviceWorker){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}setTimeout(()=>{location.href=location.pathname+'?v='+Date.now()},400)}
 const versionHTML=()=>`<p class="note" style="text-align:center;margin-top:18px">GateWise · versión ${APP_VERSION} · <a href="#" onclick="buscarActualizacion();return false" style="color:var(--pri);font-weight:700">Buscar actualización</a></p>`;
 try{if(navigator.serviceWorker){navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!window.__gwRecargado){window.__gwRecargado=1;if(!S.user||!document.querySelector('#ov'))location.reload()}})}}catch(e){}
@@ -4313,12 +4347,56 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
   /* ---------- ¿La residencial está recibiendo solicitudes? ---------- */
   async function consultarAbierto(rid) {
     if (!PROD()) {
+      const local = rid === RES ? DB : leerDB(rid);
+      PV.casas = null;
+      if (typeof window.GW_ALTA_CASAS === 'function') { try { PV.casas = await window.GW_ALTA_CASAS(rid); } catch (e) { } }
+      if (!PV.casas && local) PV.casas = casasPublicas(local);
       if (typeof window.GW_ALTA_ABIERTO === 'function') { const v = await window.GW_ALTA_ABIERTO(rid); if (v !== null) return v; }
-      const d = rid === RES ? DB : leerDB(rid); return d ? (d.config || {}).provAbierto !== false : false;
+      return local ? (local.config || {}).provAbierto !== false : false;
     }
     for (let i = 0; i < 40 && !(window.GW_PROD && GW_PROD.fs); i++) await new Promise(r => setTimeout(r, 150));
-    try { const s = await GW_PROD.fs.doc('r/' + rid + '/publico/alta').get(); return s.exists && s.data().abierto === true; } catch (e) { return false; }
+    try { const s = await GW_PROD.fs.doc('r/' + rid + '/publico/alta').get(); PV.casas = s.exists && Array.isArray(s.data().casas) ? s.data().casas : null; return s.exists && s.data().abierto === true; } catch (e) { return false; }
   }
+
+  /* ---------- Paso 4: ¿vives en la residencial? ---------- */
+  function selCasas(name, primera) {
+    const L = PV.casas || []; if (!L.length) return '';
+    const grupos = {}; L.forEach(c => { const k = c.p || 'Casas'; (grupos[k] = grupos[k] || []).push(c); });
+    const ks = Object.keys(grupos);
+    const ops = ks.length > 1 ? ks.map(k => `<optgroup label="${esc(k)}">${grupos[k].map(c => `<option value="${esc(c.id)}">${esc(c.n)}</option>`).join('')}</optgroup>`).join('') : L.map(c => `<option value="${esc(c.id)}">${esc(c.n)}${c.p ? ' · ' + esc(c.p) : ''}</option>`).join('');
+    return `<select name="${name}"><option value="">${primera}</option>${ops}</select>`;
+  }
+  function bloqueUbi(esT) {
+    const hay = (PV.casas || []).length > 0;
+    const op = (v, icono, color, t, d) => `<label class="pv-op"><input type="radio" name="vive" value="${v}" onchange="pvUbi('${v}')"><span class="pv-op-ic c-${color}">${ic(icono, 26)}</span><span class="pv-op-tx"><b>${t}</b><small>${d}</small></span><span class="pv-op-ck" aria-hidden="true"></span></label>`;
+    return `<div class="pv-card pv-ubi" id="pv-ubi">
+      <p class="pv-q">¿Vives dentro de la residencial?</p>
+      <div class="pv-opc" role="radiogroup">
+        ${op('si', 'home', 'green', 'Sí, vivo aquí', esT ? 'Elige tu casa. No necesitarás código para entrar.' : 'Elige tu casa. Tus entregas no necesitan código.')}
+        ${op('no', 'doorin', 'blue', 'No, vengo de afuera', 'Dinos quién te conoce en la residencial. Portería te dará un código de ingreso.')}
+      </div>
+      <div class="pv-rev" id="pv-vc" hidden><div class="pv-rev-in">
+        <label class="f">¿En qué casa vives?${hay ? selCasas('viveCasa', 'Elige tu casa') : '<input name="viveCasaTxt" placeholder="Ej. Casa 14, Pasaje B">'}</label>
+        <p class="pv-nota">${ic('shield', 16)}<span>La administración confirmará que vives en esa casa.</span></p>
+      </div></div>
+      <div class="pv-rev" id="pv-rec" hidden><div class="pv-rev-in">
+        <label class="f">¿Quién te conoce o te recomienda?<input name="recNombre" autocomplete="off" placeholder="Nombre del vecino. Ej. Doña Ana Rivas"></label>
+        <label class="f">¿En qué casa vive esa persona?${hay ? selCasas('recCasa', 'No sé el número') : '<input name="recCasaTxt" placeholder="Ej. Casa 1 (opcional)">'}</label>
+        <p class="pv-nota">${ic('users', 16)}<span>Le preguntaremos para confirmar que te conoce. Esto da confianza a los vecinos.</span></p>
+      </div></div>
+    </div>`;
+  }
+  window.pvUbi = function (v) {
+    const box = document.getElementById('pv-ubi'); if (!box) return; box.classList.remove('pv-err');
+    [['pv-vc', v === 'si'], ['pv-rec', v === 'no']].forEach(([id, on]) => {
+      const el = document.getElementById(id); if (!el) return;
+      if (on) { el.hidden = false; requestAnimationFrame(() => el.classList.add('on')); const f = el.querySelector('select,input'); if (f) setTimeout(() => { try { f.focus({ preventScroll: true }); } catch (e) { } }, 220); }
+      else { el.classList.remove('on'); el.hidden = true; }
+    });
+    const fs = document.querySelector('#pv-vc select,#pv-vc input'); if (fs) fs.required = v === 'si';
+    const fr = document.querySelector('#pv-rec [name=recNombre]'); if (fr) fr.required = v === 'no';
+  };
+  window.pvMarcar = function (id) { const el = document.getElementById(id) || document.getElementById('pv-ubi'); if (!el) return; const b = document.getElementById('pv-ubi'); if (b) { b.classList.remove('pv-err'); void b.offsetWidth; b.classList.add('pv-err'); } el.scrollIntoView({ behavior: 'smooth', block: 'center' }); };
   const nombreRes = rid => { const r = ((PLAT && PLAT.residenciales) || []).find(x => x.id === rid); return r ? r.nombre : ''; };
 
   /* ---------- Foto pequeña (perfil o logo) ---------- */
@@ -4361,11 +4439,9 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
           : `<label class="f">Nombre del negocio<input name="negocio" required placeholder="Ej. Pupusería Doña Tere"></label><label class="f">Categoría<select name="categoria">${CAT_P.map(c => `<option>${esc(c)}</option>`).join('')}</select></label>`}
           <label class="f">${esT ? 'Qué trabajos haces' : 'Qué vendes'}<textarea name="descripcion" required placeholder="${esT ? 'Ej. Reparación de fugas, instalación de lavamanos y calentadores' : 'Ej. Pupusas, tamales y refrescos naturales'}"></textarea></label>
           <label class="f">Horario de atención<input name="horario" placeholder="Ej. Lun–Sáb 8:00–17:00"></label>
-          ${esT ? `<div class="f">¿Vives dentro de la residencial?<div class="sv-franja"><label><input type="radio" name="vive" value="no" checked onchange="document.getElementById('pv-vc').hidden=true"><span>No, vengo de afuera<small>Te darán un código de ingreso</small></span></label><label><input type="radio" name="vive" value="si" onchange="document.getElementById('pv-vc').hidden=false"><span>Sí, vivo aquí<small>No necesitas código</small></span></label></div></div>
-          <label class="f" id="pv-vc" hidden>N° de tu casa<input name="viveTxt" placeholder="Ej. 14 o Casa 14"></label>` : ''}
           ${esT ? '' : `<label class="pv-chk"><input type="checkbox" name="domicilio" checked><span>Hago entregas a domicilio dentro de la residencial</span></label><label class="f" style="margin-top:12px">Dirección del negocio (opcional)<input name="direccion"></label>`}
-          <label class="f">¿Algún residente te recomienda? (opcional)<input name="recomienda" placeholder="Ej. Familia Rivas, Casa 1"></label>
         </div>
+        <div class="pv-paso"><i>4</i>Tu relación con la residencial</div>${bloqueUbi(esT)}
         <label class="pv-chk"><input type="checkbox" name="acepto" required><span>Autorizo a la administración de ${esc(nom)} a revisar mis datos y compartir mi nombre, teléfono y servicio con los residentes. <a href="privacidad.html" target="_blank" rel="noopener">Privacidad</a></span></label>
         <button class="btn block big-ok">Enviar solicitud</button></form>`;
     }
@@ -4379,10 +4455,13 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
     if (!/^\d{8}-\d$/.test(g('dui')) && g('dui').replace(/\D/g, '').length !== 9) return toast('El DUI debe tener 9 dígitos: 00000000-0');
     if (g('tel').replace(/\D/g, '').length < 8) return toast('Revisa el número de teléfono');
     let dui = g('dui'); const dd = dui.replace(/\D/g, ''); if (dd.length === 9) dui = dd.slice(0, 8) + '-' + dd.slice(8);
-    const s = { id: 'pv' + uid(), tipo: PV.tipo, nombre: g('nombre'), dui, tel: g('tel'), email: g('email'), descripcion: g('descripcion'), horario: g('horario'), recomienda: g('recomienda'),
+    const s = { id: 'pv' + uid(), tipo: PV.tipo, nombre: g('nombre'), dui, tel: g('tel'), email: g('email'), descripcion: g('descripcion'), horario: g('horario'),
       oficio: esT ? g('oficio') : '', negocio: esT ? '' : g('negocio'), categoria: esT ? 'Servicios' : g('categoria'), domicilio: esT ? true : !!f.get('domicilio'), direccion: g('direccion'),
-      foto: PV.foto || null, duiFoto: PV.duiFoto || null, fecha: nowISO(), estado: 'pendiente', vive: esT && f.get('vive') === 'si', viveTxt: esT && f.get('vive') === 'si' ? g('viveTxt') : '' };
-    if (s.vive && !s.viveTxt) return toast('Escribe el número de tu casa');
+      foto: PV.foto || null, duiFoto: PV.duiFoto || null, fecha: nowISO(), estado: 'pendiente', vive: f.get('vive') === 'si', viveCasa: '', viveTxt: '', recCasa: '', recomienda: '' };
+    if (!f.get('vive')) { pvMarcar('pv-ubi'); return toast('Indica si vives dentro de la residencial'); }
+    const cn = id => { const c = (PV.casas || []).find(x => x.id === id); return c ? c.n + (c.p ? ' · ' + c.p : '') : ''; };
+    if (s.vive) { s.viveCasa = g('viveCasa'); s.viveTxt = cn(s.viveCasa) || g('viveCasaTxt'); if (!s.viveTxt) { pvMarcar('pv-vc'); return toast('Elige la casa donde vives'); } }
+    else { s.recCasa = g('recCasa'); const quien = g('recNombre'); if (!quien) { pvMarcar('pv-rec'); return toast('Escribe quién te recomienda en la residencial'); } s.recomienda = quien + (cn(s.recCasa) || g('recCasaTxt') ? ' · ' + (cn(s.recCasa) || g('recCasaTxt')) : ''); }
     // demo con nube: la solicitud viaja directo a la nube (llega desde cualquier teléfono)
     if (!PROD() && typeof window.GW_ALTA_NUBE === 'function') {
       const btn = e.target.querySelector('button:not([type=button])'); if (btn) btn.disabled = true;
@@ -4405,9 +4484,12 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
 
   /* ---------- Administración: link y solicitudes ---------- */
   const abiertoAdm = () => (DB.config || {}).provAbierto !== false;
+  // Solo número y pasaje de cada casa (nunca nombres de dueños): para que el proveedor elija su casa o la de quien lo recomienda
+  function casasPublicas(d) { return ((d && d.casas) || []).slice().sort((a, b) => String(a.pasaje || '').localeCompare(String(b.pasaje || ''), 'es') || String(a.numero).localeCompare(String(b.numero), 'es', { numeric: true })).map(c => ({ id: c.id, n: 'Casa ' + c.numero, p: c.pasaje || '' })); }
+  window.casasPublicas = casasPublicas;
   async function publicarEstado(abierto) {
     if (!PROD() || !window.GW_PROD || !GW_PROD.fs || !GW_PROD.rid) return;
-    try { await GW_PROD.fs.doc('r/' + GW_PROD.rid + '/publico/alta').set({ abierto: !!abierto, nombre: DB.residencial.nombre || '' }); } catch (e) { console.warn('alta', e); }
+    try { await GW_PROD.fs.doc('r/' + GW_PROD.rid + '/publico/alta').set({ abierto: !!abierto, nombre: DB.residencial.nombre || '', casas: casasPublicas(DB) }); } catch (e) { console.warn('alta', e); }
   }
   let publicado = false;
   window.toggleAltaProv = function (v) { DB.config.provAbierto = !!v; save(); publicarEstado(!!v); render(); toast(v ? 'El link está recibiendo solicitudes' : 'Link pausado: no se reciben solicitudes'); };
@@ -4450,7 +4532,7 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
     let h = `<div class="row" style="margin-bottom:10px">${avProv(s)}<div class="grow"><b style="font-size:18px">${esc(s.negocio || s.nombre)}</b><div class="sm muted">${esT ? 'Servicio técnico' : 'Tienda o negocio'} · ${esc(tipoTxt(s))}</div></div>${chipEst(s)}</div>
       ${fotos ? `<div class="pv-fotos">${fotos}</div>` : ''}
       <div class="card kv"><span>Nombre</span><b>${esc(s.nombre)}</b><span>DUI</span><b>${esc(s.dui)}</b><span>Teléfono</span><b><a href="tel:${esc(s.tel)}">${esc(s.tel)}</a></b>${s.email ? `<span>Correo</span><b>${esc(s.email)}</b>` : ''}
-      <span>${esT ? 'Trabajos' : 'Vende'}</span><b>${esc(s.descripcion)}</b>${s.horario ? `<span>Horario</span><b>${esc(s.horario)}</b>` : ''}${!esT ? `<span>A domicilio</span><b>${s.domicilio ? 'Sí' : 'No'}</b>` : ''}${s.direccion ? `<span>Dirección</span><b>${esc(s.direccion)}</b>` : ''}${s.recomienda ? `<span>Recomendado por</span><b>${esc(s.recomienda)}</b>` : ''}${esT ? `<span>¿Vive aquí?</span><b>${s.vive ? '🏠 Sí · ' + esc(s.viveTxt || '') : '🚪 No, viene de afuera'}</b>` : ''}<span>Enviado</span><b>${fFecha(String(s.fecha).slice(0, 10))} · ${hora(s.fecha)}</b></div>`;
+      <span>${esT ? 'Trabajos' : 'Vende'}</span><b>${esc(s.descripcion)}</b>${s.horario ? `<span>Horario</span><b>${esc(s.horario)}</b>` : ''}${!esT ? `<span>A domicilio</span><b>${s.domicilio ? 'Sí' : 'No'}</b>` : ''}${s.direccion ? `<span>Dirección</span><b>${esc(s.direccion)}</b>` : ''}${s.recomienda ? `<span>Recomendado por</span><b>${esc(s.recomienda)}</b>` : ''}${s.vive !== undefined ? `<span>¿Vive aquí?</span><b>${s.vive ? '🏠 Sí · ' + esc(s.viveTxt || '') : '🚪 No, viene de afuera'}</b>` : ''}<span>Enviado</span><b>${fFecha(String(s.fecha).slice(0, 10))} · ${hora(s.fecha)}</b></div>`;
     if (s.estado === 'pendiente') h += `<a class="btn ghost block" href="https://wa.me/${waNum(s.tel)}" target="_blank" rel="noopener">${ic('chat', 18)} Escribirle por WhatsApp</a>
       <form onsubmit="aprobarProv(event,'${s.id}')" style="margin-top:14px"><h3 style="margin-top:6px">Datos de acceso</h3><div class="two"><label class="f">Usuario<input name="user" required autocapitalize="none" value="${esc(sugerirUsuario(s))}"></label><label class="f">Clave<input name="pass" required minlength="6" value="${genClave()}"></label></div>
       ${esT ? `<h3>Ingreso a la residencial</h3><div class="sv-franja"><label><input type="radio" name="vive" value="no" ${s.vive ? '' : 'checked'}><span>Viene de afuera<small>Código de ingreso en cada cita</small></span></label><label><input type="radio" name="vive" value="si" ${s.vive ? 'checked' : ''}><span>Vive en la residencial<small>Sin código</small></span></label></div>
@@ -4462,7 +4544,7 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
     sheet(esT ? 'Técnico' : 'Tienda', h);
   };
 
-  const casaVive = s => { const n = String(s.viveTxt || '').replace(/\D/g, ''); if (!s.vive || !n) return ''; const c = DB.casas.find(c => String(c.numero).replace(/\D/g, '') === n); return c ? c.id : ''; };
+  const casaVive = s => { if (s.viveCasa && DB.casas.some(c => c.id === s.viveCasa)) return s.viveCasa; const n = String(s.viveTxt || '').replace(/\D/g, ''); if (!s.vive || !n) return ''; const c = DB.casas.find(c => String(c.numero).replace(/\D/g, '') === n); return c ? c.id : ''; };
   window.aprobarProv = function (e, id) {
     e.preventDefault(); const f = new FormData(e.target); const s = provDB().find(x => x.id === id); if (!s || s.estado !== 'pendiente') return;
     const un = String(f.get('user') || '').trim().toLowerCase(); const pw = String(f.get('pass') || '').trim();
@@ -5503,6 +5585,11 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
   const esperarNube = async ms => { if (typeof NUBE === 'undefined' || typeof cfgNube !== 'function' || !cfgNube()) return false; const t = Date.now(); while (!NUBE.on && Date.now() - t < ms && NUBE.estado !== 'error') await new Promise(r => setTimeout(r, 150)); return !!NUBE.on; };
   const agregar = (ref, items, lim) => ref.transaction(cur => { let a = []; try { a = JSON.parse(cur || '[]') || []; } catch (e) { a = []; } if (!Array.isArray(a)) a = []; a.unshift(...items); if (lim && a.length > lim) a.length = lim; return JSON.stringify(a); });
 
+  // casas registradas (solo número y pasaje) para el formulario del link
+  window.GW_ALTA_CASAS = async function (rid) {
+    if (!(await esperarNube(6000))) return null;
+    try { const v = (await NUBE.db.ref('gw/r/' + rid + '/casas').once('value')).val(); if (!v) return null; const L = JSON.parse(v) || []; return typeof casasPublicas === 'function' ? casasPublicas({ casas: L }) : null; } catch (e) { return null; }
+  };
   // ¿el link está abierto? se consulta en la nube (sirve en un teléfono que nunca abrió la app)
   window.GW_ALTA_ABIERTO = async function (rid) {
     if (!(await esperarNube(6000))) return null;
