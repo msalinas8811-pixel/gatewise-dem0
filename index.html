@@ -607,6 +607,50 @@ body.rol-vecino .chk input[type=checkbox]{width:24px;height:24px}
 .pv-ubi-adm .pv-op-tx b{font-size:15.5px}.pv-ubi-adm .pv-op-tx small{font-size:13px}
 @media (prefers-reduced-motion:reduce){.of-otro{transition:none}}
 
+/* ---------- Documentos: solvencia y antecedentes ---------- */
+.pv-dl{display:flex;gap:12px;align-items:flex-start;margin:0 0 14px;font-size:14.5px;line-height:1.5;color:var(--muted)}
+.pv-dl svg{flex:none;margin-top:2px;color:var(--pri)}
+.pv-dl b{color:var(--text)}
+.doc-slot{display:flex;align-items:center;gap:12px;padding:12px;margin-bottom:10px;border-radius:18px;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--line);transition:box-shadow 200ms ease,opacity 200ms ease}
+.doc-slot:has(.doc-st.ok){box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--ok) 45%,var(--line));background:color-mix(in srgb,var(--ok) 4%,var(--card))}
+.doc-slot.cargando{opacity:.6;pointer-events:none}
+.doc-ic{flex:none;display:grid;place-items:center;width:52px;height:52px;border-radius:15px;overflow:hidden;font-size:13px;letter-spacing:.04em;
+  background:color-mix(in srgb,var(--c,var(--pri)) 12%,var(--card));color:var(--c,var(--pri))}
+.doc-ic img{width:100%;height:100%;object-fit:cover}
+.doc-ic.on b{color:#fff}.doc-ic.on:has(b){background:#dc2626}
+.doc-tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.doc-tx b{font-size:15.5px;line-height:1.25;color:var(--text)}
+.doc-st{align-self:flex-start;display:inline-flex;align-items:center;gap:4px;font-size:12.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:color-mix(in srgb,var(--warn) 14%,var(--card));color:var(--warn)}
+.doc-st.ok{background:color-mix(in srgb,var(--ok) 14%,var(--card));color:var(--ok)}
+.doc-st.falta{background:color-mix(in srgb,var(--muted) 14%,var(--card));color:var(--muted)}
+.doc-fn{font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.doc-ac{flex:none;display:flex;gap:6px;align-items:center}
+.doc-b{display:inline-flex;align-items:center;gap:4px;min-height:40px;padding:0 13px;border:0;border-radius:999px;font:inherit;font-size:14px;font-weight:700;cursor:pointer;
+  background:color-mix(in srgb,var(--pri) 10%,var(--card));color:var(--pri);transition:transform 140ms cubic-bezier(.23,1,.32,1),background-color 160ms ease}
+.doc-b:active{transform:scale(.95)}
+.doc-b.doc-up{background:var(--pri);color:var(--onpri);box-shadow:0 8px 16px -10px var(--pri)}
+.doc-b.doc-x{width:40px;padding:0;justify-content:center;background:color-mix(in srgb,var(--bad) 10%,var(--card));color:var(--bad)}
+.doc-vence{margin:-2px 0 12px}
+@media (max-width:370px){.doc-slot{flex-wrap:wrap}.doc-ac{width:100%;justify-content:flex-end}}
+.doc-slot:has(.doc-x){flex-wrap:wrap}
+.doc-slot:has(.doc-x) .doc-ac{width:100%;padding-left:64px;margin-top:-2px}
+.doc-slot:has(.doc-x) .doc-ac .doc-b:not(.doc-x){flex:1;justify-content:center}
+.doc-tx b{overflow-wrap:anywhere}
+
+/* ---------- Campos mínimos y "faltan datos" ---------- */
+.pv-min{display:flex;gap:10px;align-items:flex-start;margin:-6px 0 16px;padding:12px 14px;border-radius:16px;font-size:14.5px;line-height:1.45;color:var(--text);
+  background:color-mix(in srgb,var(--ok) 9%,var(--card));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ok) 25%,transparent)}
+.pv-min svg{flex:none;margin-top:1px;color:var(--ok)}
+.pv-req{font-style:normal;font-size:11.5px;font-weight:700;letter-spacing:.02em;padding:2px 7px;border-radius:999px;margin-left:4px;vertical-align:1px;background:color-mix(in srgb,var(--pri) 12%,var(--card));color:var(--pri)}
+.pv-opc-t{font-style:normal;font-size:12px;font-weight:600;color:var(--muted);margin-left:2px}
+.pv-falta{margin:6px 0 12px;padding:14px;border-radius:18px;background:color-mix(in srgb,var(--warn) 9%,var(--card));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--warn) 30%,transparent)}
+.pv-falta.ok{background:color-mix(in srgb,var(--ok) 8%,var(--card));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ok) 28%,transparent)}
+.pv-falta-h{display:flex;align-items:center;gap:8px;color:var(--warn)}.pv-falta.ok .pv-falta-h{color:var(--ok)}
+.pv-falta-h b{font-size:15.5px;color:var(--text)}
+.pv-falta-l{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 4px}
+.pv-falta-l span{font-size:12.5px;font-weight:650;padding:4px 10px;border-radius:999px;background:var(--card);color:var(--text);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--warn) 35%,var(--line))}
+.pv-falta p{margin:8px 0 0;font-size:13.5px;color:var(--muted);line-height:1.45}
+
 </style>
 <style data-origen="css/respaldos.css">
 /* =====================================================================
@@ -1712,19 +1756,20 @@ function vDirectorio(){const adm=S.user.rol==='admin';const D=dirDB();S.dseg=S.d
     h+=`<p class="note" style="margin-top:-4px">Personas y empresas revisadas por la administración.${adm?' Tú decides quién aparece aquí.':' Contáctalas directamente.'}</p>${ofs.length>1?`<div class="months" style="margin-bottom:10px"><button class="chip ${!S.dof?'info':''}" style="border:0" onclick="S.dof='';render()">Todos</button>${ofs.map(o=>`<button class="chip ${S.dof===o?'info':''}" style="border:0" onclick="S.dof='${esc(o)}';render()">${esc(o)}</button>`).join('')}</div>`:''}`+(l.length>1?ordenBar('dord'):'')+(l.map(s=>servCard(s,adm)).join('')||empty('Aún no hay servicios registrados'))+(adm?`<button class="btn block" onclick="editarServ()">${ic('plus',18)} Agregar persona o empresa</button>`:'')}
   return h}
 function servCard(s,adm){const ini=s.nombre.split(' ').map(w=>w[0]).slice(0,2).join('');const tel=String(s.telefono||'').replace(/\D/g,'');
-  return `<div class="card"><div class="row">${s.foto&&s.foto.data?`<img src="${s.foto.data}" alt="" style="width:52px;height:52px;border-radius:50%;object-fit:cover;flex:none">`:`<div class="av" style="width:52px;height:52px;border-radius:50%">${esc(ini)}</div>`}<div class="grow"><b>${esc(s.nombre)}</b><div class="sm muted">${esc(s.oficio)}${s.zona?' · '+esc(s.zona):''}</div><div class="months">${s.verificado?chip('✓ Verificado por la administración','ok'):chip('Sin verificar','warn')}${solvChip(s)}${adm&&s.activo===false?chip('Oculto','mut'):''}</div><div style="margin-top:6px">${rateLine('serv',s.id,true)}</div></div></div>${s.nota?`<p class="sm" style="margin:8px 0 0">${esc(s.nota)}</p>`:''}
-  <div class="btns">${telRow(s.telefono)}<button class="btn smb ghost" onclick="verResenas('serv','${s.id}')">${ic('star',14)} ${['residente','inquilino'].includes(S.user.rol)?'Opiniones y calificar':'Opiniones'}</button>${tel?`<a class="btn smb ghost" target="_blank" rel="noopener" href="https://wa.me/${tel.length<=8?telCode()+tel:tel}">WhatsApp</a>`:''}${['residente','inquilino'].includes(S.user.rol)?`<button class="btn smb ghost" onclick="paseDesdeServ('${s.id}')">Crear pase</button>`:''}${adm&&s.solvDoc?`<button class="btn smb ghost" onclick="verSolv('${s.id}')">Solvencia</button>`:''}${adm?`<button class="btn smb ghost" onclick="editarServ('${s.id}')">Editar</button>`:''}</div></div>`}
+  return `<div class="card"><div class="row">${s.foto&&s.foto.data?`<img src="${s.foto.data}" alt="" style="width:52px;height:52px;border-radius:50%;object-fit:cover;flex:none">`:`<div class="av" style="width:52px;height:52px;border-radius:50%">${esc(ini)}</div>`}<div class="grow"><b>${esc(s.nombre)}</b><div class="sm muted">${esc(s.oficio)}${s.zona?' · '+esc(s.zona):''}</div><div class="months">${s.verificado?chip('✓ Verificado por la administración','ok'):chip('Sin verificar','warn')}${solvChip(s)}${s.antecedentes?chip('Antecedentes ✓','info'):''}${adm&&s.activo===false?chip('Oculto','mut'):''}</div><div style="margin-top:6px">${rateLine('serv',s.id,true)}</div></div></div>${s.nota?`<p class="sm" style="margin:8px 0 0">${esc(s.nota)}</p>`:''}
+  <div class="btns">${telRow(s.telefono)}<button class="btn smb ghost" onclick="verResenas('serv','${s.id}')">${ic('star',14)} ${['residente','inquilino'].includes(S.user.rol)?'Opiniones y calificar':'Opiniones'}</button>${tel?`<a class="btn smb ghost" target="_blank" rel="noopener" href="https://wa.me/${tel.length<=8?telCode()+tel:tel}">WhatsApp</a>`:''}${['residente','inquilino'].includes(S.user.rol)?`<button class="btn smb ghost" onclick="paseDesdeServ('${s.id}')">Crear pase</button>`:''}${adm&&(s.solvDoc||s.solvencia||s.antecedentes||expedienteDir(s.id))?`<button class="btn smb ghost" onclick="verDocsDir('${s.id}')">${ic('shield',14)} Documentos</button>`:''}${adm?`<button class="btn smb ghost" onclick="editarServ('${s.id}')">Editar</button>`:''}</div></div>`}
 function editarEm(id){const e=id?dirDB().emergencia.find(x=>x.id===id):{};sheet(id?'Editar número':'Nuevo número',`<form onsubmit="guardarEm(event,'${id||''}')"><label class="f">Tipo<select name="categoria">${CAT_EM.map(c=>`<option ${e.categoria===c?'selected':''}>${c}</option>`).join('')}</select></label><label class="f">Nombre<input name="nombre" required value="${esc(e.nombre||'')}" placeholder="Ej. Delegación PNC Santa Tecla"></label><label class="f">Teléfono<input name="telefono" required inputmode="tel" value="${esc(e.telefono||'')}"></label><label class="f">Nota (opcional)<input name="nota" value="${esc(e.nota||'')}" placeholder="Ej. 24 horas"></label><button class="btn block">Guardar</button>${id?`<button type="button" class="btn bad block" onclick="borrarDir('emergencia','${id}')">Eliminar</button>`:''}</form>`)}
 function guardarEm(e,id){e.preventDefault();const f=new FormData(e.target);const o={categoria:f.get('categoria'),nombre:String(f.get('nombre')).trim(),telefono:String(f.get('telefono')).trim(),nota:String(f.get('nota')||'').trim()};const L=dirDB().emergencia;if(id)Object.assign(L.find(x=>x.id===id),o);else L.push(Object.assign({id:uid()},o));save();closeSheet();render();toast('Número guardado')}
-function editarServ(id){const s=id?dirDB().servicios.find(x=>x.id===id):{verificado:true,activo:true};SERVFOTO=undefined;SERVSOLV=undefined;
+function editarServ(id){const s=id?dirDB().servicios.find(x=>x.id===id):{verificado:true,activo:true};SERVFOTO=undefined;SERVSOLV=undefined;docsReset();const ex=id&&expedienteDir(id);
   sheet(id?'Editar perfil':'Nuevo perfil de servicio',`<p class="note" style="margin-top:0">Este perfil no da acceso a la administración; solo aparece en el directorio para los residentes.</p><form onsubmit="guardarServ(event,'${id||''}')"><label class="f">Nombre o empresa<input name="nombre" required value="${esc(s.nombre||'')}"></label><div class="f">Oficio${selOficio('oficio',s.oficio||'',true)}</div><div class="two"><label class="f">Teléfono<input name="telefono" required inputmode="tel" value="${esc(s.telefono||'')}"></label><label class="f">DUI<input name="dui" inputmode="numeric" maxlength="10" autocomplete="off" value="${esc(s.dui||'')}"></label></div><label class="f">Horario / zona<input name="zona" value="${esc(s.zona||'')}" placeholder="Ej. Lun–Sáb 7:00–17:00"></label><label class="f">Referencias o nota<textarea name="nota" placeholder="Ej. Recomendado por la casa 12">${esc(s.nota||'')}</textarea></label><label class="f">Foto (opcional)<input type="file" accept="image/*" onchange="fotoServ(this)"></label>
-  <label class="chk"><input type="checkbox" name="verificado" ${s.verificado?'checked':''}><span class="grow sm">Verificado por la administración (documentos y referencias revisados)</span></label><label class="chk"><input type="checkbox" name="solvencia" ${s.solvencia?'checked':''}><span class="grow sm">Presentó solvencia de la PNC</span></label><label class="f" style="margin-top:10px">Solvencia policial (foto o PDF)<input type="file" accept="image/*,application/pdf" onchange="solvServ(this)"></label>${s.solvDoc?`<button type="button" class="btn ghost smb" style="margin:-4px 0 10px" onclick="verSolv('${s.id}')">${ic('doc',14)} Ver solvencia guardada</button>`:''}<label class="f">Solvencia vigente hasta (opcional)<input type="date" name="solvVence" value="${esc(s.solvVence||'')}"></label><label class="chk"><input type="checkbox" name="activo" ${s.activo!==false?'checked':''}><span class="grow sm">Visible para los residentes</span></label>
+  <label class="chk"><input type="checkbox" name="verificado" ${s.verificado?'checked':''}><span class="grow sm">Verificado por la administración (documentos y referencias revisados)</span></label><label class="chk"><input type="checkbox" name="solvencia" ${s.solvencia?'checked':''}><span class="grow sm">Presentó solvencia de la PNC</span></label><label class="chk"><input type="checkbox" name="antecedentes" ${s.antecedentes?'checked':''}><span class="grow sm">Presentó antecedentes penales</span></label>
+  <div class="dir-docs"><p class="note" style="margin:10px 0 8px">${ic('shield',14)} Los archivos solo los ve la administración; los residentes ven la marca de verificado.</p>${docSlot('solv',!!(s.solvDoc||(ex&&ex.solvencia)),id?`verDocDir('${id}','solv')`:'')}<label class="f doc-vence">Solvencia vigente hasta (opcional)<input type="date" name="solvVence" value="${esc(s.solvVence||'')}"></label>${docSlot('antec',!!(ex&&ex.antecedentes),id?`verDocDir('${id}','antec')`:'')}</div><label class="chk"><input type="checkbox" name="activo" ${s.activo!==false?'checked':''}><span class="grow sm">Visible para los residentes</span></label>
   <button class="btn block">Guardar perfil</button>${id?`<button type="button" class="btn bad block" onclick="borrarDir('servicios','${id}')">Eliminar perfil</button>`:''}</form>`)}
 let SERVFOTO;async function fotoServ(inp){try{SERVFOTO=await leerArchivo(inp.files[0])}catch(e){toast('Foto no válida')}}
 function guardarServ(e,id){e.preventDefault();const f=new FormData(e.target);const g=k=>String(f.get(k)||'').trim();if(!duiOk(g('dui')))return toast('DUI incompleto. Formato: 00000000-0');
-  const ofi=leerOficio(f,'oficio');if(!ofi)return toast('Escribe el oficio');recordarOficio(ofi);const o={nombre:g('nombre'),oficio:ofi,telefono:g('telefono'),dui:g('dui'),zona:g('zona'),nota:g('nota'),verificado:!!f.get('verificado'),solvencia:!!f.get('solvencia'),activo:!!f.get('activo'),fecha:ymd()};if(SERVFOTO)o.foto=SERVFOTO;if(SERVSOLV){o.solvDoc=SERVSOLV;o.solvencia=true}o.solvVence=g('solvVence');
-  const L=dirDB().servicios;if(id)Object.assign(L.find(x=>x.id===id),o);else{L.push(Object.assign({id:uid(),foto:null},o));if(o.activo)notificar(DB.usuarios.filter(u=>u.activo&&['residente','inquilino'].includes(u.rol)).map(u=>u.id),'🛠️ Nuevo servicio de confianza',`${o.nombre} · ${o.oficio}`,{tab:'directorio'})}
-  SERVFOTO=undefined;SERVSOLV=undefined;save();closeSheet();render();toast('Perfil guardado')}
+  const ofi=leerOficio(f,'oficio');if(!ofi)return toast('Escribe el oficio');recordarOficio(ofi);const o={nombre:g('nombre'),oficio:ofi,telefono:g('telefono'),dui:g('dui'),zona:g('zona'),nota:g('nota'),verificado:!!f.get('verificado'),solvencia:!!f.get('solvencia'),antecedentes:!!f.get('antecedentes'),activo:!!f.get('activo'),fecha:ymd()};if(SERVFOTO)o.foto=SERVFOTO;if(DOCS.solv)o.solvencia=true;if(DOCS.antec)o.antecedentes=true;o.solvVence=g('solvVence');
+  const L=dirDB().servicios;const did=id||uid();if(id)Object.assign(L.find(x=>x.id===id),o);else{L.push(Object.assign({id:did,foto:null},o));if(o.activo)notificar(DB.usuarios.filter(u=>u.activo&&['residente','inquilino'].includes(u.rol)).map(u=>u.id),'🛠️ Nuevo servicio de confianza',`${o.nombre} · ${o.oficio}`,{tab:'directorio'})}
+  docsGuardar(did,o.nombre,{solvencia:DOCS.solv,antecedentes:DOCS.antec});docsReset();SERVFOTO=undefined;SERVSOLV=undefined;save();closeSheet();render();toast('Perfil guardado')}
 function borrarDir(k,id){dirDB()[k]=dirDB()[k].filter(x=>x.id!==id);save();closeSheet();render();toast('Eliminado')}
 function paseDesdeServ(id){const s=dirDB().servicios.find(x=>x.id===id);nuevoPase('personal');setTimeout(()=>{const o=document.querySelector('#ov');if(!o)return;const set=(n,v)=>{const i=o.querySelector('[name='+n+']');if(i&&v)i.value=v};set('nombre',s.nombre);set('dui',s.dui);const sel=o.querySelector('[name=detalle]');if(sel){const m=[...sel.options].find(x=>normTxt(x.value).startsWith(normTxt(s.oficio).slice(0,5)));if(m)sel.value=m.value}},30)}
 
@@ -2857,7 +2902,7 @@ Object.assign(I18N,{"Planes y precios":"Plans and prices","Precio mensual acorda
 
 
 /* ---------- Versión y actualización ---------- */
-const APP_VERSION='2026.11.05-33';
+const APP_VERSION='2026.11.05-35';
 async function buscarActualizacion(){toast('Buscando la versión más reciente…');try{if(navigator.serviceWorker){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}setTimeout(()=>{location.href=location.pathname+'?v='+Date.now()},400)}
 const versionHTML=()=>`<p class="note" style="text-align:center;margin-top:18px">GateWise · versión ${APP_VERSION} · <a href="#" onclick="buscarActualizacion();return false" style="color:var(--pri);font-weight:700">Buscar actualización</a></p>`;
 try{if(navigator.serviceWorker){navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!window.__gwRecargado){window.__gwRecargado=1;if(!S.user||!document.querySelector('#ov'))location.reload()}})}}catch(e){}
@@ -4407,8 +4452,6 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
       if (on) { el.hidden = false; requestAnimationFrame(() => el.classList.add('on')); const f = el.querySelector('select,input'); if (f) setTimeout(() => { try { f.focus({ preventScroll: true }); } catch (e) { } }, 220); }
       else { el.classList.remove('on'); el.hidden = true; }
     });
-    const fs = document.querySelector('#pv-vc select,#pv-vc input'); if (fs) fs.required = v === 'si';
-    const fr = document.querySelector('#pv-rec [name=recNombre]'); if (fr) fr.required = v === 'no';
   };
   window.pvMarcar = function (id) { const el = document.getElementById(id) || document.getElementById('pv-ubi'); if (!el) return; const b = document.getElementById('pv-ubi'); if (b) { b.classList.remove('pv-err'); void b.offsetWidth; b.classList.add('pv-err'); } el.scrollIntoView({ behavior: 'smooth', block: 'center' }); };
   const nombreRes = rid => { const r = ((PLAT && PLAT.residenciales) || []).find(x => x.id === rid); return r ? r.nombre : ''; };
@@ -4437,25 +4480,32 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
     const t = PV.tipo;
     const tipoBtn = (k, i, c, b, s) => `<button type="button" class="pv-tipo ${t === k ? 'on' : ''}" onclick="PV.tipo='${k}';render()"><span class="mic c-${c}">${ic(i, 26)}</span><span><b>${b}</b><small>${s}</small></span></button>`;
     let h = cab + `<h2>Ofrece tus servicios a los residentes</h2><p class="pv-lead">Llena este formulario. La administración lo revisa y, si te aprueba, te envía tu usuario y clave para que los residentes te encuentren en la app.</p>
+      <p class="pv-min">${ic('check', 18)}<span><b>Solo tu nombre y teléfono son obligatorios.</b> Lo que no tengas a mano, la administración lo completa contigo después.</span></p>
       <div class="pv-paso"><i>1</i>¿Qué ofreces?</div><div class="pv-tipos">${tipoBtn('tecnico', 'tool', 'orange', 'Servicio técnico', 'Plomería, electricidad, jardinería, limpieza…')}${tipoBtn('tienda', 'store', 'violet', 'Tienda o negocio', 'Comida, panadería, abarrotes, belleza…')}</div>`;
     if (t) {
       const esT = t === 'tecnico';
       h += `<form onsubmit="enviarAltaProv(event)">
         <div class="pv-paso"><i>2</i>Tus datos</div><div class="pv-card">
-          <label class="f">Nombre completo<input name="nombre" required autocomplete="name"></label>
-          <div class="two"><label class="f">DUI<input name="dui" required inputmode="numeric" placeholder="00000000-0"></label><label class="f">Teléfono (WhatsApp)<input name="tel" required inputmode="tel" placeholder="7000-0000"></label></div>
+          <label class="f">Nombre completo <em class="pv-req">obligatorio</em><input name="nombre" required autocomplete="name"></label>
+          <div class="two"><label class="f">DUI<input name="dui" inputmode="numeric" placeholder="00000000-0"></label><label class="f">Teléfono (WhatsApp) <em class="pv-req">obligatorio</em><input name="tel" required inputmode="tel" placeholder="7000-0000"></label></div>
           <label class="f">Correo (opcional)<input name="email" type="email" autocomplete="email"></label>
           <div class="pv-foto"><span class="pv-fprev" id="pv-foto">${PV.foto ? `<img src="${PV.foto.data}" alt="">` : ic('user', 30)}</span><label class="btn sec smb">${esT ? 'Agregar mi foto' : 'Agregar logo o foto'}<input type="file" accept="image/*" hidden onchange="pvFoto(this,'foto')"></label></div>
           ${esT ? `<div class="pv-foto" style="margin-top:12px"><span class="pv-fprev" id="pv-duiFoto">${PV.duiFoto ? `<img src="${PV.duiFoto.data}" alt="">` : ic('card', 30)}</span><label class="btn ghost smb">Foto del DUI (recomendado)<input type="file" accept="image/*" hidden onchange="pvFoto(this,'duiFoto')"></label></div>` : ''}
         </div>
         <div class="pv-paso"><i>3</i>${esT ? 'Tu servicio' : 'Tu negocio'}</div><div class="pv-card">
-          ${esT ? `<div class="f">Oficio${selOficio('oficio', '', true)}</div>`
-          : `<label class="f">Nombre del negocio<input name="negocio" required placeholder="Ej. Pupusería Doña Tere"></label><label class="f">Categoría<select name="categoria">${CAT_P.map(c => `<option>${esc(c)}</option>`).join('')}</select></label>`}
-          <label class="f">${esT ? 'Qué trabajos haces' : 'Qué vendes'}<textarea name="descripcion" required placeholder="${esT ? 'Ej. Reparación de fugas, instalación de lavamanos y calentadores' : 'Ej. Pupusas, tamales y refrescos naturales'}"></textarea></label>
+          ${esT ? `<div class="f">Oficio${selOficio('oficio', '', false)}</div>`
+          : `<label class="f">Nombre del negocio<input name="negocio" placeholder="Ej. Pupusería Doña Tere"></label><label class="f">Categoría<select name="categoria">${CAT_P.map(c => `<option>${esc(c)}</option>`).join('')}</select></label>`}
+          <label class="f">${esT ? 'Qué trabajos haces' : 'Qué vendes'}<textarea name="descripcion" placeholder="${esT ? 'Ej. Reparación de fugas, instalación de lavamanos y calentadores' : 'Ej. Pupusas, tamales y refrescos naturales'}"></textarea></label>
           <label class="f">Horario de atención<input name="horario" placeholder="Ej. Lun–Sáb 8:00–17:00"></label>
           ${esT ? '' : `<label class="pv-chk"><input type="checkbox" name="domicilio" checked><span>Hago entregas a domicilio dentro de la residencial</span></label><label class="f" style="margin-top:12px">Dirección del negocio (opcional)<input name="direccion"></label>`}
         </div>
-        <div class="pv-paso"><i>4</i>Tu relación con la residencial</div>${bloqueUbi(esT)}
+        <div class="pv-paso"><i>4</i>Tu relación con la residencial <em class="pv-opc-t">opcional</em></div>${bloqueUbi(esT)}
+        <div class="pv-paso"><i>5</i>Documentos de confianza <em class="pv-opc-t">opcional</em></div><div class="pv-card pv-docs">
+          <p class="pv-dl">${ic('shield', 18)}<span>Sube tu <b>solvencia policial</b> y tus <b>antecedentes penales</b>. Con ellos la administración te aprueba más rápido y los vecinos verán que estás verificado. <b>Solo la administración ve los archivos.</b></span></p>
+          ${docSlot('solv')}
+          <label class="f doc-vence">Solvencia vigente hasta (opcional)<input type="date" name="solvVence"></label>
+          ${docSlot('antec')}
+        </div>
         <label class="pv-chk"><input type="checkbox" name="acepto" required><span>Autorizo a la administración de ${esc(nom)} a revisar mis datos y compartir mi nombre, teléfono y servicio con los residentes. <a href="privacidad.html" target="_blank" rel="noopener">Privacidad</a></span></label>
         <button class="btn block big-ok">Enviar solicitud</button></form>`;
     }
@@ -4466,23 +4516,24 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
   window.enviarAltaProv = async function (e) {
     e.preventDefault(); const f = new FormData(e.target); const g = k => String(f.get(k) || '').trim();
     const rid = PV.rid; const esT = PV.tipo === 'tecnico';
-    if (!/^\d{8}-\d$/.test(g('dui')) && g('dui').replace(/\D/g, '').length !== 9) return toast('El DUI debe tener 9 dígitos: 00000000-0');
+    if (!g('nombre')) return toast('Escribe tu nombre');
+    if (g('dui') && !/^\d{8}-\d$/.test(g('dui')) && g('dui').replace(/\D/g, '').length !== 9) return toast('El DUI debe tener 9 dígitos: 00000000-0 (o déjalo vacío)');
     if (g('tel').replace(/\D/g, '').length < 8) return toast('Revisa el número de teléfono');
     let dui = g('dui'); const dd = dui.replace(/\D/g, ''); if (dd.length === 9) dui = dd.slice(0, 8) + '-' + dd.slice(8);
     const s = { id: 'pv' + uid(), tipo: PV.tipo, nombre: g('nombre'), dui, tel: g('tel'), email: g('email'), descripcion: g('descripcion'), horario: g('horario'),
       oficio: esT ? leerOficio(f, 'oficio') : '', negocio: esT ? '' : g('negocio'), categoria: esT ? 'Servicios' : g('categoria'), domicilio: esT ? true : !!f.get('domicilio'), direccion: g('direccion'),
-      foto: PV.foto || null, duiFoto: PV.duiFoto || null, fecha: nowISO(), estado: 'pendiente', vive: f.get('vive') === 'si', viveCasa: '', viveTxt: '', recCasa: '', recomienda: '' };
-    if (esT && !s.oficio) return toast('Escribe tu oficio');
-    if (!f.get('vive')) { pvMarcar('pv-ubi'); return toast('Indica si vives dentro de la residencial'); }
+      foto: PV.foto || null, duiFoto: PV.duiFoto || null, fecha: nowISO(), estado: 'pendiente', vive: f.get('vive') === 'si' ? true : f.get('vive') === 'no' ? false : null, viveCasa: '', viveTxt: '', recCasa: '', recomienda: '' };
+    s.solvencia = DOCS.solv || null; s.antecedentes = DOCS.antec || null; s.solvVence = g('solvVence');
+    if (JSON.stringify(s).length > 880000) return toast('Los archivos pesan mucho. Usa fotos en lugar de PDF');
     const cn = id => { const c = (PV.casas || []).find(x => x.id === id); return c ? c.n + (c.p ? ' · ' + c.p : '') : ''; };
-    if (s.vive) { s.viveCasa = g('viveCasa'); s.viveTxt = cn(s.viveCasa) || g('viveCasaTxt'); if (!s.viveTxt) { pvMarcar('pv-vc'); return toast('Elige la casa donde vives'); } }
-    else { s.recCasa = g('recCasa'); const quien = g('recNombre'); if (!quien) { pvMarcar('pv-rec'); return toast('Escribe quién te recomienda en la residencial'); } s.recomienda = quien + (cn(s.recCasa) || g('recCasaTxt') ? ' · ' + (cn(s.recCasa) || g('recCasaTxt')) : ''); }
+    if (s.vive === true) { s.viveCasa = g('viveCasa'); s.viveTxt = cn(s.viveCasa) || g('viveCasaTxt'); }
+    else if (s.vive === false) { s.recCasa = g('recCasa'); const quien = g('recNombre'); const dn = cn(s.recCasa) || g('recCasaTxt'); s.recomienda = [quien, dn].filter(Boolean).join(' · '); }
     // demo con nube: la solicitud viaja directo a la nube (llega desde cualquier teléfono)
     if (!PROD() && typeof window.GW_ALTA_NUBE === 'function') {
       const btn = e.target.querySelector('button:not([type=button])'); if (btn) btn.disabled = true;
       const r = await window.GW_ALTA_NUBE(rid, s); if (btn) btn.disabled = false;
       if (r === false) return toast('No se pudo enviar. Revisa tu internet e intenta de nuevo');
-      if (r === true) { PV.enviado = s; PV.foto = PV.duiFoto = null; render(); window.scrollTo(0, 0); return; }
+      if (r === true) { PV.enviado = s; PV.foto = PV.duiFoto = null; docsReset(); render(); window.scrollTo(0, 0); return; }
     }
     try {
       if (PROD()) {
@@ -4494,7 +4545,7 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
         if (propio) save(); else { escribirDB(rid, d); DB = viejo; }
       }
     } catch (x) { console.warn(x); return toast('No se pudo enviar. Revisa tu internet e intenta de nuevo'); }
-    PV.enviado = s; PV.foto = PV.duiFoto = null; render(); window.scrollTo(0, 0);
+    PV.enviado = s; PV.foto = PV.duiFoto = null; docsReset(); render(); window.scrollTo(0, 0);
   };
 
   /* ---------- Administración: link y solicitudes ---------- */
@@ -4532,7 +4583,7 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
         <div class="btns"><button class="btn" onclick="compartirLinkProv()">Compartir por WhatsApp</button><button class="btn ghost" onclick="copiarLinkProv()">Copiar link</button></div>
         <label class="pv-sw"><input type="checkbox" ${abiertoAdm() ? 'checked' : ''} onchange="toggleAltaProv(this.checked)"><span>${abiertoAdm() ? 'Recibiendo solicitudes' : 'Pausado: no se reciben solicitudes'}</span></label></div>
       ${seg('pvseg', [['pendiente', `Por revisar (${n('pendiente')})`], ['aprobada', `Aprobadas (${n('aprobada')})`], ['rechazada', `Rechazadas (${n('rechazada')})`]])}
-      ${lista.map(s => `<button class="item" onclick="verProv('${s.id}')">${avProv(s)}<div class="grow"><b>${esc(s.negocio || s.nombre)}</b><div class="sm muted">${esc(tipoTxt(s))}${s.negocio ? ' · ' + esc(s.nombre) : ''} · ${fFecha(String(s.fecha).slice(0, 10))}</div></div>${chipEst(s)}</button>`).join('') || empty(S.pvseg === 'pendiente' ? 'No hay solicitudes por revisar' : 'Sin registros')}`;
+      ${lista.map(s => `<button class="item" onclick="verProv('${s.id}')">${avProv(s)}<div class="grow"><b>${esc(s.negocio || s.nombre)}</b><div class="sm muted">${esc(tipoTxt(s))}${s.negocio ? ' · ' + esc(s.nombre) : ''} · ${fFecha(String(s.fecha).slice(0, 10))}</div>${s.estado === 'pendiente' && faltan(s).length ? `<div class="sm" style="color:var(--warn);font-weight:600">Faltan ${faltan(s).length} dato(s) por completar</div>` : ''}</div>${chipEst(s)}</button>`).join('') || empty(S.pvseg === 'pendiente' ? 'No hay solicitudes por revisar' : 'Sin registros')}`;
   }
 
   const genClave = () => String(Math.floor(100000 + Math.random() * 900000));
@@ -4548,6 +4599,8 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
       ${fotos ? `<div class="pv-fotos">${fotos}</div>` : ''}
       <div class="card kv"><span>Nombre</span><b>${esc(s.nombre)}</b><span>DUI</span><b>${esc(s.dui)}</b><span>Teléfono</span><b><a href="tel:${esc(s.tel)}">${esc(s.tel)}</a></b>${s.email ? `<span>Correo</span><b>${esc(s.email)}</b>` : ''}
       <span>${esT ? 'Trabajos' : 'Vende'}</span><b>${esc(s.descripcion)}</b>${s.horario ? `<span>Horario</span><b>${esc(s.horario)}</b>` : ''}${!esT ? `<span>A domicilio</span><b>${s.domicilio ? 'Sí' : 'No'}</b>` : ''}${s.direccion ? `<span>Dirección</span><b>${esc(s.direccion)}</b>` : ''}${s.recomienda ? `<span>Recomendado por</span><b>${esc(s.recomienda)}</b>` : ''}${s.vive !== undefined ? `<span>¿Vive aquí?</span><b>${s.vive ? '🏠 Sí · ' + esc(s.viveTxt || '') : '🚪 No, viene de afuera'}</b>` : ''}<span>Enviado</span><b>${fFecha(String(s.fecha).slice(0, 10))} · ${hora(s.fecha)}</b></div>`;
+    h += docsRevision(s);
+    if (s.estado === 'pendiente') { const F = faltan(s); h += `<div class="pv-falta${F.length ? '' : ' ok'}"><div class="pv-falta-h">${ic(F.length ? 'alert' : 'check', 20)}<b>${F.length ? 'Faltan datos por completar' : 'Registro completo'}</b></div>${F.length ? `<div class="pv-falta-l">${F.map(x => `<span>${x}</span>`).join('')}</div><p>Puedes aprobar así, pero conviene completarlos con el proveedor (por llamada o WhatsApp).</p>` : ''}<button type="button" class="btn ${F.length ? '' : 'ghost'} block" onclick="editarProv('${s.id}')">${ic('doc', 18)}<span class="b-tx">${F.length ? 'Completar datos' : 'Editar datos'}</span></button></div>`; }
     if (s.estado === 'pendiente') h += `<a class="btn ghost block" href="https://wa.me/${waNum(s.tel)}" target="_blank" rel="noopener">${ic('chat', 18)} Escribirle por WhatsApp</a>
       <form onsubmit="aprobarProv(event,'${s.id}')" style="margin-top:14px"><h3 style="margin-top:6px">Datos de acceso</h3><div class="two"><label class="f">Usuario<input name="user" required autocapitalize="none" value="${esc(sugerirUsuario(s))}"></label><label class="f">Clave<input name="pass" required minlength="6" value="${genClave()}"></label></div>
       ${esT ? `<h3>Oficio</h3><div class="f">${selOficio('oficio', s.oficio, true)}</div>
@@ -4561,6 +4614,55 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
   };
 
   const casaVive = s => { if (s.viveCasa && DB.casas.some(c => c.id === s.viveCasa)) return s.viveCasa; const n = String(s.viveTxt || '').replace(/\D/g, ''); if (!s.vive || !n) return ''; const c = DB.casas.find(c => String(c.numero).replace(/\D/g, '') === n); return c ? c.id : ''; };
+  // ¿Qué le falta a la solicitud?
+  function faltan(s) {
+    const esT = s.tipo === 'tecnico'; const F = [];
+    if (!s.dui) F.push('DUI');
+    if (esT && !s.oficio) F.push('Oficio'); if (!esT && !s.negocio) F.push('Nombre del negocio');
+    if (!s.descripcion) F.push(esT ? 'Trabajos que hace' : 'Qué vende');
+    if (s.vive !== true && s.vive !== false) F.push('¿Vive en la residencial?');
+    else if (s.vive === true && !s.viveTxt && !s.viveCasa) F.push('Casa donde vive');
+    else if (s.vive === false && !s.recomienda) F.push('Quién lo recomienda');
+    if (!s.solvencia) F.push('Solvencia policial'); if (!s.antecedentes) F.push('Antecedentes penales');
+    if (!s.foto) F.push('Foto');
+    return F;
+  }
+  window.faltanProv = faltan;
+  // La administración completa o corrige la solicitud antes de aprobarla
+  window.editarProv = function (id) {
+    const s = provDB().find(x => x.id === id); if (!s) return; const esT = s.tipo === 'tecnico'; docsReset();
+    sheet('Completar datos', `<form onsubmit="guardarProv(event,'${id}')">
+      <p class="note" style="margin-top:0">Completa lo que el proveedor no envió. Los cambios quedan en su solicitud.</p>
+      <label class="f">Nombre completo<input name="nombre" required value="${esc(s.nombre || '')}"></label>
+      <div class="two"><label class="f">DUI<input name="dui" inputmode="numeric" placeholder="00000000-0" value="${esc(s.dui || '')}"></label><label class="f">Teléfono<input name="tel" required inputmode="tel" value="${esc(s.tel || '')}"></label></div>
+      <label class="f">Correo<input name="email" type="email" value="${esc(s.email || '')}"></label>
+      ${esT ? `<div class="f">Oficio${selOficio('oficio', s.oficio || '', false)}</div>` : `<label class="f">Nombre del negocio<input name="negocio" value="${esc(s.negocio || '')}"></label><label class="f">Categoría<select name="categoria">${CAT_P.map(c => `<option ${c === s.categoria ? 'selected' : ''}>${esc(c)}</option>`).join('')}</select></label>`}
+      <label class="f">${esT ? 'Trabajos que hace' : 'Qué vende'}<textarea name="descripcion">${esc(s.descripcion || '')}</textarea></label>
+      <label class="f">Horario<input name="horario" value="${esc(s.horario || '')}"></label>
+      <h3>¿Vive en la residencial?</h3>${ubiAdm({ name: 'vive', si: 'si', no: 'no', dentro: s.vive === true, casa: casaVive(s), casaName: 'viveCasa' })}
+      <label class="f" style="margin-top:12px">Quién lo recomienda (si viene de afuera)<input name="recomienda" value="${esc(s.recomienda || '')}" placeholder="Ej. Ana Rivas · Casa 1"></label>
+      <h3>Documentos</h3>${docSlot('solv', !!s.solvencia, `verDocProv('${id}','solv')`)}<label class="f doc-vence">Solvencia vigente hasta<input type="date" name="solvVence" value="${esc(s.solvVence || '')}"></label>${docSlot('antec', !!s.antecedentes, `verDocProv('${id}','antec')`)}
+      <button class="btn block big-ok" style="margin-top:10px">Guardar datos</button></form>`);
+  };
+  window.guardarProv = function (e, id) {
+    e.preventDefault(); const f = new FormData(e.target); const g = k => String(f.get(k) || '').trim(); const s = provDB().find(x => x.id === id); if (!s) return; const esT = s.tipo === 'tecnico';
+    let dui = g('dui'); const dd = dui.replace(/\D/g, ''); if (dui && dd.length !== 9) return toast('El DUI debe tener 9 dígitos: 00000000-0'); if (dd.length === 9) dui = dd.slice(0, 8) + '-' + dd.slice(8);
+    if (g('tel').replace(/\D/g, '').length < 8) return toast('Revisa el teléfono');
+    Object.assign(s, { nombre: g('nombre'), dui, tel: g('tel'), email: g('email'), descripcion: g('descripcion'), horario: g('horario'), solvVence: g('solvVence'), recomienda: g('recomienda') });
+    if (esT) { const of = leerOficio(f, 'oficio'); if (f.get('oficio') === '__otro' && !of) return toast('Escribe el oficio'); s.oficio = of; if (of) recordarOficio(of); }
+    else { s.negocio = g('negocio'); s.categoria = g('categoria') || s.categoria; }
+    s.vive = f.get('vive') === 'si'; if (s.vive) { s.viveCasa = g('viveCasa'); s.viveTxt = s.viveCasa ? casaNom(s.viveCasa) + ((casa(s.viveCasa) || {}).pasaje ? ' · ' + casa(s.viveCasa).pasaje : '') : s.viveTxt; } else { s.viveCasa = ''; s.viveTxt = ''; }
+    if (DOCS.solv) s.solvencia = DOCS.solv; if (DOCS.antec) s.antecedentes = DOCS.antec; docsReset();
+    s.editada = nowISO(); save(); closeSheet(); render(); verProv(id); toast('Datos guardados');
+  };
+  // Documentos enviados por el proveedor (solo la administración los ve)
+  function docsRevision(s) {
+    const fila = (k, t, d, ico, color, f) => `<div class="doc-slot"><span class="doc-ic c-${color}${f ? ' on' : ''}">${ic(ico, 24)}</span><span class="doc-tx"><b>${t}</b>${f ? `<span class="doc-st ok">${ic('check', 14)} Enviado</span>${d ? `<small class="doc-fn">${d}</small>` : ''}` : '<span class="doc-st falta">No lo envió</span>'}</span><span class="doc-ac">${f ? `<button type="button" class="doc-b" onclick="verDocProv('${s.id}','${k}')">Ver</button>` : ''}</span></div>`;
+    const vence = s.solvVence ? (s.solvVence < ymd() ? '⚠️ Vencida el ' : 'Vigente hasta ') + fFecha(s.solvVence) : '';
+    return `<h3>Documentos</h3>${fila('solv', 'Solvencia policial', vence, 'shield', 'teal', s.solvencia)}${fila('antec', 'Antecedentes penales', '', 'doc', 'indigo', s.antecedentes)}
+      ${!s.solvencia || !s.antecedentes ? `<p class="note">Si falta algún documento, puedes pedírselo por WhatsApp antes de aprobar.</p>` : ''}`;
+  }
+  window.verDocProv = function (id, k) { const s = provDB().find(x => x.id === id); const f = s && (k === 'solv' ? s.solvencia : s.antecedentes); if (!f) return toast('No hay archivo'); verArchivo(f, (k === 'solv' ? 'Solvencia policial' : 'Antecedentes penales') + ' · ' + s.nombre); };
   window.aprobarProv = function (e, id) {
     e.preventDefault(); const f = new FormData(e.target); const s = provDB().find(x => x.id === id); if (!s || s.estado !== 'pendiente') return;
     const un = String(f.get('user') || '').trim().toLowerCase(); const pw = String(f.get('pass') || '').trim();
@@ -4574,7 +4676,7 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
     const ini = (s.negocio || s.nombre).split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase();
     let logo = s.foto || null; try { if (!logo && typeof genLogo === 'function') logo = genLogo(ini || 'GW', esT ? '#c2410c' : '#6d28d9'); } catch (x) { }
     const u = { id: 'u_' + uid(), rol: esT ? 'profesional' : 'vendedor', nombre: s.nombre, user: un, pass: pw, tel: s.tel, dui: s.dui, email: s.email || '', activo: true, casaId: '',
-      negocio: s.negocio || (s.oficio + ' · ' + s.nombre.split(' ')[0]), categoria: esT ? 'Servicios' : (s.categoria || 'Otro'), descripcion: s.descripcion, horario: s.horario,
+      negocio: s.negocio || (esT ? (s.oficio || 'Servicios') + ' · ' + s.nombre.split(' ')[0] : s.nombre), categoria: esT ? 'Servicios' : (s.categoria || 'Otro'), descripcion: s.descripcion, horario: s.horario,
       domicilio: !!s.domicilio, retiro: !esT, envio: 0, direccion: s.direccion || '', logo, proveedor: s.tipo, oficio: s.oficio || '', provId: s.id };
     if (esT) Object.assign(u, { zona: '', disponible: true, retiro: false, domicilio: true, viveCasa });
     DB.usuarios.push(u);
@@ -4582,7 +4684,7 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
     if (esT) { DB.servicios = DB.servicios || []; DB.servicios.push({ id: 'ps' + uid(), proId: u.id, nombre: 'Servicio de ' + String(s.oficio || 'mantenimiento').toLowerCase(), descripcion: s.descripcion || '', precioTipo: 'cotizar', precio: '', duracion: '', activo: true }); }
     if (esT && f.get('dir')) {
       DB.directorio = DB.directorio || { emergencia: [], servicios: [] }; DB.directorio.servicios = DB.directorio.servicios || [];
-      DB.directorio.servicios.push({ id: uid(), nombre: s.nombre, oficio: s.oficio, telefono: s.tel, dui: s.dui, zona: s.horario, nota: s.descripcion, verificado: true, solvencia: false, fecha: ymd(), foto: s.foto || null, provId: s.id, userId: u.id });
+      DB.directorio.servicios.push({ id: uid(), nombre: s.nombre, oficio: s.oficio, telefono: s.tel, dui: s.dui, zona: s.horario, nota: s.descripcion, verificado: true, solvencia: !!s.solvencia, solvVence: s.solvVence || '', antecedentes: !!s.antecedentes, fecha: ymd(), foto: s.foto || null, provId: s.id, userId: u.id });
     }
     Object.assign(s, { estado: 'aprobada', aprobada: nowISO(), userId: u.id, user: un, duiFoto: null });
     save(); render();
@@ -4598,7 +4700,7 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
   }
   window.rechazarProv = function (id) {
     pedirTexto('Rechazar solicitud', 'Motivo (puedes enviárselo por WhatsApp)', 'Por ahora no estamos aceptando más proveedores de este tipo', m => {
-      const s = provDB().find(x => x.id === id); if (!s) return; Object.assign(s, { estado: 'rechazada', motivo: m, rechazada: nowISO(), duiFoto: null, foto: null }); save(); render();
+      const s = provDB().find(x => x.id === id); if (!s) return; Object.assign(s, { estado: 'rechazada', motivo: m, rechazada: nowISO(), duiFoto: null, foto: null, solvencia: null, antecedentes: null }); save(); render();
       const msg = `Hola ${s.nombre.split(' ')[0]}, gracias por tu interés en ${DB.residencial.nombre}. Por ahora no pudimos aprobar tu registro: ${m}`;
       sheet('Solicitud rechazada', `<p>Puedes avisarle por WhatsApp.</p><a class="btn block" href="https://wa.me/${waNum(s.tel)}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">${ic('chat', 18)} Avisar por WhatsApp</a><button class="btn ghost block" onclick="closeSheet()">Listo</button>`);
     }, { boton: 'Rechazar' });
@@ -5712,6 +5814,97 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
     if (on) { rev.hidden = false; requestAnimationFrame(() => rev.classList.add('on')); } else { rev.classList.remove('on'); rev.hidden = true; }
     if (sel) sel.required = on;
   };
+})();
+
+</script>
+<script data-origen="js/app/31-documentos.js">
+/* =========================================================
+   DOCUMENTOS: SOLVENCIA POLICIAL Y ANTECEDENTES PENALES
+   - Casillas para subir foto o PDF, usadas en el link de inscripción,
+     en la aprobación y en el directorio (perfil de servicio).
+   - Privacidad: los documentos se guardan SOLO donde la administración
+     puede verlos (provSolicitudes, colección solo-admin en producción).
+     En el directorio que leen los residentes quedan únicamente las marcas
+     "Solvencia PNC" y "Antecedentes", nunca el archivo.
+   ========================================================= */
+(function () {
+  const PDF_MAX = 260 * 1024; // bytes del archivo PDF original
+  window.DOCS = {};
+  const INFO = {
+    solv: ['Solvencia policial', 'Constancia de la PNC (DIAC)', 'shield', 'teal'],
+    antec: ['Antecedentes penales', 'Certificado de antecedentes penales', 'doc', 'indigo'],
+  };
+  const peso = o => o && o.data ? Math.round(o.data.length * 0.75 / 1024) + ' KB' : '';
+
+  // Casilla para subir un documento. guardado = ya hay uno guardado (al editar)
+  window.docSlot = function (key, guardado, verFn) {
+    return `<div class="doc-slot" id="doc-${key}" data-guardado="${guardado ? 1 : ''}" data-ver="${esc(verFn || '')}">${pintar(key, guardado, verFn)}</div>`;
+  };
+  function pintar(key, guardado, verFn) {
+    const [t, d, ico, color] = INFO[key]; const f = DOCS[key];
+    const input = `<input type="file" accept="image/*,application/pdf" hidden onchange="docSubir(this,'${key}')">`;
+    let estado, acciones;
+    if (f) {
+      estado = `<span class="doc-st ok">${ic('check', 14)} Listo</span><small class="doc-fn">${esc(f.nombre || (f.tipo === 'pdf' ? 'documento.pdf' : 'foto.jpg'))} · ${peso(f)}</small>`;
+      acciones = `<button type="button" class="doc-b" onclick="docVer('${key}')">Ver</button><label class="doc-b">Cambiar${input}</label><button type="button" class="doc-b doc-x" onclick="docQuitar('${key}')" aria-label="Quitar">${ic('x', 16)}</button>`;
+    } else if (guardado) {
+      estado = `<span class="doc-st ok">${ic('check', 14)} Guardado</span><small class="doc-fn">Ya está en el expediente</small>`;
+      acciones = `${verFn ? `<button type="button" class="doc-b" onclick="${verFn}">Ver</button>` : ''}<label class="doc-b">Reemplazar${input}</label>`;
+    } else {
+      estado = `<span class="doc-st">Pendiente</span><small class="doc-fn">Foto clara o PDF</small>`;
+      acciones = `<label class="doc-b doc-up">${ic('plus', 16)} Subir${input}</label>`;
+    }
+    const prev = f && f.tipo === 'img' && f.data ? `<img src="${f.data}" alt="">` : f && f.tipo === 'pdf' ? '<b>PDF</b>' : ic(ico, 24);
+    return `<span class="doc-ic c-${color}${f ? ' on' : ''}">${prev}</span><span class="doc-tx"><b>${t}</b>${estado}</span><span class="doc-ac">${acciones}</span>`;
+  }
+  function repintar(key) { const el = document.getElementById('doc-' + key); if (el) el.innerHTML = pintar(key, !!el.dataset.guardado, el.dataset.ver); }
+  window.docSubir = async function (inp, key) {
+    const file = inp.files && inp.files[0]; if (!file) return;
+    const esPdf = file.type === 'application/pdf' || /\.pdf$/i.test(file.name);
+    if (!esPdf && !file.type.startsWith('image/')) return toast('Usa una foto o un PDF');
+    if (esPdf && file.size > PDF_MAX) return toast('El PDF pesa mucho (máximo 250 KB). Mejor tómale una foto al documento.');
+    const el = document.getElementById('doc-' + key); if (el) el.classList.add('cargando');
+    try {
+      let o = await leerArchivo(file);
+      if (o && o.tipo === 'img' && o.data && typeof reducirImagen === 'function') { try { o.data = await reducirImagen(o.data, 1300, .62); } catch (e) { } }
+      if (!o || !o.data) throw new Error('vacío');
+      DOCS[key] = o; repintar(key); toast(INFO[key][0] + ' lista');
+    } catch (e) { toast('No se pudo leer el archivo. Intenta con una foto'); }
+    finally { if (el) el.classList.remove('cargando'); }
+  };
+  window.docQuitar = function (key) { DOCS[key] = null; repintar(key); };
+  window.docVer = function (key) { if (DOCS[key]) verArchivo(DOCS[key], INFO[key][0]); };
+  window.docsReset = function () { window.DOCS = {}; };
+
+  /* ---------- Expediente privado (solo administración) ---------- */
+  const reg = () => (DB.provSolicitudes = DB.provSolicitudes || []);
+  // documentos de una entrada del directorio (aprobada por link o creada por la administración)
+  function expediente(dirId) {
+    const s = (DB.directorio && DB.directorio.servicios || []).find(x => x.id === dirId);
+    if (s && s.provId) { const p = reg().find(x => x.id === s.provId); if (p) return p; }
+    return reg().find(x => x.tipo === 'docs' && x.para === dirId) || null;
+  }
+  window.expedienteDir = expediente;
+  window.docsGuardar = function (dirId, nombre, docs) {
+    if (!docs.solvencia && !docs.antecedentes) return;
+    let e = expediente(dirId);
+    if (!e) { e = { id: 'pvd' + uid(), tipo: 'docs', para: dirId, nombre, estado: 'archivo', fecha: nowISO() }; reg().push(e); }
+    if (docs.solvencia) e.solvencia = docs.solvencia; if (docs.antecedentes) e.antecedentes = docs.antecedentes; e.nombre = nombre || e.nombre;
+  };
+  window.verDocDir = function (dirId, key) {
+    const e = expediente(dirId); const s = (DB.directorio.servicios || []).find(x => x.id === dirId) || {};
+    const f = key === 'solv' ? (e && e.solvencia) || s.solvDoc : e && e.antecedentes;
+    if (!f) return toast('No hay archivo guardado');
+    verArchivo(f, INFO[key][0] + ' · ' + (s.nombre || ''));
+  };
+  window.verDocsDir = function (dirId) {
+    const e = expediente(dirId); const s = (DB.directorio.servicios || []).find(x => x.id === dirId) || {};
+    const fila = (k, f, si) => `<div class="doc-slot"><span class="doc-ic c-${INFO[k][3]}${f ? ' on' : ''}">${ic(INFO[k][2], 24)}</span><span class="doc-tx"><b>${INFO[k][0]}</b>${f ? `<span class="doc-st ok">${ic('check', 14)} Guardado</span>` : si ? `<span class="doc-st ok">Marcado como presentado</span>` : '<span class="doc-st">No presentó</span>'}</span><span class="doc-ac">${f ? `<button type="button" class="doc-b" onclick="verDocDir('${dirId}','${k}')">Ver</button>` : ''}</span></div>`;
+    sheet('Documentos · ' + (s.nombre || ''), `<p class="note" style="margin-top:0">${ic('shield', 14)} Solo la administración puede ver estos archivos. Los residentes solo ven las marcas de verificación.</p>
+      ${fila('solv', (e && e.solvencia) || s.solvDoc, s.solvencia)}${s.solvVence ? `<p class="note">Solvencia vigente hasta ${fFecha(s.solvVence)}</p>` : ''}${fila('antec', e && e.antecedentes, s.antecedentes)}`);
+  };
+  // compatibilidad con el botón anterior
+  if (typeof verSolv === 'function') verSolv = function (id) { verDocDir(id, 'solv'); };
 })();
 
 </script>
