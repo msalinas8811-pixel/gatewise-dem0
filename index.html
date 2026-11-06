@@ -2809,7 +2809,7 @@ Object.assign(I18N,{"Planes y precios":"Plans and prices","Precio mensual acorda
 
 
 /* ---------- Versión y actualización ---------- */
-const APP_VERSION='2026.11.05-29';
+const APP_VERSION='2026.11.05-30';
 async function buscarActualizacion(){toast('Buscando la versión más reciente…');try{if(navigator.serviceWorker){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}setTimeout(()=>{location.href=location.pathname+'?v='+Date.now()},400)}
 const versionHTML=()=>`<p class="note" style="text-align:center;margin-top:18px">GateWise · versión ${APP_VERSION} · <a href="#" onclick="buscarActualizacion();return false" style="color:var(--pri);font-weight:700">Buscar actualización</a></p>`;
 try{if(navigator.serviceWorker){navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!window.__gwRecargado){window.__gwRecargado=1;if(!S.user||!document.querySelector('#ov'))location.reload()}})}}catch(e){}
@@ -4358,6 +4358,8 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
           : `<label class="f">Nombre del negocio<input name="negocio" required placeholder="Ej. Pupusería Doña Tere"></label><label class="f">Categoría<select name="categoria">${CAT_P.map(c => `<option>${esc(c)}</option>`).join('')}</select></label>`}
           <label class="f">${esT ? 'Qué trabajos haces' : 'Qué vendes'}<textarea name="descripcion" required placeholder="${esT ? 'Ej. Reparación de fugas, instalación de lavamanos y calentadores' : 'Ej. Pupusas, tamales y refrescos naturales'}"></textarea></label>
           <label class="f">Horario de atención<input name="horario" placeholder="Ej. Lun–Sáb 8:00–17:00"></label>
+          ${esT ? `<div class="f">¿Vives dentro de la residencial?<div class="sv-franja"><label><input type="radio" name="vive" value="no" checked onchange="document.getElementById('pv-vc').hidden=true"><span>No, vengo de afuera<small>Te darán un código de ingreso</small></span></label><label><input type="radio" name="vive" value="si" onchange="document.getElementById('pv-vc').hidden=false"><span>Sí, vivo aquí<small>No necesitas código</small></span></label></div></div>
+          <label class="f" id="pv-vc" hidden>N° de tu casa<input name="viveTxt" placeholder="Ej. 14 o Casa 14"></label>` : ''}
           ${esT ? '' : `<label class="pv-chk"><input type="checkbox" name="domicilio" checked><span>Hago entregas a domicilio dentro de la residencial</span></label><label class="f" style="margin-top:12px">Dirección del negocio (opcional)<input name="direccion"></label>`}
           <label class="f">¿Algún residente te recomienda? (opcional)<input name="recomienda" placeholder="Ej. Familia Rivas, Casa 1"></label>
         </div>
@@ -4376,7 +4378,8 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
     let dui = g('dui'); const dd = dui.replace(/\D/g, ''); if (dd.length === 9) dui = dd.slice(0, 8) + '-' + dd.slice(8);
     const s = { id: 'pv' + uid(), tipo: PV.tipo, nombre: g('nombre'), dui, tel: g('tel'), email: g('email'), descripcion: g('descripcion'), horario: g('horario'), recomienda: g('recomienda'),
       oficio: esT ? g('oficio') : '', negocio: esT ? '' : g('negocio'), categoria: esT ? 'Servicios' : g('categoria'), domicilio: esT ? true : !!f.get('domicilio'), direccion: g('direccion'),
-      foto: PV.foto || null, duiFoto: PV.duiFoto || null, fecha: nowISO(), estado: 'pendiente' };
+      foto: PV.foto || null, duiFoto: PV.duiFoto || null, fecha: nowISO(), estado: 'pendiente', vive: esT && f.get('vive') === 'si', viveTxt: esT && f.get('vive') === 'si' ? g('viveTxt') : '' };
+    if (s.vive && !s.viveTxt) return toast('Escribe el número de tu casa');
     try {
       if (PROD()) {
         await GW_PROD.fs.doc('r/' + rid + '/provSolicitudes/' + s.id).set({ d: JSON.stringify(s), estado: 'pendiente', _t: firebase.firestore.FieldValue.serverTimestamp() });
@@ -4437,16 +4440,19 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
     let h = `<div class="row" style="margin-bottom:10px">${avProv(s)}<div class="grow"><b style="font-size:18px">${esc(s.negocio || s.nombre)}</b><div class="sm muted">${esT ? 'Servicio técnico' : 'Tienda o negocio'} · ${esc(tipoTxt(s))}</div></div>${chipEst(s)}</div>
       ${fotos ? `<div class="pv-fotos">${fotos}</div>` : ''}
       <div class="card kv"><span>Nombre</span><b>${esc(s.nombre)}</b><span>DUI</span><b>${esc(s.dui)}</b><span>Teléfono</span><b><a href="tel:${esc(s.tel)}">${esc(s.tel)}</a></b>${s.email ? `<span>Correo</span><b>${esc(s.email)}</b>` : ''}
-      <span>${esT ? 'Trabajos' : 'Vende'}</span><b>${esc(s.descripcion)}</b>${s.horario ? `<span>Horario</span><b>${esc(s.horario)}</b>` : ''}${!esT ? `<span>A domicilio</span><b>${s.domicilio ? 'Sí' : 'No'}</b>` : ''}${s.direccion ? `<span>Dirección</span><b>${esc(s.direccion)}</b>` : ''}${s.recomienda ? `<span>Recomendado por</span><b>${esc(s.recomienda)}</b>` : ''}<span>Enviado</span><b>${fFecha(String(s.fecha).slice(0, 10))} · ${hora(s.fecha)}</b></div>`;
+      <span>${esT ? 'Trabajos' : 'Vende'}</span><b>${esc(s.descripcion)}</b>${s.horario ? `<span>Horario</span><b>${esc(s.horario)}</b>` : ''}${!esT ? `<span>A domicilio</span><b>${s.domicilio ? 'Sí' : 'No'}</b>` : ''}${s.direccion ? `<span>Dirección</span><b>${esc(s.direccion)}</b>` : ''}${s.recomienda ? `<span>Recomendado por</span><b>${esc(s.recomienda)}</b>` : ''}${esT ? `<span>¿Vive aquí?</span><b>${s.vive ? '🏠 Sí · ' + esc(s.viveTxt || '') : '🚪 No, viene de afuera'}</b>` : ''}<span>Enviado</span><b>${fFecha(String(s.fecha).slice(0, 10))} · ${hora(s.fecha)}</b></div>`;
     if (s.estado === 'pendiente') h += `<a class="btn ghost block" href="https://wa.me/${waNum(s.tel)}" target="_blank" rel="noopener">${ic('chat', 18)} Escribirle por WhatsApp</a>
       <form onsubmit="aprobarProv(event,'${s.id}')" style="margin-top:14px"><h3 style="margin-top:6px">Datos de acceso</h3><div class="two"><label class="f">Usuario<input name="user" required autocapitalize="none" value="${esc(sugerirUsuario(s))}"></label><label class="f">Clave<input name="pass" required minlength="6" value="${genClave()}"></label></div>
-      ${esT ? `<label class="pv-chk"><input type="checkbox" name="dir" checked><span>Agregar a <b>Servicios de confianza</b> del directorio</span></label>` : ''}
+      ${esT ? `<h3>Ingreso a la residencial</h3><div class="sv-franja"><label><input type="radio" name="vive" value="no" ${s.vive ? '' : 'checked'}><span>Viene de afuera<small>Código de ingreso en cada cita</small></span></label><label><input type="radio" name="vive" value="si" ${s.vive ? 'checked' : ''}><span>Vive en la residencial<small>Sin código</small></span></label></div>
+      <label class="f">Casa donde vive (si vive aquí)<select name="viveCasa"><option value="">—</option>${DB.casas.slice().sort((a, b) => String(a.numero).localeCompare(String(b.numero), 'es', { numeric: true })).map(c => `<option value="${c.id}" ${casaVive(s) === c.id ? 'selected' : ''}>${casaNom(c.id)}${c.pasaje ? ' · ' + esc(c.pasaje) : ''}</option>`).join('')}</select></label>
+      <label class="pv-chk"><input type="checkbox" name="dir" checked><span>Agregar a <b>Servicios de confianza</b> del directorio</span></label>` : ''}
       <div class="btns" style="margin-top:14px"><button class="btn ok">Aprobar y crear usuario</button><button type="button" class="btn bad" onclick="rechazarProv('${s.id}')">Rechazar</button></div></form>`;
     else if (s.estado === 'aprobada') h += `<p class="note">Aprobado el ${fFecha(String(s.aprobada || s.fecha).slice(0, 10))}. Usuario: <b>${esc(s.user || '')}</b></p>`;
     else h += `<p class="note">Rechazado: ${esc(s.motivo || '')}</p>`;
     sheet(esT ? 'Técnico' : 'Tienda', h);
   };
 
+  const casaVive = s => { const n = String(s.viveTxt || '').replace(/\D/g, ''); if (!s.vive || !n) return ''; const c = DB.casas.find(c => String(c.numero).replace(/\D/g, '') === n); return c ? c.id : ''; };
   window.aprobarProv = function (e, id) {
     e.preventDefault(); const f = new FormData(e.target); const s = provDB().find(x => x.id === id); if (!s || s.estado !== 'pendiente') return;
     const un = String(f.get('user') || '').trim().toLowerCase(); const pw = String(f.get('pass') || '').trim();
@@ -4454,12 +4460,14 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
     if (DB.usuarios.some(u => String(u.user).toLowerCase() === un)) return toast('Ese usuario ya existe');
     if (pw.length < 6) return toast('La clave debe tener al menos 6 caracteres');
     const esT = s.tipo === 'tecnico';
+    const viveCasa = esT && f.get('vive') === 'si' ? String(f.get('viveCasa') || '') : '';
+    if (esT && f.get('vive') === 'si' && !viveCasa) return toast('Elige la casa donde vive');
     const ini = (s.negocio || s.nombre).split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase();
     let logo = s.foto || null; try { if (!logo && typeof genLogo === 'function') logo = genLogo(ini || 'GW', esT ? '#c2410c' : '#6d28d9'); } catch (x) { }
     const u = { id: 'u_' + uid(), rol: esT ? 'profesional' : 'vendedor', nombre: s.nombre, user: un, pass: pw, tel: s.tel, dui: s.dui, email: s.email || '', activo: true, casaId: '',
       negocio: s.negocio || (s.oficio + ' · ' + s.nombre.split(' ')[0]), categoria: esT ? 'Servicios' : (s.categoria || 'Otro'), descripcion: s.descripcion, horario: s.horario,
       domicilio: !!s.domicilio, retiro: !esT, envio: 0, direccion: s.direccion || '', logo, proveedor: s.tipo, oficio: s.oficio || '', provId: s.id };
-    if (esT) Object.assign(u, { zona: '', disponible: true, retiro: false, domicilio: true });
+    if (esT) Object.assign(u, { zona: '', disponible: true, retiro: false, domicilio: true, viveCasa });
     DB.usuarios.push(u);
     // al profesional se le crea su primer servicio con lo que describió (lo puede editar)
     if (esT) { DB.servicios = DB.servicios || []; DB.servicios.push({ id: 'ps' + uid(), proId: u.id, nombre: 'Servicio de ' + String(s.oficio || 'mantenimiento').toLowerCase(), descripcion: s.descripcion || '', precioTipo: 'cotizar', precio: '', duracion: '', activo: true }); }
@@ -4830,6 +4838,11 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
   const citaL = s => s.cita ? `${fFecha(s.cita.fecha)} · ${s.cita.hora}` : '';
   const waNum = t => { let d = String(t || '').replace(/\D/g, ''); if (d.length === 8) d = '503' + d; return d; };
   const hecho = pid => solDB().filter(s => s.proId === pid && s.estado === 'finalizado').length;
+  // ¿El profesional vive dentro de la residencial? (no necesita código de ingreso)
+  const interno = p => !!(p && p.viveCasa);
+  const viveL = p => interno(p) ? 'Vive en ' + casaNom(p.viveCasa) : 'Viene de afuera';
+  const vigilantes = () => DB.usuarios.filter(u => u.rol === 'vigilante' && u.activo).map(u => u.id);
+  window.proInterno6 = interno;
   function paso(s, e, por, nota) { s.estado = e; (s.hist = s.hist || []).push({ e, f: nowISO(), por, nota: nota || '' }); }
 
   /* ================= RESIDENTE: buscar y pedir ================= */
@@ -4849,7 +4862,7 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
   function proCard(p) {
     const sv = serviciosDe(p.id); const desde = sv.filter(s => s.precioTipo !== 'cotizar' && +s.precio > 0).map(s => +s.precio);
     return `<button class="sv-pro" onclick="go('pro','${p.id}')">${avPro(p)}<span class="grow"><b class="sv-n">${esc(p.negocio || p.nombre)}</b><span class="sv-o">${esc(p.oficio || 'Servicios')}${p.zona ? ' · ' + esc(p.zona) : ''}</span>${rateLine('pro', p.id, false)}
-      <span class="sv-tags">${p.disponible === false ? '<span class="off">No disponible por ahora</span>' : '<span>Disponible</span>'}${hecho(p.id) ? `<span>${hecho(p.id)} trabajo(s) aquí</span>` : ''}${desde.length ? `<span>Desde ${money(Math.min(...desde))}</span>` : ''}${sv.length ? `<span>${sv.length} servicio(s)</span>` : ''}</span></span>${ic('chev', 20)}</button>`;
+      <span class="sv-tags">${p.disponible === false ? '<span class="off">No disponible por ahora</span>' : '<span>Disponible</span>'}${interno(p) ? '<span>🏠 Vecino de la residencial</span>' : ''}${hecho(p.id) ? `<span>${hecho(p.id)} trabajo(s) aquí</span>` : ''}${desde.length ? `<span>Desde ${money(Math.min(...desde))}</span>` : ''}${sv.length ? `<span>${sv.length} servicio(s)</span>` : ''}</span></span>${ic('chev', 20)}</button>`;
   }
   function vPro() {
     const p = pro(S.sub); if (!p) return empty('No encontrado');
@@ -4922,8 +4935,9 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
     let h = `<div class="row" style="gap:12px;margin-bottom:12px">${avPro(p, 52)}<div class="grow"><b style="font-size:18px">${esc(s.servicioNombre)}</b><div class="sm muted">${yoPro ? casaNom(s.casaId) + ' · ' + esc(s.residenteNombre || '') : esc(p.negocio || p.nombre)}</div></div>${chip(el, ec)}</div>${pasos(s)}`;
     if (s.estado === 'rechazado') h += alertBox('bad', 'El profesional no puede tomar este trabajo', s.motivo || '');
     if (s.estado === 'cancelado') h += alertBox('info', 'Solicitud cancelada', s.motivo || '');
-    if (s.estado === 'aceptado' && yoRes) h += alertBox('warn', `Propone venir el ${citaL(s)}`, `${s.precioEst ? 'Precio estimado: ' + money(+s.precioEst) + '. ' : ''}Si te conviene, confirma la cita: se creará el pase de acceso para portería.`);
-    if (s.pin && ['confirmado', 'en_camino'].includes(s.estado)) h += `<div class="sv-pin"><span><b class="sm" style="letter-spacing:0;font-size:14px;color:var(--text)">PIN para portería</b><br><span class="sm muted">${yoPro ? 'Preséntalo con tu DUI al llegar' : 'Ya está en su pase'}</span></span><b>${esc(s.pin)}</b></div>`;
+    if (s.estado === 'aceptado' && yoRes) h += alertBox('warn', `Propone venir el ${citaL(s)}`, `${s.precioEst ? 'Precio estimado: ' + money(+s.precioEst) + '. ' : ''}Si te conviene, confirma la cita${interno(p) ? '. Vive en la residencial, no necesita código de ingreso.' : ': se creará el código de ingreso y portería lo verá automáticamente.'}`);
+    if (s.pin && ['confirmado', 'en_camino'].includes(s.estado)) h += `<div class="sv-pin"><span><b class="sm" style="letter-spacing:0;font-size:14px;color:var(--text)">Código de ingreso</b><br><span class="sm muted">${yoPro ? 'Dilo en portería y muestra tu DUI' : 'Portería ya lo tiene registrado'}</span></span><b>${esc(s.pin)}</b></div>`;
+    if (s.sinPase && ['confirmado', 'en_camino', 'en_proceso'].includes(s.estado)) h += alertBox('info', 'No necesita código de ingreso', `${yoPro ? 'Vives' : 'Vive'} en ${casaNom(s.sinPase)}, ya está dentro de la residencial.`);
     h += `<div class="card kv"><span>Necesita</span><b style="white-space:pre-wrap">${esc(s.detalle)}</b><span>Prefiere</span><b>${fFecha(s.fechaPref)} · ${franjaL(s.franja)}</b>${s.cita ? `<span>Cita</span><b>${citaL(s)}</b>` : ''}${s.precioRef ? `<span>Precio de lista</span><b>${esc(s.precioRef)}</b>` : ''}${s.precioEst ? `<span>Estimado</span><b>${money(+s.precioEst)}</b>` : ''}${s.precioFinal ? `<span>Cobrado</span><b>${money(+s.precioFinal)}</b>` : ''}${s.notaPro ? `<span>Nota</span><b>${esc(s.notaPro)}</b>` : ''}${yoPro ? `<span>Dirección</span><b>${casaNom(s.casaId)}${(casa(s.casaId) || {}).pasaje ? ' · ' + esc(casa(s.casaId).pasaje) : ''}</b>` : ''}</div>`;
     if (s.foto && s.foto.data) h += `<img src="${s.foto.data}" alt="Foto" style="width:100%;max-height:240px;object-fit:cover;border-radius:16px;margin:4px 0 10px" onclick="verArchivo(sol6('${s.id}').foto,'Foto')">`;
     // acciones
@@ -4993,11 +5007,17 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
   /* ---------- Acciones del residente ---------- */
   window.confirmarSol = function (id) {
     const s = sol(id); if (!s) return; const p = pro(s.proId) || {};
+    if (interno(p)) {
+      s.sinPase = p.viveCasa; paso(s, 'confirmado', S.user.nombre, 'Vive en la residencial · no necesita código de ingreso');
+      notificar([s.proId], '📅 Cita confirmada', `${casaNom(s.casaId)} confirmó el ${citaL(s)}.`, { tab: 'solicitudes' });
+      save(); closeSheet(); render(); verSol(id); toast('Cita confirmada'); return;
+    }
     const pase = { id: uid(), casaId: s.casaId, creadoPor: S.user.id, tipo: 'personal', nombre: p.nombre || 'Profesional', dui: p.dui || '', detalle: `${p.oficio || 'Servicio'} · ${s.servicioNombre}`, placa: '', horario: 'Desde las ' + s.cita.hora,
-      desde: s.cita.fecha, hasta: s.cita.fecha, pin: genPin(), porton: portonDe('personal'), estado: 'activo', ingresos: [], servSolId: s.id };
+      desde: s.cita.fecha, hasta: s.cita.fecha, pin: genPin(), porton: portonDe('personal'), estado: 'activo', ingresos: [], servSolId: s.id, servicio: true, oficio: p.oficio || '', citaHora: s.cita.hora, tel: p.tel || '' };
     DB.pases.push(pase); s.paseId = pase.id; s.pin = pase.pin; paso(s, 'confirmado', S.user.nombre);
-    notificar([s.proId], '📅 Cita confirmada', `${casaNom(s.casaId)} confirmó el ${citaL(s)}. Tu PIN para portería es ${pase.pin}.`, { tab: 'solicitudes' });
-    save(); closeSheet(); render(); verSol(id); toast('Cita confirmada · pase creado');
+    notificar([s.proId], '📅 Cita confirmada', `${casaNom(s.casaId)} confirmó el ${citaL(s)}. Tu código de ingreso para portería es ${pase.pin}.`, { tab: 'solicitudes' });
+    try { const vg = vigilantes(); if (vg.length) notificar(vg, '🔧 Ingreso programado: ' + pase.nombre, `${p.oficio || 'Servicio'} para ${casaNom(s.casaId)} · ${citaL(s)}. Código ${pase.pin}.`, { tab: 'inicio' }); } catch (x) { }
+    save(); closeSheet(); render(); verSol(id); toast('Cita confirmada · portería ya tiene el código');
   };
   window.otraHora = function (id) {
     pedirTexto('Pedir otra hora', '¿Qué día u hora te conviene?', 'Mejor el sábado en la mañana', m => {
@@ -5067,6 +5087,7 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
       <label class="f">Sobre tu trabajo<textarea name="descripcion">${esc(u.descripcion || '')}</textarea></label>
       <div class="two"><label class="f">Horario<input name="horario" value="${esc(u.horario || '')}"></label><label class="f">Zona<input name="zona" value="${esc(u.zona || '')}" placeholder="Ej. Toda la residencial"></label></div>
       <label class="f">Teléfono (WhatsApp)<input name="tel" value="${esc(u.tel || '')}" inputmode="tel"></label><button class="btn block">Guardar</button></form>
+      <div class="card kv"><span>Ingreso</span><b>${interno(u) ? '🏠 ' + viveL(u) + ': no necesitas código' : '🚪 Vienes de afuera: con cada cita confirmada recibes un código para portería'}</b></div><p class="note">Si esto no es correcto, pídele a la administración que lo cambie.</p>
       <button class="btn ghost block" onclick="verResenas('pro','${u.id}')">${ic('star', 18)}<span class="b-tx">Ver mis opiniones</span></button>`;
   }
   window.guardarPerfilPro = function (e) {
@@ -5101,11 +5122,43 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
     S.asv = S.asv || 'activas'; const L = solDB().slice().sort((a, b) => String(b.creado).localeCompare(String(a.creado)));
     const g = { activas: L.filter(s => ACTIVOS.includes(s.estado)), terminadas: L.filter(s => s.estado === 'finalizado'), otras: L.filter(s => ['rechazado', 'cancelado'].includes(s.estado)) };
     return `<h2>Servicios a domicilio</h2><div class="kpis">${kpi('Profesionales', pros().length, "")}${kpi('En curso', g.activas.length, "S.asv='activas';render()")}${kpi('Terminados', g.terminadas.length, "S.asv='terminadas';render()")}</div>
-      <h3>Profesionales</h3>${pros().map(p => `<button class="item" onclick="verResenas('pro','${p.id}')">${avPro(p, 44)}<div class="grow"><b>${esc(p.negocio || p.nombre)}</b><div class="sm muted">${esc(p.oficio || '')} · ${hecho(p.id)} terminado(s)</div>${rateLine('pro', p.id, false)}</div>${p.disponible === false ? chip('No disponible', 'mut') : chip('Disponible', 'ok')}</button>`).join('') || empty('Aún no hay profesionales. Invítalos con el link de registro.')}
+      <h3>Profesionales</h3>${pros().map(p => `<button class="item" onclick="verResenas('pro','${p.id}')">${avPro(p, 44)}<div class="grow"><b>${esc(p.negocio || p.nombre)}</b><div class="sm muted">${esc(p.oficio || '')} · ${hecho(p.id)} terminado(s)</div><div class="sm">${interno(p) ? '🏠 ' + viveL(p) + ' · sin código' : '🚪 Viene de afuera · con código de ingreso'}</div>${rateLine('pro', p.id, false)}</div>${p.disponible === false ? chip('No disponible', 'mut') : chip('Disponible', 'ok')}</button><button class="btn ghost smb" style="margin:-4px 0 10px auto;display:flex" onclick="ubicPro('${p.id}')">${ic('home', 16)}<span class="b-tx">¿Dónde vive?</span></button>`).join('') || empty('Aún no hay profesionales. Invítalos con el link de registro.')}
       <button class="btn ghost block" onclick="go('proveedores')">${ic('userplus', 18)}<span class="b-tx">Link de registro de técnicos y tiendas</span></button>
       <h3>Solicitudes</h3>${seg('asv', [['activas', `En curso (${g.activas.length})`], ['terminadas', `Terminadas (${g.terminadas.length})`], ['otras', 'Canceladas']])}${g[S.asv].map(s => { const p = pro(s.proId) || {}; const [el, ec] = EST[s.estado] || [s.estado]; return `<div class="item"><div class="grow"><b>${esc(s.servicioNombre)}</b><div class="sm muted">${casaNom(s.casaId)} · ${esc(p.negocio || p.nombre || '')}${s.cita ? ' · ' + citaL(s) : ''}</div></div>${chip(el, ec)}</div>`; }).join('') || empty('Sin solicitudes')}`;
   }
   
+  window.ubicPro = function (id) {
+    const p = pro(id); if (!p) return; const cs = DB.casas.slice().sort((a, b) => String(a.numero).localeCompare(String(b.numero), 'es', { numeric: true }));
+    sheet('¿Dónde vive?', `<p class="note" style="margin-top:0"><b>${esc(p.negocio || p.nombre)}</b>. Si viene de afuera, cada cita confirmada crea un código de ingreso que portería ve automáticamente. Si vive en la residencial, no lo necesita.</p>
+      <form onsubmit="ubicProOk(event,'${id}')"><div class="sv-franja"><label><input type="radio" name="u" value="fuera" ${interno(p) ? '' : 'checked'}><span>Viene de afuera<small>Con código de ingreso</small></span></label><label><input type="radio" name="u" value="dentro" ${interno(p) ? 'checked' : ''}><span>Vive en la residencial<small>Sin código</small></span></label></div>
+      <label class="f">Casa donde vive<select name="casa"><option value="">Elige la casa</option>${cs.map(c => `<option value="${c.id}" ${p.viveCasa === c.id ? 'selected' : ''}>${casaNom(c.id)}${c.pasaje ? ' · ' + esc(c.pasaje) : ''}</option>`).join('')}</select></label>
+      <button class="btn block big-ok">Guardar</button></form>`);
+  };
+  window.ubicProOk = function (e, id) {
+    e.preventDefault(); const f = new FormData(e.target); const p = pro(id); if (!p) return;
+    if (f.get('u') === 'dentro') { if (!f.get('casa')) return toast('Elige la casa donde vive'); p.viveCasa = f.get('casa'); } else p.viveCasa = '';
+    save(); closeSheet(); render(); toast(p.viveCasa ? 'Listo: no necesitará código de ingreso' : 'Listo: recibirá código de ingreso en cada cita');
+  };
+
+  /* ---------- Portería: servicios a domicilio con código ---------- */
+  if (typeof paseItemVig === 'function') {
+    const bp = paseItemVig;
+    paseItemVig = function (p) { let h = bp.apply(this, arguments); if (p && p.servSolId) h = h.replace('</div><div class="sm">🚪', `</div><div class="sm" style="color:var(--brand,#c2410c);font-weight:700">🔧 Servicio a domicilio${p.citaHora ? ' · llega ' + esc(p.citaHora) : ''}</div><div class="sm">🚪`); return h; };
+  }
+  if (typeof verPaseVig === 'function') {
+    const bv = verPaseVig;
+    verPaseVig = function (id) { bv.apply(this, arguments); const p = DB.pases.find(x => x.id === id); if (!p || !p.servSolId) return; const kv = document.querySelector('#ov .card.kv'); if (kv) kv.insertAdjacentHTML('afterbegin', `<span>Servicio</span><b>🔧 ${esc(p.detalle || 'Servicio a domicilio')}${p.citaHora ? ' · cita ' + esc(p.citaHora) : ''}</b>${p.tel ? `<span>Teléfono</span><b><a href="tel:${esc(p.tel)}">${esc(p.tel)}</a></b>` : ''}`); };
+  }
+  if (VIEWS.vigilante && VIEWS.vigilante.inicio) {
+    const bvi = VIEWS.vigilante.inicio;
+    VIEWS.vigilante.inicio = function () {
+      let h = bvi.apply(this, arguments);
+      const hoy = ymd(); const L = DB.pases.filter(p => p.servSolId && p.estado === 'activo' && p.desde > hoy).sort((a, b) => String(a.desde + (a.citaHora || '')).localeCompare(String(b.desde + (b.citaHora || '')))).slice(0, 10);
+      if (L.length) h += `<h3>Servicios programados próximos días (${L.length})</h3>` + L.map(p => `<button class="item" onclick="verPaseVig('${p.id}')">${tAv(p.tipo)}<div class="grow"><b>${esc(p.nombre)}</b> <span class="sm muted">· ${casaNom(p.casaId)}</span><div class="sm muted">🔧 ${esc(p.detalle || '')}</div><div class="sm">📅 ${fFecha(p.desde)}${p.citaHora ? ' · ' + esc(p.citaHora) : ''} · Código ${esc(p.pin)}</div></div>${chip('Programado', 'info')}</button>`).join('');
+      return h;
+    };
+  }
+
   if (VIEWS.admin) {
     VIEWS.admin.servicios = vAdmServicios;
     const bm = VIEWS.admin.mas; if (bm) VIEWS.admin.mas = function () { const h = bm.apply(this, arguments); const it = menuItem('tool', 'Servicios a domicilio', "go('servicios')"); const i = h.indexOf('<h3>Sesión</h3>'); return i >= 0 ? h.slice(0, i) + it + h.slice(i) : h + it; };
@@ -5165,7 +5218,7 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
       { id: 'u_pro2', nombre: 'Ernesto Valle', user: 'electricista', oficio: 'Electricista', negocio: 'Electro Valle', tel: '7234-5678', dui: '03456789-2', c: '#ca8a04', horario: 'Lun–Vie 8:00–18:00 · emergencias 24 h', descripcion: 'Instalaciones eléctricas, cortocircuitos, lámparas, tomacorrientes y revisión de breakers. Electricista certificado.' },
       { id: 'u_pro3', nombre: 'Marta Alas', user: 'jardinera', oficio: 'Jardinero', negocio: 'Jardines Verdes', tel: '7345-6789', dui: '05678901-3', c: '#15803d', horario: 'Mar–Dom 6:00–14:00', descripcion: 'Corte de grama, poda de árboles, diseño de jardines y fumigación ecológica.' },
     ];
-    P.forEach(p => d.usuarios.push({ id: p.id, rol: 'profesional', nombre: p.nombre, user: p.user, pass: '1234', tel: p.tel, dui: p.dui, activo: true, casaId: '', oficio: p.oficio, negocio: p.negocio, descripcion: p.descripcion, horario: p.horario, zona: 'Toda la residencial', disponible: true, logo: logo(p.negocio.split(' ').map(w => w[0]).join('').slice(0, 2), p.c), proveedor: 'tecnico' }));
+    P.forEach(p => d.usuarios.push({ id: p.id, rol: 'profesional', nombre: p.nombre, user: p.user, pass: '1234', tel: p.tel, dui: p.dui, activo: true, casaId: '', oficio: p.oficio, negocio: p.negocio, descripcion: p.descripcion, horario: p.horario, zona: 'Toda la residencial', disponible: true, logo: logo(p.negocio.split(' ').map(w => w[0]).join('').slice(0, 2), p.c), proveedor: 'tecnico', viveCasa: p.id === 'u_pro3' ? ((d.casas.find(c => c.id === 'c7') || d.casas[d.casas.length - 1] || {}).id || '') : '' }));
     d.servicios = (d.servicios || []).concat([
       ['u_pro1', 'Reparación de fugas', 'Lavamanos, inodoros, duchas y tuberías visibles.', 'desde', 15, '1 a 2 horas'],
       ['u_pro1', 'Destape de cañerías', 'Con equipo de presión, sin romper.', 'fijo', 25, '1 hora'],
@@ -5200,7 +5253,7 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
     d.servSol = (d.servSol || []).concat(sols);
     // pase de acceso de la cita confirmada de hoy
     const s3 = sols[2]; d.pases = d.pases || [];
-    d.pases.push({ id: 'p_sv3', casaId: 'c4', creadoPor: s3.residenteId, tipo: 'personal', nombre: 'Ernesto Valle', dui: '03456789-2', detalle: 'Electricista · ' + s3.servicioNombre, placa: 'P 123-456', horario: 'Desde las 14:00', desde: hoy(), hasta: hoy(), pin: '482615', porton: '', estado: 'activo', ingresos: [], servSolId: s3.id });
+    d.pases.push({ id: 'p_sv3', casaId: 'c4', creadoPor: s3.residenteId, tipo: 'personal', nombre: 'Ernesto Valle', dui: '03456789-2', detalle: 'Electricista · ' + s3.servicioNombre, placa: 'P 123-456', horario: 'Desde las 14:00', desde: hoy(), hasta: hoy(), pin: '482615', porton: '', estado: 'activo', ingresos: [], servSolId: s3.id, servicio: true, oficio: 'Electricista', citaHora: '14:00', tel: '7234-5678' });
     s3.paseId = 'p_sv3';
     d.resenas = d.resenas || [];
     [['u_pro3', 'c5', 5, 'Dejó el jardín impecable y recogió todo. Muy puntual.', 6], ['u_pro1', 'c6', 4, 'Buen trabajo con el calentador, llegó 20 minutos tarde pero avisó.', 19], ['u_pro1', 'c9', 5, 'Resolvió la fuga rápido y cobró lo acordado.', 40], ['u_pro2', 'c10', 5, 'Muy profesional, explicó todo lo que hizo.', 30]]
@@ -5223,6 +5276,8 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
   load = function () {
     const r = lb.apply(this, arguments);
     try { if (RES === 'r1' && DB && !DB.servSeed && DB.usuarios.some(u => u.id === 'u_admin')) { sembrar(DB); save(); } } catch (e) { }
+    // demo ya cargada antes: la jardinera vive en la residencial (ejemplo de profesional sin código)
+    try { if (RES === 'r1' && DB && DB.servSeed && !DB.viveSeed) { const j = DB.usuarios.find(u => u.id === 'u_pro3'); if (j && !j.viveCasa) j.viveCasa = (DB.casas.find(c => c.id === 'c7') || DB.casas[DB.casas.length - 1] || {}).id || ''; const ps = DB.pases.find(x => x.id === 'p_sv3'); if (ps) Object.assign(ps, { servicio: true, citaHora: ps.citaHora || '14:00', oficio: 'Electricista' }); DB.viveSeed = true; save(); } } catch (e) { }
     return r;
   };
 
