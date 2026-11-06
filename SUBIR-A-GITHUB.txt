@@ -1,4 +1,4 @@
-GATEWISE · CÓMO SUBIRLA A GITHUB (versión 2026.11.05-25)
+GATEWISE · CÓMO SUBIRLA A GITHUB (versión 2026.11.05-33)
 =======================================================
 
 La carpeta "gatewise-github" tiene TODO lo necesario, sin subcarpetas:
@@ -23,7 +23,7 @@ PASOS
 6. Espera 1 o 2 minutos y abre tu página.
    Si todavía ves la versión anterior: Menú › "Buscar actualización",
    o cierra y vuelve a abrir la app.
-   Abajo de la pantalla de ingreso debe decir: versión 2026.11.05-25.
+   Abajo de la pantalla de ingreso debe decir: versión 2026.11.05-33.
 
 SI ALGO NO SE VE BIEN
 - Si quedaron en el repositorio carpetas viejas "css" o "js", o un "prod.js" suelto,
