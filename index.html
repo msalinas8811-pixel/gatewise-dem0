@@ -651,6 +651,20 @@ body.rol-vecino .chk input[type=checkbox]{width:24px;height:24px}
 .pv-falta-l span{font-size:12.5px;font-weight:650;padding:4px 10px;border-radius:999px;background:var(--card);color:var(--text);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--warn) 35%,var(--line))}
 .pv-falta p{margin:8px 0 0;font-size:13.5px;color:var(--muted);line-height:1.45}
 
+/* ---------- Acceso de técnicos y tiendas aprobados (32-acceso-proveedores.js) ---------- */
+.ap-est{display:flex;gap:12px;align-items:center;padding:14px 16px;border-radius:16px;margin:0 0 12px;border:1px solid var(--line)}
+.ap-est.on{background:color-mix(in srgb,var(--ok) 9%,transparent);border-color:color-mix(in srgb,var(--ok) 28%,transparent)}
+.ap-est.off{background:color-mix(in srgb,var(--bad) 8%,transparent);border-color:color-mix(in srgb,var(--bad) 26%,transparent)}
+.ap-est-ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;flex:none;color:#fff;background:var(--ok)}
+.ap-est.off .ap-est-ic{background:var(--bad)}
+.ap-est b{display:block}.ap-est small{display:block;color:var(--muted);margin-top:2px;line-height:1.35}
+.ap-pass{display:flex;gap:8px;align-items:center}.ap-pass input{flex:1;min-width:0}.ap-pass .btn{flex:none;margin:0}
+.ap-res{display:flex;gap:10px;align-items:center;margin:6px 0 10px}
+.ap-fila{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin:-4px 0 12px}.ap-fila .btn{margin:0}
+.ap-col{display:flex;flex-direction:column;gap:6px;align-items:flex-end;flex:none}
+.ap-off{opacity:.62}
+.ap-btn{margin-top:4px}
+
 </style>
 <style data-origen="css/respaldos.css">
 /* =====================================================================
@@ -2902,7 +2916,7 @@ Object.assign(I18N,{"Planes y precios":"Plans and prices","Precio mensual acorda
 
 
 /* ---------- Versión y actualización ---------- */
-const APP_VERSION='2026.11.05-35';
+const APP_VERSION='2026.11.06-36';
 async function buscarActualizacion(){toast('Buscando la versión más reciente…');try{if(navigator.serviceWorker){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}setTimeout(()=>{location.href=location.pathname+'?v='+Date.now()},400)}
 const versionHTML=()=>`<p class="note" style="text-align:center;margin-top:18px">GateWise · versión ${APP_VERSION} · <a href="#" onclick="buscarActualizacion();return false" style="color:var(--pri);font-weight:700">Buscar actualización</a></p>`;
 try{if(navigator.serviceWorker){navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!window.__gwRecargado){window.__gwRecargado=1;if(!S.user||!document.querySelector('#ov'))location.reload()}})}}catch(e){}
@@ -4725,7 +4739,9 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
     if (bt) VIEWS.admin.tienda = function () {
       const h = bt.apply(this, arguments);
       const a = alertBox('info', 'Link de registro para tiendas y técnicos', 'Compártelo y aprueba a quienes se registren.', "go('proveedores')");
-      const k = h.indexOf('</h2>'); return k >= 0 ? h.slice(0, k + 5) + a + h.slice(k + 5) : a + h;
+      // después de la fila del título (no dentro de ella)
+      const k = h.indexOf('</h2>'); const j = k >= 0 ? h.indexOf('</div>', k) : -1;
+      return j >= 0 ? h.slice(0, j + 6) + a + h.slice(j + 6) : a + h;
     };
   }
   if (typeof ICOL !== 'undefined') ICOL.userplus = ICOL.userplus || 'blue';
@@ -5905,6 +5921,167 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
   };
   // compatibilidad con el botón anterior
   if (typeof verSolv === 'function') verSolv = function (id) { verDocDir(id, 'solv'); };
+})();
+
+</script>
+<script data-origen="js/app/32-acceso-proveedores.js">
+/* =========================================================
+   ACCESO DE TÉCNICOS Y TIENDAS YA APROBADOS
+   - La administración puede desactivar (y volver a activar) a un técnico,
+     profesional o tienda que ya está de alta, y cambiarle el usuario y la
+     contraseña.
+   - Al desactivar: no puede entrar a la app, deja de aparecer para los
+     vecinos (servicios a domicilio, directorio y tienda), sus códigos de
+     ingreso pendientes se cancelan en portería y se avisa a las casas con
+     solicitudes en curso.
+   - Se abre desde: Técnicos y tiendas › Aprobadas, Servicios a domicilio,
+     Directorio › Servicios de confianza y Tienda › Vendedores.
+   - En producción los cambios viajan por la sincronización normal
+     (prod.js): la clave y el usuario se cambian en el servidor y, al
+     desactivar, la cuenta se bloquea y se cierra su sesión.
+   ========================================================= */
+(function () {
+  const ACT = ['solicitado', 'aceptado', 'confirmado', 'en_camino', 'en_proceso'];
+  const esProv = u => u && (u.rol === 'profesional' || u.rol === 'vendedor');
+  const nom = u => u.negocio || u.nombre || 'Proveedor';
+  const genClave = () => String(Math.floor(100000 + Math.random() * 900000));
+  const waNum = t => { let d = String(t || '').replace(/\D/g, ''); if (d.length === 8) d = '503' + d; return d; };
+  const entradas = u => ((DB.directorio && DB.directorio.servicios) || []).filter(s => s.userId === u.id || (u.provId && s.provId === u.provId));
+  const solicitud = u => (DB.provSolicitudes || []).find(s => s.userId === u.id || (u.provId && s.id === u.provId));
+  const enCurso = u => (DB.servSol || []).filter(s => s.proId === u.id && ACT.includes(s.estado));
+  const pasesPend = u => { const ids = new Set(enCurso(u).map(s => s.paseId).filter(Boolean)); return DB.pases.filter(p => p.estado === 'activo' && ids.has(p.id)); };
+
+  // ¿Este perfil del directorio tiene usuario en la app?
+  window.usuarioDeServ = function (dirId) {
+    const s = ((DB.directorio && DB.directorio.servicios) || []).find(x => x.id === dirId); if (!s) return null;
+    let u = s.userId && usuario(s.userId);
+    if (!u && s.provId) u = DB.usuarios.find(x => x.provId === s.provId);
+    return esProv(u) ? u : null;
+  };
+
+  window.accesoProv = function (id) {
+    const u = usuario(id); if (!esProv(u)) return toast('Este proveedor no tiene usuario en la app');
+    const esT = u.rol === 'profesional'; const on = u.activo !== false;
+    const n = esT ? enCurso(u).length : 0;
+    sheet('Acceso a la app', `<div class="row" style="margin-bottom:12px">${typeof logoNegocio === 'function' ? logoNegocio(u, 52) : '<div class="av">' + ic('user', 22) + '</div>'}<div class="grow"><b style="font-size:18px">${esc(nom(u))}</b><div class="sm muted">${esT ? esc(u.oficio || 'Servicio técnico') : 'Tienda · ' + esc(u.categoria || '')} · ${esc(u.nombre)}</div></div>${on ? chip('Activo', 'ok') : chip('Desactivado', 'bad')}</div>
+      <div class="ap-est ${on ? 'on' : 'off'}"><span class="ap-est-ic">${ic(on ? 'check' : 'lock', 22)}</span><div class="grow"><b>${on ? 'Puede entrar a la app' : 'No puede entrar a la app'}</b><small>${on ? (esT ? 'Los vecinos lo ven y le pueden pedir servicios.' : 'Los vecinos ven su tienda y le pueden hacer pedidos.') : 'No aparece para los vecinos. Puedes activarlo de nuevo cuando quieras.'}</small></div></div>
+      ${on ? `<button type="button" class="btn bad block" onclick="desactivarProv('${u.id}')">${ic('lock', 18)}<span class="b-tx">Desactivar</span></button>${esT && n ? `<p class="note" style="margin-top:6px">Tiene ${n} solicitud(es) en curso. Si lo desactivas, se cancelan y les avisamos a las casas.</p>` : ''}`
+        : `<button type="button" class="btn ok block" onclick="activarProv('${u.id}')">${ic('check', 18)}<span class="b-tx">Activar de nuevo</span></button>`}
+      <form onsubmit="guardarAccesoProv(event,'${u.id}')" style="margin-top:18px"><h3 style="margin-top:0">Usuario y contraseña</h3>
+        <label class="f">Usuario<input name="user" required autocapitalize="none" autocomplete="off" spellcheck="false" value="${esc(u.user || '')}"></label>
+        <label class="f">Nueva contraseña<div class="ap-pass"><input name="pass" id="apPass" minlength="6" autocomplete="new-password" placeholder="Opcional"><button type="button" class="btn ghost smb" onclick="document.getElementById('apPass').value='${genClave()}'">Generar</button></div></label>
+        <p class="note" style="margin-top:-4px">Déjala vacía si no quieres cambiarla. Mínimo 6 caracteres. Al guardar, puedes enviarle sus datos nuevos por WhatsApp.</p>
+        <button class="btn block big-ok">Guardar cambios</button></form>`);
+  };
+
+  window.guardarAccesoProv = function (e, id) {
+    e.preventDefault(); const u = usuario(id); if (!u) return; const f = new FormData(e.target);
+    const un = String(f.get('user') || '').trim().toLowerCase(); const pw = String(f.get('pass') || '').trim();
+    if (!/^[a-z0-9._-]{3,40}$/.test(un)) return toast('Usuario: solo letras, números, punto o guion (3 o más)');
+    const cambiaU = un !== String(u.user || '').toLowerCase();
+    if (cambiaU && DB.usuarios.some(x => x.id !== u.id && String(x.user || '').toLowerCase() === un)) return toast('Ese usuario ya existe');
+    if (pw && pw.length < 6) return toast('La contraseña debe tener al menos 6 caracteres');
+    if (!cambiaU && !pw) return toast('No hiciste cambios');
+    u.user = un; if (pw) u.pass = pw;
+    const s = solicitud(u); if (s) s.user = un;
+    save(); render();
+    const msg = `Hola ${String(u.nombre || '').split(' ')[0]} 👋 La administración de *${DB.residencial.nombre}* actualizó tus datos de acceso a GateWise.\n\nEntra aquí: ${location.origin + location.pathname.replace(/index\.html$/, '')}\nResidencial: ${DB.residencial.nombre}\nUsuario: ${un}${pw ? '\nClave: ' + pw : '\n(Tu clave no cambió)'}`;
+    window.AP_MSG = msg;
+    sheet('Datos actualizados', `<div class="b-conf" style="--b-c:var(--ok)"><div class="b-conf-ic">${ic('check', 26)}</div><p>Listo. <b>${esc(nom(u))}</b> ya entra con sus datos nuevos.</p></div>
+      <div class="pv-cred" style="margin-top:14px"><span>Usuario</span><b>${esc(un)}</b><span>Clave</span><b>${pw ? esc(pw) : 'Sin cambios'}</b></div>
+      ${u.tel ? `<a class="btn ok block big-ok" href="https://wa.me/${waNum(u.tel)}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">${ic('chat', 20)} Enviarle sus datos por WhatsApp</a>` : ''}
+      <button class="btn ghost block" onclick="navigator.clipboard&&navigator.clipboard.writeText(AP_MSG).then(()=>toast('Mensaje copiado'),()=>toast('No se pudo copiar'))">Copiar mensaje</button>`);
+  };
+
+  window.desactivarProv = function (id) {
+    const u = usuario(id); if (!u) return; const esT = u.rol === 'profesional';
+    confirmar('¿Desactivar a ' + nom(u) + '?', esT ? 'No podrá entrar a la app ni aparecerá para los vecinos. Sus códigos de ingreso pendientes dejan de funcionar en portería y las solicitudes en curso se cancelan.' : 'No podrá entrar a la app y su tienda dejará de aparecer para los vecinos.', 'Desactivar', () => {
+      u.activo = false; let nc = 0;
+      if (esT) {
+        pasesPend(u).forEach(p => { p.estado = 'cancelado'; });
+        const casas = new Set();
+        enCurso(u).forEach(s => { s.estado = 'cancelado'; (s.hist = s.hist || []).push({ e: 'cancelado', f: nowISO(), por: S.user.nombre, nota: 'La administración desactivó al profesional' }); casas.add(s.casaId); nc++; });
+        casas.forEach(c => { try { notificar(usuariosCasa(c), 'Servicio cancelado', `${nom(u)} ya no está disponible en la residencial. Puedes pedir el servicio a otro profesional.`, { tab: 'servicios' }); } catch (x) { } });
+      }
+      entradas(u).forEach(s => { s.activo = false; });
+      save(); render(); accesoProv(id);
+      toast(nc ? `Desactivado · se cancelaron ${nc} solicitud(es)` : 'Desactivado');
+    }, { no: 'Volver' });
+  };
+  window.activarProv = function (id) {
+    const u = usuario(id); if (!u) return; u.activo = true; entradas(u).forEach(s => { s.activo = true; });
+    save(); render(); accesoProv(id); toast('Activado: ya puede entrar y los vecinos lo ven');
+  };
+
+  /* ---------- Botones en las pantallas de la administración ---------- */
+  const btnAcceso = (uid, txt) => `<button type="button" class="btn ghost smb ap-btn" onclick="event.stopPropagation();accesoProv('${uid}')">${ic('key', 16)}<span class="b-tx">${txt || 'Acceso y contraseña'}</span></button>`;
+
+  // Técnicos y tiendas › Aprobadas
+  if (typeof verProv === 'function') {
+    const bv = verProv;
+    verProv = function (id) {
+      bv.apply(this, arguments);
+      const s = (DB.provSolicitudes || []).find(x => x.id === id); if (!s || s.estado !== 'aprobada' || !s.userId) return;
+      const u = usuario(s.userId); const box = document.querySelector('#ov .sheet-b, #ov .sheet-body, #ov .sheet') || document.querySelector('#ov'); if (!box || !u) return;
+      const nota = [...box.querySelectorAll('p.note')].find(p => /Aprobado el/.test(p.textContent));
+      const h = `<div class="ap-res">${u.activo !== false ? chip('Activo', 'ok') : chip('Desactivado', 'bad')}<span class="grow sm muted">${u.activo !== false ? 'Puede entrar a la app' : 'No puede entrar a la app'}</span></div>${btnAcceso(u.id, u.activo !== false ? 'Desactivar o cambiar usuario y contraseña' : 'Activar o cambiar usuario y contraseña')}`;
+      if (nota) nota.insertAdjacentHTML('afterend', h); else box.insertAdjacentHTML('beforeend', h);
+    };
+    window.verProv = verProv;
+  }
+  // En la lista de aprobadas, marcar a los desactivados
+  if (VIEWS.admin && VIEWS.admin.proveedores) {
+    const bp = VIEWS.admin.proveedores;
+    VIEWS.admin.proveedores = function () {
+      let h = bp.apply(this, arguments); if (S.pvseg !== 'aprobada') return h;
+      (DB.provSolicitudes || []).filter(s => s.estado === 'aprobada' && s.userId).forEach(s => { const u = usuario(s.userId); if (u && u.activo === false) h = h.replace(`<button class="item" onclick="verProv('${s.id}')">`, `<button class="item ap-off" onclick="verProv('${s.id}')">`); });
+      return h;
+    };
+  }
+
+  // Servicios a domicilio: botón de acceso y lista de desactivados
+  if (VIEWS.admin && VIEWS.admin.servicios) {
+    const bs = VIEWS.admin.servicios;
+    VIEWS.admin.servicios = function () {
+      let h = bs.apply(this, arguments);
+      DB.usuarios.filter(u => u.rol === 'profesional' && u.activo).forEach(u => {
+        const viejo = `<button class="btn ghost smb" style="margin:-4px 0 10px auto;display:flex" onclick="ubicPro('${u.id}')">`;
+        const k = h.indexOf(viejo); if (k < 0) return; const fin = h.indexOf('</button>', k) + 9;
+        h = h.slice(0, k) + `<div class="ap-fila">${btnAcceso(u.id, 'Acceso')}` + h.slice(k, fin).replace(viejo, `<button class="btn ghost smb" onclick="ubicPro('${u.id}')">`) + '</div>' + h.slice(fin);
+      });
+      const off = DB.usuarios.filter(u => u.rol === 'profesional' && u.activo === false);
+      if (off.length) {
+        const lista = `<h3>Desactivados (${off.length})</h3>` + off.map(u => `<button class="item ap-off" onclick="accesoProv('${u.id}')"><div class="av">${ic('lock', 20)}</div><div class="grow"><b>${esc(nom(u))}</b><div class="sm muted">${esc(u.oficio || '')} · usuario ${esc(u.user || '')}</div><div class="sm">No puede entrar ni aparece para los vecinos</div></div>${chip('Desactivado', 'bad')}</button>`).join('');
+        const k = h.indexOf(`<button class="btn ghost block" onclick="go('proveedores')">`);
+        h = k >= 0 ? h.slice(0, k) + lista + h.slice(k) : h + lista;
+      }
+      return h;
+    };
+  }
+
+  // Directorio › Servicios de confianza: botón en la tarjeta (solo administración)
+  if (typeof servCard === 'function') {
+    const bc = servCard;
+    servCard = function (s, adm) {
+      let h = bc.apply(this, arguments); if (!adm) return h;
+      const u = usuarioDeServ(s.id); if (!u) return h;
+      if (u.activo === false) h = h.replace('<div class="months">', `<div class="months">${chip('Usuario desactivado', 'bad')}`);
+      const k = h.lastIndexOf('</div></div>'); return k >= 0 ? h.slice(0, k) + btnAcceso(u.id, 'Acceso') + h.slice(k) : h;
+    };
+  }
+
+  // Tienda › Vendedores: el botón Desactivar abre la misma ventana (usuario y clave incluidos)
+  if (VIEWS.admin && VIEWS.admin.tienda) {
+    const bt = VIEWS.admin.tienda;
+    VIEWS.admin.tienda = function () {
+      let h = bt.apply(this, arguments);
+      DB.usuarios.filter(u => u.rol === 'vendedor').forEach(u => {
+        h = h.replace(`<button class="btn smb ${u.activo ? 'ghost' : 'sec'}" onclick="toggleUser('${u.id}')">${u.activo ? 'Desactivar' : 'Activar'}</button>`,
+          `<div class="ap-col">${u.activo ? '' : chip('Desactivado', 'bad')}<button class="btn smb ghost" onclick="accesoProv('${u.id}')">${ic('key', 14)} Acceso</button></div>`);
+      });
+      return h;
+    };
+  }
 })();
 
 </script>
