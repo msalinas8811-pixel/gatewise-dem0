@@ -2099,7 +2099,7 @@ function aplicarMarca(){const r=document.documentElement.style;const m=marcaActu
 function setThemeMeta(c){let t=document.querySelector('meta[name=theme-color]');if(!t){t=document.createElement('meta');t.name='theme-color';document.head.appendChild(t)}t.content=c}
 try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>aplicarMarca())}catch(e){}
 function leerLogo(file,max=360){return new Promise((res,rej)=>{if(!file||!file.size)return res(null);if(!file.type.startsWith('image/'))return rej(new Error('tipo'));const r=new FileReader();r.onload=()=>{const img=new Image();img.onload=()=>{const s=Math.min(1,max/Math.max(img.width,img.height));const w=Math.max(1,Math.round(img.width*s)),h=Math.max(1,Math.round(img.height*s));const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');x.drawImage(img,0,0,w,h);const png=c.toDataURL('image/png');
-    const j=document.createElement('canvas');j.width=w;j.height=h;const y=j.getContext('2d');y.fillStyle='#fff';y.fillRect(0,0,w,h);y.drawImage(img,0,0,w,h);res({tipo:'img',nombre:'logo.png',data:png.length<260000?png:c.toDataURL('image/jpeg',.85),jpg:j.toDataURL('image/jpeg',.88),w,h})};img.onerror=rej;img.src=r.result};r.onerror=rej;r.readAsDataURL(file)})}
+    const j=document.createElement('canvas');j.width=w;j.height=h;const y=j.getContext('2d');y.fillStyle='#fff';y.fillRect(0,0,w,h);y.drawImage(img,0,0,w,h);res({tipo:'img',nombre:'logo.png',data:png.length<70000?png:c.toDataURL('image/jpeg',.75),jpg:j.toDataURL('image/jpeg',.88),w,h})};img.onerror=rej;img.src=r.result};r.onerror=rej;r.readAsDataURL(file)})}
 function genLogo(ini,bg,fg='#fff'){const c=document.createElement('canvas');c.width=c.height=240;const x=c.getContext('2d');x.fillStyle=bg;x.beginPath();x.arc(120,120,120,0,7);x.fill();x.strokeStyle='rgba(255,255,255,.55)';x.lineWidth=8;x.beginPath();x.arc(120,120,100,0,7);x.stroke();x.fillStyle=fg;x.font='bold 92px sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(ini,120,128);
   const j=document.createElement('canvas');j.width=j.height=240;const y=j.getContext('2d');y.fillStyle='#fff';y.fillRect(0,0,240,240);y.drawImage(c,0,0);return{tipo:'img',nombre:'logo.png',data:c.toDataURL('image/png'),jpg:j.toDataURL('image/jpeg',.88),w:240,h:240}}
 const logoImg=(l,s=34,r='10px',extra='')=>l&&l.data?`<img src="${l.data}" alt="" style="width:${s}px;height:${s}px;border-radius:${r};object-fit:contain;background:#fff;flex:none;${extra}">`:'';
@@ -2809,7 +2809,7 @@ Object.assign(I18N,{"Planes y precios":"Plans and prices","Precio mensual acorda
 
 
 /* ---------- Versión y actualización ---------- */
-const APP_VERSION='2026.11.05-30';
+const APP_VERSION='2026.11.05-31';
 async function buscarActualizacion(){toast('Buscando la versión más reciente…');try{if(navigator.serviceWorker){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}setTimeout(()=>{location.href=location.pathname+'?v='+Date.now()},400)}
 const versionHTML=()=>`<p class="note" style="text-align:center;margin-top:18px">GateWise · versión ${APP_VERSION} · <a href="#" onclick="buscarActualizacion();return false" style="color:var(--pri);font-weight:700">Buscar actualización</a></p>`;
 try{if(navigator.serviceWorker){navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!window.__gwRecargado){window.__gwRecargado=1;if(!S.user||!document.querySelector('#ov'))location.reload()}})}}catch(e){}
@@ -4312,7 +4312,10 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
 
   /* ---------- ¿La residencial está recibiendo solicitudes? ---------- */
   async function consultarAbierto(rid) {
-    if (!PROD()) { const d = rid === RES ? DB : leerDB(rid); return d ? (d.config || {}).provAbierto !== false : false; }
+    if (!PROD()) {
+      if (typeof window.GW_ALTA_ABIERTO === 'function') { const v = await window.GW_ALTA_ABIERTO(rid); if (v !== null) return v; }
+      const d = rid === RES ? DB : leerDB(rid); return d ? (d.config || {}).provAbierto !== false : false;
+    }
     for (let i = 0; i < 40 && !(window.GW_PROD && GW_PROD.fs); i++) await new Promise(r => setTimeout(r, 150));
     try { const s = await GW_PROD.fs.doc('r/' + rid + '/publico/alta').get(); return s.exists && s.data().abierto === true; } catch (e) { return false; }
   }
@@ -4380,6 +4383,13 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
       oficio: esT ? g('oficio') : '', negocio: esT ? '' : g('negocio'), categoria: esT ? 'Servicios' : g('categoria'), domicilio: esT ? true : !!f.get('domicilio'), direccion: g('direccion'),
       foto: PV.foto || null, duiFoto: PV.duiFoto || null, fecha: nowISO(), estado: 'pendiente', vive: esT && f.get('vive') === 'si', viveTxt: esT && f.get('vive') === 'si' ? g('viveTxt') : '' };
     if (s.vive && !s.viveTxt) return toast('Escribe el número de tu casa');
+    // demo con nube: la solicitud viaja directo a la nube (llega desde cualquier teléfono)
+    if (!PROD() && typeof window.GW_ALTA_NUBE === 'function') {
+      const btn = e.target.querySelector('button:not([type=button])'); if (btn) btn.disabled = true;
+      const r = await window.GW_ALTA_NUBE(rid, s); if (btn) btn.disabled = false;
+      if (r === false) return toast('No se pudo enviar. Revisa tu internet e intenta de nuevo');
+      if (r === true) { PV.enviado = s; PV.foto = PV.duiFoto = null; render(); window.scrollTo(0, 0); return; }
+    }
     try {
       if (PROD()) {
         await GW_PROD.fs.doc('r/' + rid + '/provSolicitudes/' + s.id).set({ d: JSON.stringify(s), estado: 'pendiente', _t: firebase.firestore.FieldValue.serverTimestamp() });
@@ -5381,6 +5391,140 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
     'Cargar la demo': 'Load the demo', 'Qué incluye': "What's included", 'Empezar con datos reales': 'Start with real data', 'Borrar todo y empezar de cero': 'Delete everything and start over', 'Quitar solo la demo': 'Remove only the demo',
     'Borrar todo': 'Delete everything',
   });
+})();
+
+</script>
+<script data-origen="js/app/29-almacenamiento.js">
+/* =========================================================
+   ALMACENAMIENTO LIVIANO Y REGISTRO DE PROVEEDORES POR LA NUBE
+   1. Fotos y logos más livianos: todo lo que se sube se reduce (JPG/WebP) y
+      las imágenes pesadas que ya estaban guardadas se comprimen solas.
+   2. Si el teléfono se queda sin espacio, la app libera espacio sola
+      (comprime imágenes y borra copias de otras residenciales que ya
+      están en la nube) y vuelve a guardar, en vez de perder los cambios.
+   3. El formulario del link de registro (técnicos y tiendas) envía la
+      solicitud directo a la nube: llega a la administración desde
+      cualquier teléfono, aunque nunca haya abierto la app.
+   (En modo producción nada de esto aplica: usa Firestore.)
+   ========================================================= */
+(function () {
+  const PROD = () => window.GATEWISE_MODO === 'produccion';
+
+  /* ---------- Imágenes ---------- */
+  let WEBP = null;
+  const webpOk = () => { if (WEBP === null) { try { const c = document.createElement('canvas'); c.width = c.height = 2; WEBP = c.toDataURL('image/webp').startsWith('data:image/webp'); } catch (e) { WEBP = false; } } return WEBP; };
+  const cargarImg = src => new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; });
+  // Reduce una imagen (data:...) a un tamaño máximo; conserva transparencia si el navegador soporta WebP
+  async function reducir(data, max, q) {
+    const img = await cargarImg(data); const s = Math.min(1, max / Math.max(img.width, img.height));
+    const c = document.createElement('canvas'); c.width = Math.max(1, Math.round(img.width * s)); c.height = Math.max(1, Math.round(img.height * s));
+    const x = c.getContext('2d'); const alfa = /^data:image\/(png|webp|gif)/.test(data);
+    if (!(alfa && webpOk())) { x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); }
+    x.drawImage(img, 0, 0, c.width, c.height);
+    const out = alfa && webpOk() ? c.toDataURL('image/webp', q) : c.toDataURL('image/jpeg', q);
+    return out.length < data.length ? out : data;
+  }
+  window.reducirImagen = reducir;
+
+  // ¿Qué imágenes conviene reducir? (los comprobantes se dejan legibles)
+  const pesada = v => typeof v === 'string' && v.startsWith('data:image/') && (v.length > 160000 || (/^data:image\/png/.test(v) && v.length > 24000));
+  async function compactar(obj, lim) {
+    let n = 0, ahorro = 0; const vistos = new Set();
+    async function walk(o) {
+      if (!o || typeof o !== 'object' || vistos.has(o)) return; vistos.add(o);
+      for (const k of Object.keys(o)) {
+        const v = o[k];
+        if (pesada(v) || (lim && typeof v === 'string' && v.startsWith('data:image/') && v.length > lim)) {
+          try { const r = await reducir(v, v.length > 400000 ? 1100 : 900, .62); if (r.length < v.length) { ahorro += v.length - r.length; o[k] = r; n++; } } catch (e) { }
+        } else if (v && typeof v === 'object') await walk(v);
+      }
+    }
+    await walk(obj); return { n, ahorro };
+  }
+  window.compactarDatos = compactar;
+
+  // Logos generados: más chicos
+  if (typeof genLogo === 'function') {
+    genLogo = function (ini, bg, fg = '#fff') {
+      const T = 160, c = document.createElement('canvas'); c.width = c.height = T; const x = c.getContext('2d');
+      x.fillStyle = bg; x.beginPath(); x.arc(T / 2, T / 2, T / 2, 0, 7); x.fill(); x.strokeStyle = 'rgba(255,255,255,.55)'; x.lineWidth = 5; x.beginPath(); x.arc(T / 2, T / 2, T / 2 - 13, 0, 7); x.stroke();
+      x.fillStyle = fg; x.font = 'bold 62px sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(ini, T / 2, T / 2 + 5);
+      const j = document.createElement('canvas'); j.width = j.height = T; const y = j.getContext('2d'); y.fillStyle = '#fff'; y.fillRect(0, 0, T, T); y.drawImage(c, 0, 0);
+      return { tipo: 'img', nombre: 'logo.png', data: webpOk() ? c.toDataURL('image/webp', .9) : c.toDataURL('image/png'), jpg: j.toDataURL('image/jpeg', .72), w: T, h: T };
+    };
+  }
+
+  /* ---------- Guardar sin perder cambios cuando falta espacio ---------- */
+  const esCuota = e => e && (e.name === 'QuotaExceededError' || e.code === 22 || e.code === 1014 || /quota|exceed/i.test(String(e.message || e)));
+  function liberarCopias() {
+    // copias locales de otras residenciales: si hay nube, ya están allá y se vuelven a bajar al abrirlas
+    if (typeof NUBE === 'undefined' || !NUBE.on) return 0; let n = 0;
+    try { const pre = KEY + '_r_'; const ks = []; for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.startsWith(pre) && k !== dbKey(RES)) ks.push(k); } ks.forEach(k => { localStorage.removeItem(k); n++; }); } catch (e) { }
+    return n;
+  }
+  let arreglando = false;
+  const guardarLocal = () => localStorage.setItem(dbKey(RES), JSON.stringify(DB));
+  save = function () {
+    if (!DB || !RES) return;
+    try { guardarLocal(); }
+    catch (e) {
+      if (!esCuota(e)) { console.warn(e); }
+      else {
+        // 1) borrar copias de otras residenciales y reintentar
+        let ok = false; if (liberarCopias()) { try { guardarLocal(); ok = true; } catch (x) { } }
+        // 2) comprimir imágenes y reintentar
+        if (!ok && !arreglando) {
+          arreglando = true; const yo = DB;
+          compactar(DB, 60000).then(r => { arreglando = false; if (DB !== yo) return; try { guardarLocal(); if (r.n) toast('Liberamos espacio comprimiendo ' + r.n + ' foto(s)'); } catch (x) { avisoLleno(); } try { nubeRes(); } catch (x) { } });
+        } else if (!ok) { /* ya se está comprimiendo */ }
+      }
+    }
+    try { nubeRes(); } catch (e) { }
+  };
+  function avisoLleno() {
+    const nube = typeof NUBE !== 'undefined' && NUBE.on;
+    toast(nube ? 'Este teléfono está sin espacio. Tus cambios sí se guardaron en la nube.' : 'Este teléfono está sin espacio: borra fotos pesadas o haz un respaldo y restablece la demo');
+  }
+
+  // Compactar una vez lo que ya estaba guardado (logos y fotos pesadas de versiones anteriores)
+  const COMPACTO = 1;
+  const bl = load;
+  load = function () {
+    const r = bl.apply(this, arguments);
+    try {
+      if (!PROD() && DB && (DB.compacto || 0) < COMPACTO) {
+        const yo = DB; setTimeout(() => compactar(yo).then(x => { if (DB !== yo) return; DB.compacto = COMPACTO; if (x.n) console.info('GateWise: ' + x.n + ' imagen(es) comprimidas, ' + Math.round(x.ahorro / 1024) + ' KB liberados'); save(); }), 800);
+      }
+    } catch (e) { }
+    return r;
+  };
+
+  /* ---------- Registro de proveedores: directo a la nube ---------- */
+  const esperarNube = async ms => { if (typeof NUBE === 'undefined' || typeof cfgNube !== 'function' || !cfgNube()) return false; const t = Date.now(); while (!NUBE.on && Date.now() - t < ms && NUBE.estado !== 'error') await new Promise(r => setTimeout(r, 150)); return !!NUBE.on; };
+  const agregar = (ref, items, lim) => ref.transaction(cur => { let a = []; try { a = JSON.parse(cur || '[]') || []; } catch (e) { a = []; } if (!Array.isArray(a)) a = []; a.unshift(...items); if (lim && a.length > lim) a.length = lim; return JSON.stringify(a); });
+
+  // ¿el link está abierto? se consulta en la nube (sirve en un teléfono que nunca abrió la app)
+  window.GW_ALTA_ABIERTO = async function (rid) {
+    if (!(await esperarNube(6000))) return null;
+    try { const v = (await NUBE.db.ref('gw/r/' + rid + '/config').once('value')).val(); if (v === null) return null; const c = JSON.parse(v) || {}; return c.provAbierto !== false; } catch (e) { return null; }
+  };
+  // true = enviada a la nube · false = falló el envío · null = no hay nube (se guarda en el teléfono)
+  window.GW_ALTA_NUBE = async function (rid, sol) {
+    if (!(await esperarNube(6000))) return null;
+    try {
+      if (sol.duiFoto && sol.duiFoto.data && sol.duiFoto.data.length > 250000) sol.duiFoto.data = await reducir(sol.duiFoto.data, 900, .6);
+      if (sol.foto && sol.foto.data && sol.foto.data.length > 150000) sol.foto.data = await reducir(sol.foto.data, 600, .65);
+      const base = NUBE.db.ref('gw/r/' + rid);
+      const tx = await agregar(base.child('provSolicitudes'), [sol], 300);
+      if (tx && tx.committed === false) return false;
+      try {
+        const us = JSON.parse((await base.child('usuarios').once('value')).val() || '[]') || [];
+        const adm = us.filter(u => u.rol === 'admin' && u.activo).map(u => u.id); const esT = sol.tipo === 'tecnico';
+        if (adm.length) await agregar(base.child('notifs'), adm.map(u => ({ id: uid(), userId: u, titulo: '🧰 Nueva solicitud de ' + (esT ? 'técnico' : 'tienda'), texto: `${sol.negocio || sol.nombre} (${esT ? sol.oficio : sol.categoria}) pide estar disponible en la residencial.`, fecha: nowISO(), leida: false, accion: { tab: 'proveedores' } })), 800);
+      } catch (x) { console.warn('aviso admin', x); }
+      return true;
+    } catch (x) { console.warn('alta nube', x); return false; }
+  };
 })();
 
 </script>
