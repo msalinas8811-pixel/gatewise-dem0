@@ -691,6 +691,70 @@ body.rol-vecino .chk input[type=checkbox]{width:24px;height:24px}
 .bx-casa{color:var(--text);font-weight:600}
 .bx-row .grow{min-width:0}
 
+/* ---------- Reportar un problema en 3 pasos (34-reclamos.js) ---------- */
+.rc-ic{--c:var(--c-teal);width:44px;height:44px;border-radius:14px;display:grid;place-items:center;flex:none;color:var(--c);background:color-mix(in srgb,var(--c) 14%,transparent)}
+.rc-ic svg{width:24px;height:24px}
+.c-red{--c:var(--c-red)}.c-amber{--c:var(--c-amber)}.c-sky{--c:var(--c-sky)}.c-green{--c:var(--c-green)}.c-violet{--c:var(--c-violet)}.c-teal{--c:var(--c-teal)}.c-slate{--c:var(--c-slate)}.c-orange{--c:var(--c-orange)}.c-indigo{--c:var(--c-indigo)}.c-pink{--c:var(--c-pink)}.c-blue{--c:var(--c-blue)}
+.rc-ic-lg{width:60px;height:60px;border-radius:18px}.rc-ic-lg svg{width:32px;height:32px}
+.rc-wiz{padding-bottom:6px}
+.rc-pasos{display:flex;align-items:center;gap:6px;margin:0 0 14px}.rc-pasos span{height:6px;flex:1;max-width:56px;border-radius:99px;background:var(--line);transition:background 200ms ease}
+.rc-pasos span.on{background:var(--pri)}.rc-pasos span.ok{background:color-mix(in srgb,var(--pri) 55%,transparent)}.rc-pasos small{margin-left:auto;color:var(--muted);font-weight:600}
+.rc-t{font-size:24px;line-height:1.2;margin:0 0 4px;letter-spacing:-.01em;text-transform:none;color:var(--text)}.rc-t::before{display:none}
+.rc-t small{font-size:15px;font-weight:500;color:var(--muted)}.rc-t2{font-size:19px;margin-top:20px}
+.rc-s{color:var(--muted);font-size:16px;margin:0 0 16px;line-height:1.4}
+.rc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.rc-cat{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;min-height:128px;padding:16px 10px;border-radius:22px;border:2px solid var(--line);background:var(--card);color:var(--text);font:inherit;cursor:pointer;text-align:center;
+  transition:transform 160ms cubic-bezier(.23,1,.32,1),border-color 160ms ease,background 160ms ease}
+.rc-cat:active{transform:scale(.96)}.rc-cat b{font-size:18px;line-height:1.2}
+.rc-cat .rc-ic{width:64px;height:64px;border-radius:20px}.rc-cat .rc-ic svg{width:36px;height:36px}
+.rc-cat.on,.rc-cat:hover{border-color:var(--c);background:color-mix(in srgb,var(--c) 7%,var(--card))}
+.rc-elegida{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;margin:0 0 18px;border-radius:18px;border:1.5px solid var(--line);background:var(--card);font:inherit;color:var(--text);text-align:left;cursor:pointer}
+.rc-elegida span:not(.rc-ic){flex:1}.rc-elegida small{display:block;color:var(--muted)}.rc-elegida b{font-size:18px}.rc-elegida em{font-style:normal;color:var(--pri);font-weight:700}
+.rc-caja{border:2px solid var(--line);border-radius:18px;background:var(--card);overflow:hidden}
+.rc-caja:focus-within{border-color:var(--pri)}
+.rc-caja textarea{display:block;width:100%;border:0!important;box-shadow:none!important;background:transparent!important;font:inherit;font-size:18px!important;line-height:1.45;padding:14px 16px!important;min-height:120px;resize:vertical;color:var(--text);outline:none;margin:0!important}
+.rc-mic{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:14px;border:0;border-top:1px solid var(--line);background:color-mix(in srgb,var(--pri) 7%,transparent);color:var(--pri);font:inherit;font-size:17px;font-weight:700;cursor:pointer}
+.rc-mic svg{width:24px;height:24px}.rc-mic.on{background:var(--c-red);color:#fff;animation:rcPulso 1.2s ease-in-out infinite}
+@keyframes rcPulso{50%{opacity:.75}}
+.rc-donde{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 10px}
+.rc-chip{padding:10px 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);color:var(--text);font:inherit;font-size:16px;cursor:pointer}
+.rc-chip.on{border-color:var(--pri);background:color-mix(in srgb,var(--pri) 10%,var(--card));color:var(--pri);font-weight:700}
+.rc-in{width:100%;font-size:17px!important;padding:14px 16px!important;border-radius:16px!important}
+.rc-big{display:flex;align-items:center;gap:14px;width:100%;padding:16px 18px;border-radius:20px;border:2px solid var(--line);background:var(--card);color:var(--text);font:inherit;text-align:left;text-decoration:none;cursor:pointer;transition:transform 160ms cubic-bezier(.23,1,.32,1)}
+.rc-big:active{transform:scale(.97)}.rc-big svg{width:30px;height:30px;flex:none}.rc-big b{display:block;font-size:18px}.rc-big small{display:block;color:var(--muted);margin-top:2px}
+.rc-cam{border-style:dashed;color:var(--pri)}.rc-cam b{color:var(--text)}
+.rc-urg{display:grid;gap:12px;margin:4px 0 8px}
+.rc-call{background:var(--c-red);border-color:var(--c-red);color:#fff}.rc-call small{color:rgba(255,255,255,.85)}
+.rc-911{border-color:color-mix(in srgb,var(--c-red) 45%,transparent);color:var(--c-red)}.rc-911 b{color:var(--text)}
+.rc-no svg{color:var(--muted)}
+.rc-foto{display:flex;flex-direction:column;gap:8px;align-items:flex-start}.rc-foto img{width:100%;max-height:240px;object-fit:cover;border-radius:18px}
+.rc-sig,.rc-env{margin-top:22px;font-size:19px!important;padding:18px!important}
+.rc-atras{display:block;margin:12px auto 0;border:0;background:none;color:var(--muted);font:inherit;font-size:16px;font-weight:600;padding:10px;cursor:pointer}
+.rc-res{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:20px 18px;border-radius:22px;border:1.5px solid var(--line);background:var(--card)}
+.rc-res-c{font-size:20px}.rc-res p{margin:4px 0;font-size:17px;line-height:1.45}.rc-res .rc-res-u{color:var(--muted);font-size:15px}
+.rc-res img{width:100%;max-height:200px;object-fit:cover;border-radius:16px;margin-top:6px}
+.rc-fin{text-align:center;padding:6px 0}.rc-fin h3{font-size:24px;margin:12px 0 6px;text-transform:none;letter-spacing:0;color:var(--text)}.rc-fin h3::before{display:none}.rc-fin p{color:var(--muted);font-size:16px;line-height:1.45;margin:0 0 16px}
+.rc-fin-ic{width:84px;height:84px;margin:0 auto;border-radius:50%;display:grid;place-items:center;font-size:44px;font-weight:800;color:#fff;background:var(--ok);box-shadow:0 12px 30px -10px var(--ok);animation:rcPop 320ms cubic-bezier(.23,1,.32,1)}
+@keyframes rcPop{from{transform:scale(.6);opacity:0}}
+.rc-track{display:grid;gap:0;margin:0 0 16px;text-align:left}
+.rc-tk{display:flex;gap:12px;align-items:flex-start;position:relative;padding:0 0 14px}
+.rc-tk:not(:last-child)::after{content:'';position:absolute;left:15px;top:32px;bottom:2px;width:2px;background:var(--line)}
+.rc-tk.ok:not(:last-child)::after{background:var(--ok)}
+.rc-tk-d{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;flex:none;font-weight:800;background:var(--bg);color:var(--muted);border:2px solid var(--line)}
+.rc-tk.ok .rc-tk-d{background:var(--ok);border-color:var(--ok);color:#fff}.rc-tk.on .rc-tk-d{background:var(--pri);border-color:var(--pri);color:#fff;box-shadow:0 0 0 5px color-mix(in srgb,var(--pri) 18%,transparent)}
+.rc-tk b{display:block;font-size:16px}.rc-tk small{color:var(--muted)}.rc-tk:not(.ok):not(.on) b{color:var(--muted)}
+.rc-det{display:flex;align-items:center;gap:12px;margin:0 0 14px}.rc-det b{display:block;font-size:18px}.rc-det small{color:var(--muted)}
+.rc-hero{display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:18px;margin:4px 0 12px;border-radius:24px;border:0;cursor:pointer;font:inherit;color:#fff;
+  background:linear-gradient(135deg,var(--pri),color-mix(in srgb,var(--pri) 70%,#000));box-shadow:0 14px 30px -16px var(--pri);transition:transform 160ms cubic-bezier(.23,1,.32,1)}
+.rc-hero:active{transform:scale(.97)}
+.rc-hero-ic{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;flex:none;background:rgba(255,255,255,.18)}
+.rc-hero-tx{flex:1}.rc-hero-tx b{display:block;font-size:20px}.rc-hero-tx small{display:block;opacity:.88;margin-top:2px;line-height:1.35}
+.rc-hero .dir-add-plus{background:#fff;color:var(--pri)}
+.rc-rap{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 0 8px}
+.rc-rap-b{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 4px;border-radius:18px;border:1.5px solid var(--line);background:var(--card);font:inherit;color:var(--text);cursor:pointer}
+.rc-rap-b:active{transform:scale(.96)}.rc-rap-b small{font-size:13px;font-weight:600;text-align:center;line-height:1.2}
+.rc-item{align-items:center}.rc-mini{display:flex;gap:4px;margin-top:6px}.rc-mini i{width:26px;height:5px;border-radius:9px;background:var(--line)}.rc-mini i.on{background:var(--ok)}
+
 </style>
 <style data-origen="css/respaldos.css">
 /* =====================================================================
@@ -2944,7 +3008,7 @@ Object.assign(I18N,{"Planes y precios":"Plans and prices","Precio mensual acorda
 
 
 /* ---------- Versión y actualización ---------- */
-const APP_VERSION='2026.11.06-39';
+const APP_VERSION='2026.11.06-40';
 async function buscarActualizacion(){toast('Buscando la versión más reciente…');try{if(navigator.serviceWorker){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}setTimeout(()=>{location.href=location.pathname+'?v='+Date.now()},400)}
 const versionHTML=()=>`<p class="note" style="text-align:center;margin-top:18px">GateWise · versión ${APP_VERSION} · <a href="#" onclick="buscarActualizacion();return false" style="color:var(--pri);font-weight:700">Buscar actualización</a></p>`;
 try{if(navigator.serviceWorker){navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!window.__gwRecargado){window.__gwRecargado=1;if(!S.user||!document.querySelector('#ov'))location.reload()}})}}catch(e){}
@@ -6348,6 +6412,190 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
   }
   if (VIEWS.admin) VIEWS.admin.accesos = vBitacoraAdm;
   window.bitacoraRegistros = registros;
+})();
+
+</script>
+<script data-origen="js/app/34-reclamos.js">
+/* =========================================================
+   REPORTAR UN PROBLEMA, EN 3 PASOS (pensado para personas mayores)
+   1. "¿Qué pasó?": botones grandes con ícono y una palabra por categoría.
+      Seguridad pregunta primero si es una emergencia y ofrece llamar a
+      portería o al 911.
+   2. "Cuéntanos": una caja con ejemplo, botón para dictar con la voz,
+      lugar (con "Frente a mi casa" en un toque) y foto opcional.
+   3. "Revisa y envía": resumen y un botón verde grande.
+   En "Mis reportes" cada reporte muestra su avance como un pedido:
+   Recibido → En revisión → Resuelto.
+   Los datos se guardan igual que antes (DB.reclamos), así que la
+   administración y la versión en la nube no cambian.
+   ========================================================= */
+(function () {
+  const sv = p => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+  const SVG = {
+    seguridad: sv('<path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/>'),
+    luz: sv('<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 00-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0012 3z"/>'),
+    agua: sv('<path d="M12 3s-6 6.6-6 11a6 6 0 0012 0c0-4.4-6-11-6-11z"/><path d="M9.5 15a2.5 2.5 0 002.5 2.5"/>'),
+    basura: sv('<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/><path d="M10 11v6M14 11v6"/>'),
+    ruido: sv('<path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 010 7M19 6a8.5 8.5 0 010 12"/>'),
+    verde: sv('<path d="M12 21v-5"/><path d="M7.5 16h9a4 4 0 001-7.9 5 5 0 00-9.9-.6A4.3 4.3 0 007.5 16z"/><path d="M12 13l-2-2M12 12l2-2"/><path d="M8 21h8"/>'),
+    calle: sv('<path d="M3 21V8M21 21V8"/><path d="M3 10h18v4H3z"/><path d="M7 10l-2 4M12 10l-2 4M17 10l-2 4"/>'),
+    mascota: sv('<circle cx="6" cy="10" r="2"/><circle cx="10" cy="6" r="2"/><circle cx="14" cy="6" r="2"/><circle cx="18" cy="10" r="2"/><path d="M12 12c-3 0-5 3.5-5 5.5S9 20 12 19s5 1.5 5-1.5S15 12 12 12z"/>'),
+    vecinos: sv('<circle cx="8" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M2 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M14.5 14.5A5 5 0 0122 19"/>'),
+    mant: sv('<path d="M14.7 6.3a4 4 0 00-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 005.4-5.4l-2.5 2.5-2.8-.7-.7-2.8 2.5-2.5z"/>'),
+    otro: sv('<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 114 2c-.9.6-1.5 1.2-1.5 2.5"/><path d="M12 17h.01"/>'),
+    mic: sv('<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v3"/>'),
+    cam: sv('<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>'),
+    tel: sv('<path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/>'),
+  };
+  // [clave, nombre que se guarda, ícono, color, ejemplo]
+  const CATS = [
+    ['seguridad', 'Seguridad', 'seguridad', 'red', 'Ej. Vi a una persona extraña rondando las casas del pasaje B.'],
+    ['luz', 'Iluminación', 'luz', 'amber', 'Ej. La lámpara frente a la casa 5 no enciende desde hace 3 noches.'],
+    ['agua', 'Agua y drenajes', 'agua', 'sky', 'Ej. Hay una fuga de agua en la calle principal.'],
+    ['basura', 'Basura', 'basura', 'green', 'Ej. No pasaron recogiendo la basura del pasaje A.'],
+    ['ruido', 'Ruido', 'ruido', 'violet', 'Ej. Música muy fuerte después de las 10 de la noche.'],
+    ['verde', 'Áreas verdes', 'verde', 'teal', 'Ej. El zacate del parque está muy alto.'],
+    ['calle', 'Calles y portones', 'calle', 'slate', 'Ej. El portón de entrada no cierra bien.'],
+    ['mascota', 'Mascotas', 'mascota', 'orange', 'Ej. Un perro anda suelto en el pasaje C.'],
+    ['vecinos', 'Vecinos', 'vecinos', 'indigo', 'Ej. Un carro estaciona frente a mi cochera.'],
+    ['otro', 'Otro', 'otro', 'pink', 'Cuéntanos qué pasó con tus palabras.'],
+  ];
+  // categorías guardadas antes (para mostrar su ícono)
+  const ANT = { 'Alumbrado': 'luz', 'Agua / drenaje': 'agua', 'Mantenimiento': 'mant', 'Vecinos': 'vecinos' };
+  const deCat = nombre => { const c = CATS.find(x => x[1] === nombre); if (c) return { i: c[2], c: c[3] }; const k = ANT[nombre]; if (k === 'mant') return { i: 'mant', c: 'slate' }; const d = k && CATS.find(x => x[0] === k); return d ? { i: d[2], c: d[3] } : { i: 'otro', c: 'pink' }; };
+  const icoCat = (nombre, cls) => { const d = deCat(nombre); return `<span class="rc-ic c-${d.c} ${cls || ''}">${SVG[d.i]}</span>`; };
+  window.rcIcono = icoCat;
+  // la lista de categorías del sistema usa los nombres nuevos (los reportes viejos se siguen viendo)
+  try { if (Array.isArray(CATR)) { CATR.length = 0; CATS.forEach(c => CATR.push(c[1])); } } catch (e) { }
+
+  const RC = { paso: 1, cat: null, txt: '', ubic: '', foto: null, enviando: false };
+  const cat = () => CATS.find(c => c[0] === RC.cat);
+  const porteria = () => { const L = (DB.directorio && DB.directorio.emergencia) || []; return L.find(x => /porter|vigilan|caseta|seguridad/i.test((x.nombre || '') + ' ' + (x.categoria || '')) && x.telefono); };
+  const pasos = n => `<div class="rc-pasos" aria-label="Paso ${n} de 3">${[1, 2, 3].map(i => `<span class="${i < n ? 'ok' : i === n ? 'on' : ''}"></span>`).join('')}<small>Paso ${n} de 3</small></div>`;
+
+  function pintar() {
+    const el = document.getElementById('rcWiz'); if (!el) return; el.innerHTML = contenido();
+    const b = el.closest('.sheet-b, .sheet-body') || el.parentElement; try { (b || el).scrollTop = 0; } catch (e) { }
+    if (RC.paso === 2) setTimeout(() => { const t = document.getElementById('rcTxt'); if (t && !RC.txt) try { t.focus({ preventScroll: true }); } catch (e) { } }, 250);
+  }
+  function contenido() {
+    if (RC.paso === 'urg') {
+      const p = porteria();
+      return `${pasos(1)}<h3 class="rc-t">¿Está pasando ahora mismo?</h3><p class="rc-s">Si es una emergencia, llama primero. Después puedes dejar el reporte.</p>
+        <div class="rc-urg">${p ? `<a class="rc-big rc-call" href="tel:${esc(String(p.telefono).replace(/[^\d+]/g, ''))}">${SVG.tel}<span><b>Llamar a portería</b><small>${esc(p.telefono)}</small></span></a>` : ''}
+        <a class="rc-big rc-911" href="tel:911">${SVG.tel}<span><b>Llamar al 911</b><small>Policía, bomberos, ambulancia</small></span></a>
+        <button type="button" class="rc-big rc-no" onclick="rcIr(2)">${SVG.seguridad}<span><b>No es urgente</b><small>Solo quiero reportarlo</small></span></button></div>
+        <button type="button" class="rc-atras" onclick="rcIr(1)">← Elegir otra opción</button>`;
+    }
+    if (RC.paso === 1) return `${pasos(1)}<h3 class="rc-t">¿Qué pasó?</h3><p class="rc-s">Toca la opción que mejor lo describa.</p>
+      <div class="rc-grid">${CATS.map(c => `<button type="button" class="rc-cat c-${c[3]} ${RC.cat === c[0] ? 'on' : ''}" onclick="rcCat('${c[0]}')"><span class="rc-ic c-${c[3]}">${SVG[c[2]]}</span><b>${c[1]}</b></button>`).join('')}</div>`;
+    const c = cat(); if (!c) { RC.paso = 1; return contenido(); }
+    if (RC.paso === 2) {
+      const voz = !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+      return `${pasos(2)}<button type="button" class="rc-elegida" onclick="rcIr(1)">${icoCat(c[1])}<span><small>Tu reporte es sobre</small><b>${c[1]}</b></span><em>Cambiar</em></button>
+        <h3 class="rc-t">Cuéntanos qué pasó</h3>
+        <div class="rc-caja"><textarea id="rcTxt" rows="4" maxlength="600" placeholder="${esc(c[4])}" oninput="RCtxt(this.value)">${esc(RC.txt)}</textarea>
+          ${voz ? `<button type="button" id="rcMic" class="rc-mic" onclick="rcVoz()">${SVG.mic}<span>Dictar con mi voz</span></button>` : ''}</div>
+        <h3 class="rc-t rc-t2">¿Dónde? <small>(opcional)</small></h3>
+        <div class="rc-donde"><button type="button" class="rc-chip ${RC.ubic === 'Frente a mi casa' ? 'on' : ''}" onclick="rcUbic('Frente a mi casa')">🏠 Frente a mi casa</button><button type="button" class="rc-chip ${RC.ubic === 'En la entrada' ? 'on' : ''}" onclick="rcUbic('En la entrada')">🚪 En la entrada</button><button type="button" class="rc-chip ${RC.ubic === 'En el parque' ? 'on' : ''}" onclick="rcUbic('En el parque')">🌳 En el parque</button></div>
+        <input id="rcUb" class="rc-in" placeholder="Otro lugar. Ej. Pasaje B, frente a casa 9" value="${esc(RC.ubic)}" oninput="RC_U(this.value)">
+        <h3 class="rc-t rc-t2">Foto <small>(opcional)</small></h3>
+        ${RC.foto ? `<div class="rc-foto"><img src="${RC.foto.data}" alt="Foto del problema"><button type="button" class="rc-chip" onclick="rcFotoQuitar()">Quitar foto</button></div>`
+          : `<label class="rc-big rc-cam">${SVG.cam}<span><b>Tomar o subir una foto</b><small>Ayuda a entender el problema</small></span><input type="file" accept="image/*" capture="environment" hidden onchange="rcFoto(this)"></label>`}
+        <button type="button" class="btn block big-ok rc-sig" onclick="rcIr(3)">Continuar</button>`;
+    }
+    if (RC.paso === 3) return `${pasos(3)}<h3 class="rc-t">Revisa y envía</h3><p class="rc-s">Así le llegará a la administración.</p>
+      <div class="rc-res">${icoCat(c[1], 'rc-ic-lg')}<b class="rc-res-c">${c[1]}</b><p>${esc(RC.txt) || '<i class="muted">Sin descripción</i>'}</p>${RC.ubic ? `<p class="rc-res-u">📍 ${esc(RC.ubic)}</p>` : ''}${RC.foto ? `<img src="${RC.foto.data}" alt="Foto del problema">` : ''}<p class="rc-res-u">🏠 ${esc(casaNom(S.user.casaId))}</p></div>
+      <button type="button" class="btn ok block big-ok rc-env" onclick="rcEnviar()" ${RC.enviando ? 'disabled' : ''}>✓ Enviar reporte</button>
+      <button type="button" class="rc-atras" onclick="rcIr(2)">← Corregir</button>`;
+    if (RC.paso === 'ok') return `<div class="rc-fin"><span class="rc-fin-ic">✓</span><h3>¡Listo! Recibimos tu reporte</h3><p>La administración ya fue avisada. Te enviaremos una notificación cuando lo revisen.</p>
+      <div class="rc-track">${track('abierto')}</div><button type="button" class="btn block big-ok" onclick="closeSheet();S.rseg='activos';go('reclamos')">Ver mis reportes</button></div>`;
+    return '';
+  }
+
+  window.RCtxt = v => { RC.txt = v; };
+  window.RC_U = v => { RC.ubic = v; document.querySelectorAll('.rc-donde .rc-chip').forEach(b => b.classList.toggle('on', b.textContent.includes(v) && !!v)); };
+  window.rcUbic = v => { RC.ubic = RC.ubic === v ? '' : v; pintar(); };
+  window.rcCat = k => { RC.cat = k; RC.paso = k === 'seguridad' ? 'urg' : 2; pintar(); };
+  window.rcIr = n => {
+    if (n === 3) { const t = document.getElementById('rcTxt'); if (t) RC.txt = t.value; const u = document.getElementById('rcUb'); if (u) RC.ubic = u.value.trim();
+      if (!RC.txt.trim() && !RC.foto) { toast('Escribe qué pasó o toma una foto'); const x = document.getElementById('rcTxt'); if (x) x.focus(); return; } }
+    if (n === 2 && !RC.cat) n = 1; RC.paso = n; pintar();
+  };
+  window.rcFoto = async inp => {
+    const f = inp.files && inp.files[0]; if (!f) return;
+    try { let o = await leerArchivo(f); if (o && o.data && typeof reducirImagen === 'function') { try { o.data = await reducirImagen(o.data, 1100, .62); } catch (e) { } } RC.foto = o; const t = document.getElementById('rcTxt'); if (t) RC.txt = t.value; pintar(); }
+    catch (e) { toast('No se pudo leer la foto'); }
+  };
+  window.rcFotoQuitar = () => { RC.foto = null; pintar(); };
+  let rec = null;
+  window.rcVoz = function () {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition; const b = document.getElementById('rcMic'); if (!SR) return;
+    if (rec) { try { rec.stop(); } catch (e) { } return; }
+    rec = new SR(); rec.lang = (typeof LANG !== 'undefined' && LANG === 'en') ? 'en-US' : 'es-SV'; rec.interimResults = false; rec.continuous = false;
+    const base = (document.getElementById('rcTxt') || {}).value || '';
+    rec.onresult = e => { const t = [...e.results].map(r => r[0].transcript).join(' '); const x = document.getElementById('rcTxt'); const v = (base ? base.trim() + ' ' : '') + t.charAt(0).toUpperCase() + t.slice(1); RC.txt = v; if (x) x.value = v; };
+    rec.onerror = () => toast('No se pudo usar el micrófono. Puedes escribirlo.');
+    rec.onend = () => { rec = null; if (b) { b.classList.remove('on'); b.querySelector('span').textContent = 'Dictar con mi voz'; } };
+    try { rec.start(); if (b) { b.classList.add('on'); b.querySelector('span').textContent = 'Te escucho… toca para terminar'; } } catch (e) { rec = null; }
+  };
+  window.rcEnviar = function () {
+    const c = cat(); if (!c || RC.enviando) return; RC.enviando = true;
+    const txt = RC.txt.trim(); const corto = txt ? txt.replace(/^ej\.\s*/i, '').split(/[.\n]/)[0].slice(0, 60) : 'Reporte con foto';
+    const r = { id: uid(), casaId: S.user.casaId, usuarioId: S.user.id, categoria: c[1], titulo: corto.length < txt.length && txt.length > 60 ? corto + '…' : corto, descripcion: txt || '(Ver foto)', ubicacion: RC.ubic || '', foto: RC.foto || null, estado: 'abierto', fecha: nowISO(), hilo: [] };
+    DB.reclamos.unshift(r);
+    notificar(admins(), (c[0] === 'seguridad' ? '🚨' : '📝') + ' Nuevo reporte: ' + c[1], `${casaNom(r.casaId)} · ${r.titulo}`, { tab: 'reclamos' });
+    save(); RC.paso = 'ok'; RC.enviando = false; render(); pintar();
+  };
+
+  // Nuevo reporte (reemplaza el formulario anterior)
+  nuevoReclamo = function () {
+    Object.assign(RC, { paso: 1, cat: null, txt: '', ubic: '', foto: null, enviando: false });
+    sheet('Reportar un problema', `<div id="rcWiz" class="rc-wiz">${contenido()}</div>`);
+    const ov = document.getElementById('ov'); if (ov) ov.classList.add('rc-ov');
+  };
+  window.nuevoReclamo = nuevoReclamo;
+
+  /* ---------- Avance del reporte (como un pedido) ---------- */
+  function track(est) {
+    const n = est === 'resuelto' ? 3 : est === 'proceso' ? 2 : 1;
+    return [['Recibido', 'La administración lo tiene'], ['En revisión', 'Están trabajando en ello'], ['Resuelto', 'Problema atendido']]
+      .map((s, i) => `<div class="rc-tk ${i + 1 < n ? 'ok' : i + 1 === n ? 'on' : ''}"><span class="rc-tk-d">${i + 1 <= n ? '✓' : i + 1}</span><span><b>${s[0]}</b><small>${s[1]}</small></span></div>`).join('');
+  }
+  window.rcTrack = track;
+
+  // Lista: ícono de la categoría en cada reporte (residente y administración)
+  reclamoItem = function (r) {
+    const res = S.user && S.user.rol !== 'admin'; const e = res ? ({ abierto: { l: 'Recibido', c: 'warn' }, proceso: { l: 'En revisión', c: 'info' }, resuelto: { l: 'Resuelto', c: 'ok' } }[r.estado] || EST_R[r.estado]) : (EST_R[r.estado] || { l: r.estado, c: '' });
+    const n = (r.hilo || []).filter(m => { const u = usuario(m.autor); return u && u.rol === 'admin'; }).length;
+    return `<button class="item rc-item" onclick="verReclamo('${r.id}')">${icoCat(r.categoria)}<div class="grow"><b>${esc(r.titulo)}</b><div class="sm muted">${esc(r.categoria)} · ${res ? fFecha(r.fecha) : casaNom(r.casaId) + ' · ' + fFecha(r.fecha)}</div>${res ? `<div class="rc-mini">${[1, 2, 3].map(i => `<i class="${i <= (r.estado === 'resuelto' ? 3 : r.estado === 'proceso' ? 2 : 1) ? 'on' : ''}"></i>`).join('')}</div>` : ''}${n && res ? `<div class="sm" style="color:var(--pri);font-weight:600">💬 ${n} respuesta(s) de la administración</div>` : ''}</div>${chip(e.l, e.c)}</button>`;
+  };
+  window.reclamoItem = reclamoItem;
+
+  // Pantalla "Reclamos y reportes" del residente: botón grande arriba
+  const bv = vReclamos;
+  const vNueva = function () {
+    if (!S.user || S.user.rol === 'admin') return bv.apply(this, arguments);
+    S.rseg = S.rseg || 'activos';
+    const mis = DB.reclamos.filter(r => r.casaId === S.user.casaId);
+    const l = mis.filter(r => S.rseg === 'activos' ? r.estado !== 'resuelto' : r.estado === 'resuelto').sort((a, b) => b.fecha.localeCompare(a.fecha));
+    return `<h2>Reclamos y reportes</h2>
+      <button type="button" class="rc-hero" onclick="nuevoReclamo()"><span class="rc-hero-ic">${ic('chatalert', 28)}</span><span class="rc-hero-tx"><b>Reportar un problema</b><small>Luces, agua, basura, ruido, seguridad y más. En 3 pasos.</small></span><span class="dir-add-plus" aria-hidden="true">${ic('plus', 22)}</span></button>
+      <div class="rc-rap">${CATS.slice(0, 4).map(c => `<button type="button" class="rc-rap-b" onclick="nuevoReclamo();rcCat('${c[0]}')"><span class="rc-ic c-${c[3]}">${SVG[c[2]]}</span><small>${c[1]}</small></button>`).join('')}</div>
+      <h3>Mis reportes</h3>${seg('rseg', [['activos', 'En curso'], ['resueltos', 'Resueltos']])}${l.map(reclamoItem).join('') || empty(S.rseg === 'activos' ? 'No tienes reportes en curso' : 'Aún no hay reportes resueltos')}`;
+  };
+  vReclamos = vNueva; window.vReclamos = vNueva;
+  ['residente', 'admin'].forEach(r => { if (VIEWS[r] && VIEWS[r].reclamos) VIEWS[r].reclamos = vNueva; });
+
+  // Detalle: avance arriba para el residente
+  const bd = verReclamo;
+  verReclamo = function (id) {
+    bd.apply(this, arguments);
+    const r = DB.reclamos.find(x => x.id === id); if (!r) return;
+    const kv = document.querySelector('#ov .kv'); if (!kv) return;
+    kv.insertAdjacentHTML('beforebegin', `<div class="rc-det">${icoCat(r.categoria, 'rc-ic-lg')}<div><b>${esc(r.categoria)}</b><small>${fFecha(r.fecha)}</small></div></div><div class="rc-track">${track(r.estado)}</div>`);
+  };
+  window.verReclamo = verReclamo;
 })();
 
 </script>
