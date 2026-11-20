@@ -3008,7 +3008,7 @@ Object.assign(I18N,{"Planes y precios":"Plans and prices","Precio mensual acorda
 
 
 /* ---------- Versión y actualización ---------- */
-const APP_VERSION='2026.11.20-42';
+const APP_VERSION='2026.11.20-43';
 async function buscarActualizacion(){toast('Buscando la versión más reciente…');try{if(navigator.serviceWorker){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}setTimeout(()=>{location.href=location.pathname+'?v='+Date.now()},400)}
 const versionHTML=()=>`<p class="note" style="text-align:center;margin-top:18px">GateWise · versión ${APP_VERSION} · <a href="#" onclick="buscarActualizacion();return false" style="color:var(--pri);font-weight:700">Buscar actualización</a></p>`;
 try{if(navigator.serviceWorker){navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!window.__gwRecargado){window.__gwRecargado=1;if(!S.user||!document.querySelector('#ov'))location.reload()}})}}catch(e){}
@@ -6769,6 +6769,293 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
 .lg-chk{display:flex;gap:10px;align-items:flex-start;margin:10px 0 4px;font-size:15px;line-height:1.45;cursor:pointer}.lg-chk input{width:22px;height:22px;flex:none;margin-top:1px;accent-color:var(--pri)}
 .lg-pie{text-align:center;font-size:14px;margin:18px 0 6px;color:var(--muted)}.lg-pie a{color:var(--pri);font-weight:600}
 .lg-nota{display:flex;gap:6px;align-items:flex-start;margin:10px 0 4px}.lg-nota svg{flex:none;margin-top:3px}`;
+  document.head.appendChild(st);
+})();
+
+/* =========================================================
+   INTERFAZ FÁCIL EN EL TELÉFONO
+   Residente / inquilino: 4 botones grandes + barras de portería y
+     emergencias + "Más cosas" en lista sencilla. Menú inferior de 5.
+   Vigilante: teclado grande para el número del pase; verde = puede
+     pasar, rojo = no puede pasar. Botón grande "Llegó alguien sin pase".
+   Cobrador, tienda y técnico: lo urgente primero y botones grandes.
+   ========================================================= */
+(function () {
+  const ROLES_FACIL = ['residente', 'inquilino', 'vigilante', 'cobrador', 'vendedor', 'profesional'];
+  const tpl = h => { const t = document.createElement('template'); t.innerHTML = h; return t.content; };
+  const outer = frag => { const d = document.createElement('div'); d.appendChild(frag); return d.innerHTML; };
+
+  /* ---------- marca el rol en la página para los estilos ---------- */
+  const br = render;
+  render = function () {
+    const r = br.apply(this, arguments);
+    try { const rol = S.user && S.user.rol; document.documentElement.dataset.ezrol = rol && ROLES_FACIL.includes(rol) ? rol : ''; } catch (e) { }
+    return r;
+  };
+  window.render = render;
+
+  /* ---------- menú inferior de residente e inquilino: máximo 5 ---------- */
+  try {
+    ['residente', 'inquilino'].forEach(r => {
+      if (!NAV[r]) return;
+      NAV[r] = NAV[r].filter(n => n.id !== 'tienda');
+      NAV[r].forEach(n => { if (n.id === 'accesos') n.l = 'Visitas'; });
+    });
+  } catch (e) { }
+  // la tienda sigue a mano en "Más" para residente e inquilino
+  ['residente', 'inquilino'].forEach(r => {
+    const V = VIEWS[r]; if (!V || !V.mas || !V.tienda) return; const b = V.mas;
+    V.mas = function () {
+      const h = b.apply(this, arguments); if (typeof h !== 'string' || h.includes("go('tienda')")) return h;
+      const it = menuItem('store', 'Tienda entre vecinos', "go('tienda')"); const i = h.indexOf('<h3>Sesión</h3>');
+      return i >= 0 ? h.slice(0, i) + it + h.slice(i) : h + it;
+    };
+  });
+
+  /* ---------- residente e inquilino: inicio ---------- */
+  function inicioResidente(h) {
+    if (typeof h !== 'string' || !h.includes('r7-grid')) return h;
+    const f = tpl(h); const grid = f.querySelector('.r7-grid'); if (!grid) return h;
+    const tiles = [...grid.children];
+    const por = sel => tiles.find(t => (t.getAttribute('onclick') || '').includes(sel) || (t.getAttribute('href') || '').includes(sel));
+    const pase = por('elegirPase7'), pagos = por("go('pagos')"), recl = por("go('reclamos')"), avis = por("go('avisos')"), resv = por("go('reservas')");
+    const tel = tiles.find(t => (t.getAttribute('href') || '').startsWith('tel:')), sos = tiles.find(t => t.classList.contains('r7-sos'));
+    const big = [pase, pagos || resv, recl, avis].filter(Boolean);
+    let rest = tiles.filter(t => !big.includes(t) && t !== tel && t !== sos);
+    while (big.length < 4 && rest.length) big.push(rest.shift());
+
+    const g = document.createElement('div'); g.className = 'ez-big';
+    big.forEach(t => { t.classList.add('ez-t'); g.appendChild(t); });
+    const bars = document.createElement('div'); bars.className = 'ez-bars';
+    if (tel) { tel.classList.add('ez-bar', 'ez-tel'); bars.appendChild(tel); }
+    if (sos) { sos.classList.add('ez-bar'); bars.appendChild(sos); }
+    const mini = document.createElement('div'); mini.className = 'ez-mini';
+    rest.forEach(t => {
+      const b = t.cloneNode(true); const cc = [...t.classList].filter(c => c.startsWith('c-')).join(' '); b.className = 'ez-m';
+      const ti = b.querySelector('.r7-ti'); if (ti) ti.className = 'mic ' + cc;
+      const small = b.querySelector('small'); if (small) small.remove();
+      b.insertAdjacentHTML('beforeend', `<span class="ez-ch">${ic('chev', 18)}</span>`); mini.appendChild(b);
+    });
+    if (VIEWS[S.user.rol] && VIEWS[S.user.rol].tienda && !rest.some(t => (t.getAttribute('onclick') || '').includes("go('tienda')")))
+      mini.insertAdjacentHTML('beforeend', `<button class="ez-m" onclick="go('tienda')"><span class="mic c-pink">${ic('store', 22)}</span><span><b>Tienda entre vecinos</b></span><span class="ez-ch">${ic('chev', 18)}</span></button>`);
+    if (VIEWS[S.user.rol] && VIEWS[S.user.rol].votaciones && !rest.some(t => (t.getAttribute('onclick') || '').includes("go('votaciones')")))
+      mini.insertAdjacentHTML('beforeend', `<button class="ez-m" onclick="go('votaciones')"><span class="mic c-indigo">${ic('vote', 22)}</span><span><b>Votaciones</b></span><span class="ez-ch">${ic('chev', 18)}</span></button>`);
+
+    const q = f.querySelector('.r7-q'); if (q) q.textContent = '¿Qué necesitas?';
+    grid.replaceWith(g, bars);
+    if (mini.children.length) { const h3 = document.createElement('h3'); h3.className = 'ez-h'; h3.textContent = 'Más cosas'; bars.after(h3, mini); }
+    return outer(f);
+  }
+  ['residente', 'inquilino'].forEach(r => {
+    const V = VIEWS[r]; if (!V || !V.inicio) return; const b = V.inicio;
+    V.inicio = function () { const h = b.apply(this, arguments); try { return inicioResidente(h); } catch (e) { console.warn('ez residente', e); return h; } };
+  });
+
+  /* ---------- vigilante: teclado grande ---------- */
+  S.vzPin = S.vzPin || '';
+  const MAXPIN = 8;
+  function pintarPin(grow) {
+    const d = document.getElementById('vzDisp'); if (!d) return;
+    const p = S.vzPin;
+    d.innerHTML = p ? p.split('').map((c, i) => `<span${i === p.length - 1 && grow ? ' class="nv"' : ''}>${c}</span>`).join('') : `<em>Escribe el número</em>`;
+    d.classList.toggle('lleno', !!p);
+    const ok = document.getElementById('vzOk'); if (ok) ok.disabled = p.length < 4;
+  }
+  window.vzKey = function (n) { if (S.vzPin.length >= MAXPIN) return; S.vzPin += String(n); pintarPin(true); try { navigator.vibrate && navigator.vibrate(8) } catch (e) { } };
+  window.vzBorrar = function (todo) { S.vzPin = todo ? '' : S.vzPin.slice(0, -1); pintarPin(); };
+  const banner = (cls, titulo, sub) => `<div class="vz-res ${cls}"><span class="vz-ri">${ic(cls === 'ok' ? 'check' : cls === 'in' ? 'out' : 'x', 44)}</span><b>${titulo}</b>${sub ? `<small>${sub}</small>` : ''}</div>`;
+  function noPasa(titulo, sub, extra) {
+    sheet('Resultado', `${banner('bad', titulo, sub)}${extra || ''}
+      <button class="btn block big-ok vz-warnbtn" onclick="closeSheet();go('sinpase')">${ic('phone', 20)} Pedir permiso al residente</button>
+      <button class="btn ghost block" onclick="closeSheet();setTimeout(()=>{const k=document.querySelector('.vz-keys button');k&&k.focus()},50)">Escribir otro número</button>`);
+    try { navigator.vibrate && navigator.vibrate([90, 60, 90]) } catch (e) { }
+  }
+  window.vzValidar = function () {
+    const q = S.vzPin.trim(); if (q.length < 4) return;
+    S.vzPin = ''; pintarPin();
+    const p = DB.pases.find(x => x.pin === q && (vigenteHoy(x) || dentro(x)));
+    if (p) {
+      verPaseVig(p.id);
+      const d = dentro(p);
+      const sh = document.querySelector('#ov .sheet'); const body = sh && (sh.querySelector('.sbody,.sheet-b,.bd') || sh.lastElementChild);
+      const tgt = document.querySelector('#ov .sheet > div:last-child') || body;
+      if (tgt) tgt.insertAdjacentHTML('afterbegin', d ? banner('in', 'Ya está adentro', 'Si va saliendo, toca «Marcar salida».') : banner('ok', 'Puede pasar', 'Pide el DUI y revisa que el nombre coincida.'));
+      try { navigator.vibrate && navigator.vibrate(40) } catch (e) { }
+      return;
+    }
+    const inv = DB.pases.find(x => x.pin === q);
+    if (inv) { const e = estadoPase(inv); return noPasa('No puede pasar', `Este pase está ${esc(e.l.toLowerCase())} · ${esc(casaNom(inv.casaId))}`); }
+    let al = ''; try { al = typeof buscarAlumVig === 'function' ? buscarAlumVig(q) : ''; } catch (e) { }
+    if (al) { sheet('Código de academia', `${banner('ok', 'Alumno de academia', 'Revisa que sea su día y su horario.')}${al}`); return; }
+    noPasa('Número no encontrado', 'Revisa el número con la persona. Si no tiene pase, pide permiso al residente.');
+  };
+  document.addEventListener('keydown', e => {
+    if (!document.getElementById('vzDisp') || document.getElementById('ov')) return;
+    const t = e.target; if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT')) return;
+    if (/^\d$/.test(e.key)) { vzKey(e.key); e.preventDefault(); }
+    else if (e.key === 'Backspace') { vzBorrar(); e.preventDefault(); }
+    else if (e.key === 'Enter') { vzValidar(); e.preventDefault(); }
+  });
+
+  if (VIEWS.vigilante && VIEWS.vigilante.inicio) {
+    const bv = VIEWS.vigilante.inicio;
+    VIEWS.vigilante.inicio = function () {
+      let h = bv.apply(this, arguments);
+      try {
+        const G = p => !S.gate || S.gate === 'todos' || p.porton === S.gate;
+        const den = DB.pases.filter(p => dentro(p) && G(p)).length, exp = DB.pases.filter(p => vigenteHoy(p) && !dentro(p) && G(p)).length;
+        const esp = (DB.autorizaciones || []).filter(a => a.estado === 'esperando').length;
+        h = h.replace(/^\s*<h2>Portería<\/h2><label class="f">Estoy en<select[\s\S]*?<\/select><\/label>/, '')
+          .replace('placeholder="Buscar por PIN, nombre o N° de casa"', 'placeholder="Nombre, N° de casa o placa"')
+          .replace('<input id="qv"', '<h3 class="ez-h">¿No trae número? Busca aquí</h3><input id="qv"')
+          .replace(/<h3>Dentro de la colonia/, '<h3 id="vzDentro">Dentro de la colonia')
+          .replace(/<h3>Esperados hoy/, '<h3 id="vzEsperados">Esperados hoy');
+        const sel = `<select class="vz-gate" aria-label="Portón donde estoy" onchange="S.gate=this.value;try{localStorage.setItem(KEY+'_gate',this.value)}catch(e){};render()"><option value="todos">Todos los portones</option>${portones().map(p => `<option value="${p.id}" ${S.gate === p.id ? 'selected' : ''}>${esc(p.nombre)}</option>`).join('')}</select>`;
+        const k = n => `<button type="button" onclick="vzKey(${n})">${n}</button>`;
+        const top = `<div class="vz">
+          <div class="vz-top"><h2>Portería</h2>${sel}</div>
+          <section class="vz-pad" aria-label="Validar número de pase">
+            <div class="vz-lbl">Número del pase</div>
+            <div class="vz-disp" id="vzDisp" aria-live="polite"><em>Escribe el número</em></div>
+            <div class="vz-keys">${[1, 2, 3, 4, 5, 6, 7, 8, 9].map(k).join('')}<button type="button" class="vz-del" onclick="vzBorrar()" ondblclick="vzBorrar(true)" aria-label="Borrar">${ic('back', 28)}</button>${k(0)}<button type="button" class="vz-ok" id="vzOk" onclick="vzValidar()" disabled aria-label="Revisar número">${ic('check', 32)}</button></div>
+          </section>
+          <button class="vz-sin" onclick="go('sinpase')"><span>${ic('userplus', 30)}</span><b>Llegó alguien sin pase</b><small>Pide permiso al residente</small></button>
+          <div class="vz-cnt">
+            <button onclick="document.getElementById('vzDentro')?.scrollIntoView({behavior:'smooth'})"><b>${den}</b><small>Adentro ahora</small></button>
+            <button onclick="document.getElementById('vzEsperados')?.scrollIntoView({behavior:'smooth'})"><b>${exp}</b><small>Esperados hoy</small></button>
+            <button class="${esp ? 'hot' : ''}" onclick="go('sinpase')"><b>${esp}</b><small>Esperando permiso</small></button>
+          </div>
+        </div>`;
+        setTimeout(pintarPin, 0);
+        return top + h;
+      } catch (e) { console.warn('ez vigilante', e); return h; }
+    };
+  }
+
+  /* ---------- cobrador ---------- */
+  if (VIEWS.cobrador && VIEWS.cobrador.inicio) {
+    const bc = VIEWS.cobrador.inicio;
+    VIEWS.cobrador.inicio = function () {
+      let h = bc.apply(this, arguments);
+      try {
+        h = h.replace(/<a class="sm" href="tel:([^"]+)">([\s\S]*?)<\/a>/g, (m, t) => `<a class="ez-call" href="tel:${t}">${ic('phone', 18)} Llamar ${esc(t)}</a>`);
+        return `<div class="ez-cob">${h}</div>`;
+      } catch (e) { return h; }
+    };
+  }
+
+  /* ---------- tienda (vendedor): pedidos primero ---------- */
+  if (VIEWS.vendedor && VIEWS.vendedor.inicio) {
+    const bt = VIEWS.vendedor.inicio;
+    VIEWS.vendedor.inicio = function () {
+      const h = bt.apply(this, arguments);
+      try {
+        const f = tpl(h); const k = f.querySelector('.kpis'); if (!k) return h;
+        const h3 = [...f.querySelectorAll('h3')].find(x => /Pedidos por atender/i.test(x.textContent));
+        const pub = [...f.querySelectorAll('button')].find(b => (b.getAttribute('onclick') || '') === 'editarProd()');
+        const acc = document.createElement('div'); acc.className = 'ez-acc';
+        acc.innerHTML = `<button class="ez-a c-teal" onclick="editarProd()"><span>${ic('plus', 28)}</span><b>Publicar producto</b></button><button class="ez-a c-indigo" onclick="go('productos')"><span>${ic('box', 28)}</span><b>Mis productos</b></button>`;
+        if (pub) pub.remove();
+        const mov = []; if (h3) { let n = h3; while (n && n !== pub) { mov.push(n); n = n.nextSibling; } }
+        const tit = document.createElement('h3'); tit.className = 'ez-h'; tit.textContent = 'Mis números';
+        k.before(acc); mov.forEach(n => k.before(n)); k.before(tit); k.classList.add('ez-kpis');
+        if (h3) h3.classList.add('ez-h');
+        return outer(f);
+      } catch (e) { console.warn('ez tienda', e); return h; }
+    };
+  }
+
+  /* ---------- técnico: wrapper para estilos ---------- */
+  if (VIEWS.profesional && VIEWS.profesional.inicio) {
+    const bp = VIEWS.profesional.inicio;
+    VIEWS.profesional.inicio = function () { const h = bp.apply(this, arguments); return typeof h === 'string' ? `<div class="ez-pro">${h}</div>` : h; };
+  }
+
+  /* ---------- estilos ---------- */
+  const st = document.createElement('style'); st.id = 'gw-facil-css';
+  st.textContent = `
+:root{--ez-ease:cubic-bezier(.23,1,.32,1)}
+/* base más grande para roles de teléfono */
+html[data-ezrol] .item,html[data-ezrol] .sv-sol{min-height:64px}
+html[data-ezrol] h3{font-size:15px}
+html[data-ezrol] .btn{min-height:50px}
+html[data-ezrol] .ez-h{margin-top:22px}
+button.ez-t,a.ez-t,.ez-m,.ez-bar,.vz-keys button,.vz-sin,.vz-cnt button,.ez-a,.ez-call{-webkit-tap-highlight-color:transparent;transition:transform 140ms var(--ez-ease),box-shadow 140ms var(--ez-ease)}
+button.ez-t:active,a.ez-t:active,.ez-m:active,.ez-bar:active,.vz-keys button:active,.vz-sin:active,.vz-cnt button:active,.ez-a:active,.ez-call:active{transform:scale(.97)}
+@media (prefers-reduced-motion:reduce){button.ez-t,a.ez-t,.ez-m,.ez-bar,.vz-keys button,.vz-sin,.vz-cnt button,.ez-a{transition:none}}
+
+/* residente: 4 botones grandes */
+.ez-big{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0 12px}
+.ez-big .ez-t{min-height:168px;padding:18px 16px;display:flex;flex-direction:column;justify-content:space-between;gap:12px;border-radius:22px}
+.ez-big .ez-t .r7-ti{width:60px!important;height:60px!important;border-radius:18px!important}
+.ez-big .ez-t .r7-ti svg{width:32px;height:32px}
+.ez-big .ez-t b{font-size:20px!important;line-height:1.2;display:block}
+.ez-big .ez-t small{font-size:15px!important;margin-top:4px;display:block}
+.ez-big .ez-t .r7-bd{font-size:16px;min-width:30px;height:30px}
+.ez-bars{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:6px}
+.ez-bars .ez-bar{grid-column:auto!important;min-height:72px;display:flex;align-items:center;gap:14px;padding:12px 16px;border-radius:18px;text-decoration:none}
+.ez-bars .ez-tel{flex-direction:row!important}
+.ez-bars .ez-bar b{font-size:18px}
+.ez-bars .ez-bar small{font-size:14px}
+.ez-mini{display:flex;flex-direction:column;gap:8px}
+.ez-m{display:flex;align-items:center;gap:14px;width:100%;min-height:62px;padding:10px 14px;border-radius:16px;border:1px solid var(--line);background:var(--card,#fff);color:var(--ink,inherit);text-align:left;font:inherit;cursor:pointer}
+.ez-m .mic{width:42px;height:42px;border-radius:13px;flex:none}
+.ez-m b{font-size:17px;font-weight:650}
+.ez-m>span:nth-child(2){flex:1}
+.ez-m .ez-ch{color:var(--muted);display:flex}
+.ez-m .r7-bd{position:static;margin-left:auto}
+
+/* vigilante */
+.vz-top{display:flex;align-items:center;gap:10px;justify-content:space-between;margin-bottom:10px}
+.vz-top h2{margin:0}
+.vz-gate{width:auto!important;max-width:58%;min-height:44px;font-size:15px;font-weight:600;border-radius:999px;padding:0 14px}
+.vz-pad{background:var(--card,#fff);border:1px solid var(--line);border-radius:24px;padding:16px;box-shadow:0 6px 24px rgba(15,60,58,.08)}
+.vz-lbl{font-size:15px;font-weight:700;color:var(--muted);text-align:center;letter-spacing:.02em;text-transform:uppercase}
+.vz-disp{height:72px;margin:8px 0 14px;border-radius:16px;background:var(--bg2,rgba(15,118,110,.06));display:flex;align-items:center;justify-content:center;gap:8px;font-variant-numeric:tabular-nums}
+.vz-disp em{font-style:normal;color:var(--muted);font-size:18px}
+.vz-disp span{font-size:40px;font-weight:800;letter-spacing:.02em}.vz-disp span.nv{animation:vzIn 160ms var(--ez-ease)}
+@keyframes vzIn{from{opacity:0;transform:translateY(6px) scale(.96)}to{opacity:1;transform:none}}
+.vz-keys{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.vz-keys button{height:72px;border-radius:18px;border:1px solid var(--line);background:var(--bg,#f6f8f8);font-size:32px;font-weight:700;color:var(--ink,inherit);cursor:pointer;display:grid;place-items:center;font-variant-numeric:tabular-nums}
+.vz-keys .vz-del{color:var(--muted)}
+.vz-keys .vz-ok{background:#15803d;border-color:#15803d;color:#fff}
+.vz-keys .vz-ok:disabled{opacity:.4;cursor:default}
+.vz-sin{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:14px;align-items:center;width:100%;margin-top:12px;padding:14px 18px;min-height:80px;border:0;border-radius:20px;background:#c2410c;color:#fff;text-align:left;font:inherit;cursor:pointer}
+.vz-sin>span{grid-row:1/3;width:52px;height:52px;border-radius:16px;background:rgba(255,255,255,.18);display:grid;place-items:center}
+.vz-sin b{font-size:20px}.vz-sin small{font-size:15px;opacity:.9}
+.vz-cnt{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.vz-cnt button{min-height:76px;border-radius:16px;border:1px solid var(--line);background:var(--card,#fff);color:var(--ink,inherit);font:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.vz-cnt b{font-size:26px;font-variant-numeric:tabular-nums}.vz-cnt small{font-size:13px;color:var(--muted);text-align:center;line-height:1.2}
+.vz-cnt .hot{border-color:#d97706;background:rgba(217,119,6,.08)}.vz-cnt .hot b{color:#b45309}
+.vz-res{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:18px 14px;border-radius:20px;margin-bottom:14px;color:#fff;animation:vzIn 200ms var(--ez-ease)}
+.vz-res b{font-size:28px;letter-spacing:.01em}.vz-res small{font-size:16px;opacity:.95}
+.vz-res .vz-ri{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.2);display:grid;place-items:center}
+.vz-res.ok{background:#15803d}.vz-res.bad{background:#b91c1c}.vz-res.in{background:#1d4ed8}
+.vz-warnbtn{background:#c2410c!important;border-color:#c2410c!important}
+
+/* cobrador */
+.ez-cob .card .btns{display:grid;grid-template-columns:1fr;gap:8px}
+.ez-cob .card .btns .btn{min-height:56px;font-size:17px}
+.ez-cob .card b{font-size:17px}
+.ez-call{display:inline-flex;align-items:center;gap:6px;margin-top:6px;min-height:40px;padding:0 14px;border-radius:999px;background:rgba(21,128,61,.1);color:#15803d;font-weight:700;text-decoration:none;font-size:15px;white-space:nowrap}
+.ez-cob .kpi b{font-size:26px}
+
+/* tienda */
+.ez-acc{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0 4px}
+.ez-a{display:flex;flex-direction:column;align-items:flex-start;gap:10px;min-height:104px;padding:14px;border-radius:18px;border:0;color:#fff;font:inherit;text-align:left;cursor:pointer}
+.ez-a span{width:46px;height:46px;border-radius:14px;background:rgba(255,255,255,.2);display:grid;place-items:center}
+.ez-a b{font-size:17px}
+.ez-a.c-teal{background:linear-gradient(135deg,#0f766e,#115e59)}.ez-a.c-indigo{background:linear-gradient(135deg,#4f46e5,#3730a3)}
+.ez-kpis{grid-template-columns:1fr 1fr!important}
+
+/* técnico */
+.ez-pro .sv-sol.accion{position:relative;padding-bottom:62px}
+.ez-pro .sv-sol.accion::after{content:'Responder ›';position:absolute;left:14px;right:14px;bottom:12px;height:44px;border-radius:12px;background:var(--pri,#0f766e);color:#fff;font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center}
+.ez-pro .sv-stats b{font-size:28px}
+.ez-pro .sv-disp{min-height:60px;font-size:17px}
+
+@media (min-width:900px){.ez-big{grid-template-columns:repeat(4,1fr)}.ez-bars{grid-template-columns:1fr 1fr}.vz{max-width:520px}}
+`;
   document.head.appendChild(st);
 })();
 
