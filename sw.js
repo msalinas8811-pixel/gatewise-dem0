@@ -1,4 +1,4 @@
-const CACHE = 'gatewise-v40';
+const CACHE = 'gatewise-v41';
 const ASSETS = [
   './',
   './index.html',
@@ -7,6 +7,8 @@ const ASSETS = [
   './icon-192.png',
   './icon-512.png',
   './firebase-messaging-sw.js',
+  './terminos.html',
+  './privacidad.html',
 ];
 
 self.addEventListener('install', e => {

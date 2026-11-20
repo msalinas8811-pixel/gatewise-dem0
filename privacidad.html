@@ -1,61 +1,67 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Política de privacidad · GateWise</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aviso de privacidad · GateWise</title>
+<meta name="description" content="Aviso de privacidad de la app GateWise">
 <style>
-:root{--bg:#f6f8f9;--tx:#13232a;--mu:#5b6b72;--ac:#0f766e;--card:#fff;--line:#dfe6e9}
-@media (prefers-color-scheme:dark){:root{--bg:#0d171b;--tx:#e6eef0;--mu:#9fb0b6;--ac:#5eead4;--card:#13232a;--line:#22343b}}
-body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.65 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-main{max-width:760px;margin:0 auto;padding:32px 16px 64px}h1{font-size:28px;margin:0 0 4px}h2{font-size:19px;margin:28px 0 6px}
-p,li{color:var(--tx)}.mu{color:var(--mu)}a{color:var(--ac)}.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-top:18px}
+:root{--bg:#F5F7F8;--card:#FFFFFF;--text:#0F1E2A;--muted:#5B6B7A;--line:#E2E8EC;--pri:#0F766E;--ink:#0B3B3A}
+@media (prefers-color-scheme:dark){:root{--bg:#0A1116;--card:#121C24;--text:#E7EEF3;--muted:#9AA9B6;--line:#22313D;--pri:#2DD4BF;--ink:#06201F}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:17px/1.6 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{background:var(--ink);color:#fff;padding:20px 16px}
+header .in,main{max-width:760px;margin:0 auto}
+header a{color:#A7F3D0;font-weight:600;text-decoration:none}
+header b{display:block;font-size:14px;opacity:.85}
+h1{font-size:30px;line-height:1.2;margin:6px 0 0}
+main{padding:24px 16px 56px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:8px 22px 20px}
+h2{font-size:20px;margin:28px 0 8px;color:var(--pri)}
+p,li{color:var(--text)}
+ul{padding-left:22px}li{margin:4px 0}
+.tb{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:12px 0}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th{background:var(--bg);text-align:left;font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);padding:10px 12px}
+td{padding:10px 12px;border-top:1px solid var(--line);vertical-align:top}
+mark{background:#FEF08A;color:#000;padding:0 3px;border-radius:3px}
+nav{margin-top:12px;font-size:15px}
+a{color:var(--pri)}
+:focus-visible{outline:3px solid var(--pri);outline-offset:2px}
 </style>
 </head>
-<body><main>
-<h1>Política de privacidad de GateWise</h1>
-<p class="mu">Última actualización: 29 de octubre de 2026</p>
-
-<p>GateWise es una aplicación para administrar residenciales y condominios: cuotas, pagos, control de acceso, avisos, reservas, academias, eventos y tienda entre vecinos. Esta política explica qué datos tratamos, para qué y cómo los protegemos.</p>
-
-<h2>Quién es responsable</h2>
-<p>La administración de cada residencial decide qué datos registra y es responsable de ellos ante sus residentes. GateWise (Miguel Salinas, El Salvador) presta la plataforma y trata los datos solo por cuenta de esa administración. Contacto: <a href="mailto:msalinas8811@gmail.com">msalinas8811@gmail.com</a>.</p>
-
-<h2>Qué datos tratamos</h2>
-<ul>
-<li><b>Identificación y contacto:</b> nombre, casa, teléfono, correo, número de DUI o documento.</li>
-<li><b>Verificación de propietarios:</b> foto del documento, foto del DUI y una foto en tiempo real, solo durante el registro, para que la administración confirme la identidad.</li>
-<li><b>Acceso a la residencial:</b> pases de visita, placas de vehículos, registro de entradas y salidas.</li>
-<li><b>Finanzas de la casa:</b> cuotas, pagos reportados y comprobantes.</li>
-<li><b>Comunidad:</b> votaciones, reservas, inscripciones a academias y eventos, pedidos de la tienda y opiniones.</li>
-<li><b>Datos técnicos:</b> identificador del teléfono para enviar notificaciones, si las activas.</li>
-</ul>
-<p>Tu contraseña no se guarda en nuestra base de datos: la maneja Firebase Authentication (Google) de forma cifrada.</p>
-
-<h2>Para qué los usamos</h2>
-<p>Solo para operar la residencial: cobrar y registrar cuotas, controlar el ingreso, comunicar avisos, gestionar reservas y actividades. No vendemos datos ni los usamos para publicidad.</p>
-
-<h2>Quién puede ver tus datos</h2>
-<ul>
-<li>Tú ves los datos de tu casa. La administración ve los de todas las casas.</li>
-<li>Portería ve lo necesario para el ingreso (nombres, teléfonos, placas y pases). El cobrador ve lo necesario para cobrar.</li>
-<li>Los demás vecinos no ven tu teléfono, tu DUI ni tus pagos.</li>
-</ul>
-<p>Estas reglas se aplican en el servidor, no solo en la pantalla.</p>
-
-<h2>Dónde se guardan y cómo se protegen</h2>
-<p>En Google Cloud (Firebase), región Estados Unidos (Carolina del Sur), con cifrado en tránsito y en reposo, reglas de acceso por rol y residencial, y respaldos diarios.</p>
-
-<h2>Cuánto tiempo los guardamos</h2>
-<p>Mientras la residencial use GateWise. Los registros contables (cuotas y pagos) pueden conservarse el tiempo que la administración necesite para su contabilidad. Si la residencial deja el servicio, se eliminan todos sus datos.</p>
-
-<h2>Tus derechos</h2>
-<p>Puedes ver y corregir tus datos en la app (Menú › Mi perfil), pedir a tu administración que los corrija o los elimine, y eliminar tu cuenta tú mismo. Ver <a href="eliminar-cuenta.html">cómo eliminar tu cuenta</a>.</p>
-
-<h2>Menores de edad</h2>
-<p>Los datos de alumnos de academias los registra la persona responsable o la administración, y se usan solo para inscripción, pagos y control de ingreso.</p>
-
-<h2>Cambios</h2>
-<p>Si cambiamos esta política, lo anunciaremos en la app.</p>
-
-<div class="card"><b>¿Preguntas?</b> Escríbenos a <a href="mailto:msalinas8811@gmail.com">msalinas8811@gmail.com</a>.</div>
-</main></body></html>
+<body>
+<header><div class="in"><b>GateWise</b><h1>Aviso de privacidad</h1><nav><a href="terminos.html">Términos de uso</a> · <a href="./">Volver a la app</a></nav></div></header>
+<main><div class="card">
+<p>Versión 1.0 · Vigente desde el 20 de noviembre de 2026</p>
+<p>Este aviso explica qué datos personales se tratan en GateWise, para qué, quién los ve y cómo ejercer sus derechos, según la Ley para la Protección de Datos Personales de El Salvador (Decreto Legislativo N.° 144 de 2024).</p>
+<h2>1. Quién es responsable de sus datos</h2>
+<ul><li><strong>Responsable:</strong> la administración de su residencial, que decide para qué se usan los datos de sus residentes, visitas y personal.</li><li><strong>Encargado:</strong> Miguel Salinas (GateWise), que opera la app y trata los datos por cuenta de la residencial, con un contrato que lo obliga a protegerlos.</li><li><strong>Delegado de protección de datos de GateWise:</strong> Miguel Salinas · <mark>[correo de privacidad]</mark>. El delegado de su residencial se lo informa su administración.</li></ul>
+<h2>2. Qué datos tratamos</h2>
+<div class="tb"><table><thead><tr><th scope="col">Persona</th><th scope="col">Datos</th></tr></thead><tbody><tr><td>Propietarios, inquilinos y familiares</td><td>Nombre, número de casa, teléfono, correo, DUI, usuario, pagos y cuotas, pases que crea, reportes, reservas y votaciones (qué casa votó, no qué eligió en votaciones secretas)</td></tr><tr><td>Visitas, trabajadores y repartidores</td><td>Nombre, DUI, placa del vehículo, motivo, casa que visita y horas de entrada y salida</td></tr><tr><td>Personal de vigilancia y cobradores</td><td>Nombre, usuario y registro de las acciones que realizan en la app</td></tr><tr><td>Técnicos, tiendas y profesionales</td><td>Nombre, DUI, teléfono, oficio, foto, solvencia policial, antecedentes penales y opiniones de los vecinos</td></tr><tr><td>Niñas, niños y adolescentes en academias</td><td>Nombre, edad, responsable, horario y código de ingreso, registrados por su padre, madre o tutor</td></tr></tbody></table></div>
+<p>No tratamos datos sensibles como salud, religión u opiniones políticas, salvo lo que usted decida escribir en un reporte o mensaje.</p>
+<h2>3. Para qué los usamos</h2>
+<ul><li>Dar acceso a la app según su rol.</li><li>Controlar el ingreso de visitas y proveedores y llevar la bitácora de seguridad.</li><li>Administrar cuotas, pagos, recibos y mora.</li><li>Enviar avisos, recordatorios y notificaciones de la residencial.</li><li>Atender reportes, reservas, votaciones, academias y eventos.</li><li>Verificar a técnicos y tiendas antes de mostrarlos a los vecinos.</li><li>Mantener la seguridad de la app, hacer respaldos y resolver problemas técnicos.</li></ul>
+<p><strong>No vendemos sus datos, no los usamos para publicidad y no los compartimos con otras residenciales.</strong></p>
+<h2>4. Base para tratarlos</h2>
+<p>Tratamos sus datos con su consentimiento, que usted da al aceptar este aviso al crear su cuenta, y para cumplir la relación que usted tiene con su residencial (por ejemplo, el pago de cuotas). Puede revocar su consentimiento en cualquier momento; eso puede impedir que siga usando algunas funciones.</p>
+<h2>5. Quién puede ver sus datos</h2>
+<div class="tb"><table><thead><tr><th scope="col">Quién</th><th scope="col">Qué ve</th></tr></thead><tbody><tr><td>Usted</td><td>Sus datos y los de su casa</td></tr><tr><td>Administración de su residencial</td><td>Los datos necesarios para administrar la residencial</td></tr><tr><td>Vigilancia</td><td>Lo necesario para el portón: pases, nombres, casas, placas y teléfonos de contacto. No ve finanzas</td></tr><tr><td>Cobradores</td><td>Cuotas, pagos y datos de contacto de las casas que visitan</td></tr><tr><td>Otros vecinos</td><td>Solo lo que usted publique (opiniones, productos de su tienda) y su nombre en avisos o eventos</td></tr><tr><td>GateWise</td><td>Solo para soporte, mantenimiento o seguridad</td></tr></tbody></table></div>
+<h2>6. Dónde se guardan</h2>
+<p>Sus datos se guardan en los servidores de Google Cloud (Firebase) en los <strong>Estados Unidos</strong>, con cifrado y certificaciones internacionales de seguridad. Al aceptar este aviso, usted da su consentimiento para esta transferencia internacional, como pide el artículo 44 de la Ley.</p>
+<h2>7. Cuánto tiempo los conservamos</h2>
+<div class="tb"><table><thead><tr><th scope="col">Información</th><th scope="col">Plazo</th></tr></thead><tbody><tr><td>Su cuenta</td><td>Mientras esté activa, más 30 días</td></tr><tr><td>Pagos, cuotas y recibos</td><td><mark>[5 años]</mark>, por respaldo contable de la residencial</td></tr><tr><td>Bitácora de portería y pases</td><td><mark>[12 meses]</mark></td></tr><tr><td>Documentos de técnicos y tiendas</td><td>Mientras estén activos; solicitudes rechazadas, 90 días</td></tr><tr><td>Reportes y reclamos</td><td><mark>[12 meses]</mark> después de resueltos</td></tr><tr><td>Alumnos de academias</td><td>Mientras estén inscritos, más 6 meses</td></tr><tr><td>Respaldos de seguridad</td><td>60 días</td></tr></tbody></table></div>
+<h2>8. Cómo protegemos sus datos</h2>
+<ul><li>Cada residencial está separada en el servidor: nadie de otra residencial puede ver sus datos.</li><li>Cada persona ve solo lo que su rol permite.</li><li>Las claves las protege Google y no se guardan en la base de datos.</li><li>Respaldo completo cada noche y registro de cambios.</li><li>Si ocurre una vulneración que le afecte, la residencial le avisará en un máximo de 72 horas, junto con la Agencia de Ciberseguridad del Estado y la Fiscalía General de la República, como manda la Ley.</li></ul>
+<h2>9. Sus derechos</h2>
+<p>Usted puede pedir <strong>acceso</strong> a sus datos, su <strong>rectificación</strong>, <strong>cancelación</strong> u <strong>olvido</strong>, <strong>oponerse</strong> a un uso, pedir su <strong>portabilidad</strong> (una copia en archivo) o la <strong>limitación</strong> de su tratamiento (derechos ARCO-POL).</p>
+<ul><li>Escriba a la administración de su residencial o a <mark>[correo de privacidad]</mark>, con su nombre, casa y lo que solicita.</li><li>Le responderemos en un máximo de <strong>20 días hábiles</strong>, prorrogables una vez por otros 20 si hay una causa justificada.</li><li>Puede corregir algunos datos desde su perfil en la app y eliminar su cuenta en Menú › Eliminar mi cuenta.</li><li>Si no está conforme con la respuesta, puede acudir a la Agencia de Ciberseguridad del Estado.</li></ul>
+<h2>10. Niñas, niños y adolescentes</h2>
+<p>Solo registramos datos de menores con el consentimiento de su padre, madre o tutor, quien puede pedir en cualquier momento su corrección o eliminación.</p>
+<h2>11. Datos en su teléfono</h2>
+<p>La app guarda en su teléfono datos técnicos para funcionar más rápido y para las notificaciones (por ejemplo, la residencial elegida y un identificador de notificaciones). No usamos cookies de publicidad ni de seguimiento.</p>
+<h2>12. Cambios a este aviso</h2>
+<p>Le avisaremos en la app cualquier cambio importante antes de que entre en vigencia.</p>
+</div></main>
+</body>
+</html>

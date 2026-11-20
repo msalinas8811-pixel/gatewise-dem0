@@ -1141,7 +1141,7 @@ function vLogin(){const plat=S.modoPlat||!PLAT.residenciales.length;return `<div
 <form onsubmit="login(event)" class="card"><div class="f">Entrar a<div class="combo"><input id="resq" autocomplete="off" placeholder="Escribe las primeras letras de la residencial" value="${esc(plat?'Administrador de la APP':(PLAT.residenciales.find(r=>r.id===RES)||{}).nombre||'')}" onfocus="this.select();filtraRes('')" oninput="filtraRes(this.value)" onkeydown="teclaRes(event)" onblur="setTimeout(()=>{const b=document.getElementById('resList');if(b)b.hidden=true;this.value=${plat?"'Administrador de la APP'":"(PLAT.residenciales.find(r=>r.id===RES)||{}).nombre||''"}},150)"><div id="resList" class="combo-list" hidden></div></div></div><label class="f">${plat?'Correo del Administrador de la APP':'Usuario'}<input name="user" ${plat?'type="email" autocomplete="email"':'autocomplete="username"'} autocapitalize="none" required></label><label class="f">Clave<input name="pass" type="password" autocomplete="current-password" required></label><button class="btn block">Ingresar</button><p class="note" style="margin:10px 0 0">${plat?'Acceso del Administrador de la APP: crea y administra todas las residenciales.':'Administración, residentes, inquilinos, vigilancia y cobradores de '+esc(DB?DB.residencial.nombre:'')+' entran con su usuario y clave.'}</p></form>
 ${!plat&&DB?`<button class="btn ghost block" onclick="irRegistro()">Soy propietario · crear mi cuenta</button>`:''}<button class="btn ghost block" onclick="S.tab='solicitarRes';render()">Quiero la app para mi residencial</button>
 ${cfgNube()?'':PLAT.residenciales.length||PLAT.solicitudes.length?`<button class="btn ghost block" style="color:var(--bad)" onclick="borrarRegistros()">🗑️ Borrar todos los registros</button>`:`<button class="btn ghost block" onclick="resetDemo()">Cargar datos de ejemplo</button>`}<p class="note nubeEstado" style="text-align:center;margin-top:14px;cursor:pointer;text-decoration:underline dotted" onclick="verNube()">${nubeTxt()}</p>${versionHTML()}</div>`}
-function nuevoDueno(){return toast('Solo el dueño de la app es Administrador de la APP');sheet('Crear usuario de Administrador de la APP',`<p class="note" style="margin-top:0">El Administrador de la APP da de alta las residenciales, sus perfiles, administradores y planes. Después entras con este usuario en la pantalla de inicio.</p><form onsubmit="crearPlataforma(event)"><label class="f">Tu nombre<input name="nombre" required autocomplete="name"></label><label class="f">Usuario<input name="user" required autocapitalize="none" autocomplete="username" placeholder="Ej. miguel"></label><div class="two"><label class="f">Contraseña<input name="pass" type="password" required minlength="6" autocomplete="new-password"></label><label class="f">Repite la contraseña<input name="pass2" type="password" required minlength="6" autocomplete="new-password"></label></div><button class="btn block">Crear usuario y entrar</button></form>`)}
+function nuevoDueno(){return toast('Solo el dueño de la app es Administrador de la APP');sheet('Crear usuario de Administrador de la APP',`<p class="note" style="margin-top:0">El Administrador de la APP da de alta las residenciales, sus perfiles, administradores y planes. Después entras con este usuario en la pantalla de inicio.</p><form onsubmit="crearPlataforma(event)"><label class="f">Tu nombre<input name="nombre" required autocomplete="name"></label><label class="f">Usuario<input name="user" required autocapitalize="none" autocomplete="username" placeholder="Ej. miguel"></label><div class="two"><label class="f">Contraseña<input name="pass" type="password" required minlength="8" autocomplete="new-password"></label><label class="f">Repite la contraseña<input name="pass2" type="password" required minlength="8" autocomplete="new-password"></label></div><button class="btn block">Crear usuario y entrar</button></form>`)}
 const RETOS=['Muestra 2 dedos junto a tu cara','Levanta el pulgar y sonríe','Toca tu oreja derecha','Muestra la palma de tu mano abierta','Cierra un ojo y sonríe'];
 let SELFIE=null,camStream=null;
 function irRegistro(){S.tab='registro';S.reto=null;SELFIE=null;render();window.scrollTo(0,0)}
@@ -1801,14 +1801,14 @@ function guardarProp(e,cid){e.preventDefault();const f=new FormData(e.target);co
 function vSetup(){return `<div class="login"><div class="logo">${ic('gatewise',36)}</div><h1 style="margin:0 0 2px">GateWise</h1><p class="muted" style="margin:0 0 18px">Configuración inicial</p>
 <div class="card sm">Crea tu cuenta de <b>Administrador de la APP</b>. Con ella registras las residenciales, sus administradores y planes. Solo se pide una vez en este dispositivo.</div>
 <form class="card" onsubmit="crearPlataforma(event)"><label class="f">Tu nombre<input name="nombre" required autocomplete="name"></label><label class="f">Usuario<input name="user" required autocapitalize="none" autocomplete="username" placeholder="Ej. miguel"></label>
-<div class="two"><label class="f">Contraseña<input name="pass" type="password" required minlength="6" autocomplete="new-password"></label><label class="f">Repite la contraseña<input name="pass2" type="password" required minlength="6" autocomplete="new-password"></label></div>
+<div class="two"><label class="f">Contraseña<input name="pass" type="password" required minlength="8" autocomplete="new-password"></label><label class="f">Repite la contraseña<input name="pass2" type="password" required minlength="8" autocomplete="new-password"></label></div>
 <label class="chk" style="border:0"><input type="checkbox" name="demo" checked><span class="sm"><b>Cargar residenciales de ejemplo</b> para probar todos los roles (puedes eliminarlas después).</span></label>
 <button class="btn block">Crear cuenta y entrar</button></form></div>`}
 function crearPlataforma(e){e.preventDefault();return toast('Solo el dueño de la app es Administrador de la APP');const f=new FormData(e.target);const un=String(f.get('user')).trim().toLowerCase();
   if(f.get('pass')!==f.get('pass2'))return toast('Las contraseñas no coinciden');if(!/^[a-z0-9._-]{3,}$/.test(un))return toast('Usuario: mínimo 3 letras o números, sin espacios');
   if(PLAT.superadmins.some(x=>x.user===un))return toast('Ese usuario de Administrador de la APP ya existe');
   const sa={id:'sa'+uid(),rol:'superadmin',nombre:String(f.get('nombre')).trim(),user:un,pass:f.get('pass'),activo:true};PLAT.superadmins.push(sa);savePlat();closeSheet();S.modoPlat=false;entrar(sa);toast('Usuario de Administrador de la APP creado')}
-function miCuentaSA(){return cuentaDueno();const u=S.user;sheet('Mi cuenta',`<form onsubmit="guardarCuentaSA(event)"><label class="f">Nombre<input name="nombre" required value="${esc(u.nombre)}"></label><label class="f">Usuario<input name="user" required autocapitalize="none" value="${esc(u.user)}"></label><label class="f">Contraseña actual<input name="a" type="password" required></label><label class="f">Nueva contraseña (opcional)<input name="n" type="password" minlength="6"></label><button class="btn block">Guardar</button></form>`)}
+function miCuentaSA(){return cuentaDueno();const u=S.user;sheet('Mi cuenta',`<form onsubmit="guardarCuentaSA(event)"><label class="f">Nombre<input name="nombre" required value="${esc(u.nombre)}"></label><label class="f">Usuario<input name="user" required autocapitalize="none" value="${esc(u.user)}"></label><label class="f">Contraseña actual<input name="a" type="password" required></label><label class="f">Nueva contraseña (opcional)<input name="n" type="password" minlength="8"></label><button class="btn block">Guardar</button></form>`)}
 function guardarCuentaSA(e){e.preventDefault();const f=new FormData(e.target);if(f.get('a')!==S.user.pass)return toast('La contraseña actual no es correcta');const un=String(f.get('user')).trim().toLowerCase();if(!/^[a-z0-9._-]{3,}$/.test(un))return toast('Usuario: mínimo 3 letras o números, sin espacios');
   S.user.nombre=String(f.get('nombre')).trim();S.user.user=un;if(f.get('n'))S.user.pass=f.get('n');savePlat();closeSheet();render();toast('Cuenta actualizada')}
 const NIVELES=[['admin','Administración'],['residente','Residentes (propietarios)'],['inquilino','Inquilinos'],['vigilante','Vigilancia'],['cobrador','Cobradores']];
@@ -3008,7 +3008,7 @@ Object.assign(I18N,{"Planes y precios":"Plans and prices","Precio mensual acorda
 
 
 /* ---------- Versión y actualización ---------- */
-const APP_VERSION='2026.11.06-40';
+const APP_VERSION='2026.11.20-41';
 async function buscarActualizacion(){toast('Buscando la versión más reciente…');try{if(navigator.serviceWorker){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}setTimeout(()=>{location.href=location.pathname+'?v='+Date.now()},400)}
 const versionHTML=()=>`<p class="note" style="text-align:center;margin-top:18px">GateWise · versión ${APP_VERSION} · <a href="#" onclick="buscarActualizacion();return false" style="color:var(--pri);font-weight:700">Buscar actualización</a></p>`;
 try{if(navigator.serviceWorker){navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!window.__gwRecargado){window.__gwRecargado=1;if(!S.user||!document.querySelector('#ov'))location.reload()}})}}catch(e){}
@@ -4612,7 +4612,7 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
           <label class="f doc-vence">Solvencia vigente hasta (opcional)<input type="date" name="solvVence"></label>
           ${docSlot('antec')}
         </div>
-        <label class="pv-chk"><input type="checkbox" name="acepto" required><span>Autorizo a la administración de ${esc(nom)} a revisar mis datos y compartir mi nombre, teléfono y servicio con los residentes. <a href="privacidad.html" target="_blank" rel="noopener">Privacidad</a></span></label>
+        <label class="pv-chk"><input type="checkbox" name="acepto" required><span>Autorizo a la administración de ${esc(nom)} a revisar mis documentos (DUI, solvencia policial y antecedentes penales) y a mostrar mi nombre, oficio y teléfono a los vecinos si mi solicitud es aprobada. Mis documentos solo los ve la administración. <a href="privacidad.html" target="_blank" rel="noopener">Privacidad</a></span></label>
         <button class="btn block big-ok">Enviar solicitud</button></form>`;
     }
     return shellPv(h + volver);
@@ -4692,7 +4692,7 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
       ${lista.map(s => `<button class="item" onclick="verProv('${s.id}')">${avProv(s)}<div class="grow"><b>${esc(s.negocio || s.nombre)}</b><div class="sm muted">${esc(tipoTxt(s))}${s.negocio ? ' · ' + esc(s.nombre) : ''} · ${fFecha(String(s.fecha).slice(0, 10))}</div>${s.estado === 'pendiente' && faltan(s).length ? `<div class="sm" style="color:var(--warn);font-weight:600">Faltan ${faltan(s).length} dato(s) por completar</div>` : ''}</div>${chipEst(s)}</button>`).join('') || empty(S.pvseg === 'pendiente' ? 'No hay solicitudes por revisar' : 'Sin registros')}`;
   }
 
-  const genClave = () => String(Math.floor(100000 + Math.random() * 900000));
+  const genClave = () => String(Math.floor(10000000 + Math.random() * 90000000));
   const sugerirUsuario = s => { const base = slugBase(s.negocio || s.nombre); let u = base, i = 2; while (DB.usuarios.some(x => String(x.user).toLowerCase() === u)) u = base + i++; return u; };
   const slugBase = t => String(t || 'proveedor').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '').slice(0, 14) || 'proveedor';
   const waNum = t => { let d = String(t || '').replace(/\D/g, ''); if (d.length === 8) d = '503' + d; return d; };
@@ -4708,7 +4708,7 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
     h += docsRevision(s);
     if (s.estado === 'pendiente') { const F = faltan(s); h += `<div class="pv-falta${F.length ? '' : ' ok'}"><div class="pv-falta-h">${ic(F.length ? 'alert' : 'check', 20)}<b>${F.length ? 'Faltan datos por completar' : 'Registro completo'}</b></div>${F.length ? `<div class="pv-falta-l">${F.map(x => `<span>${x}</span>`).join('')}</div><p>Puedes aprobar así, pero conviene completarlos con el proveedor (por llamada o WhatsApp).</p>` : ''}<button type="button" class="btn ${F.length ? '' : 'ghost'} block" onclick="editarProv('${s.id}')">${ic('doc', 18)}<span class="b-tx">${F.length ? 'Completar datos' : 'Editar datos'}</span></button></div>`; }
     if (s.estado === 'pendiente') h += `<a class="btn ghost block" href="https://wa.me/${waNum(s.tel)}" target="_blank" rel="noopener">${ic('chat', 18)} Escribirle por WhatsApp</a>
-      <form onsubmit="aprobarProv(event,'${s.id}')" style="margin-top:14px"><h3 style="margin-top:6px">Datos de acceso</h3><div class="two"><label class="f">Usuario<input name="user" required autocapitalize="none" value="${esc(sugerirUsuario(s))}"></label><label class="f">Clave<input name="pass" required minlength="6" value="${genClave()}"></label></div>
+      <form onsubmit="aprobarProv(event,'${s.id}')" style="margin-top:14px"><h3 style="margin-top:6px">Datos de acceso</h3><div class="two"><label class="f">Usuario<input name="user" required autocapitalize="none" value="${esc(sugerirUsuario(s))}"></label><label class="f">Clave<input name="pass" required minlength="8" value="${genClave()}"></label></div>
       ${esT ? `<h3>Oficio</h3><div class="f">${selOficio('oficio', s.oficio, true)}</div>
       <h3>Ingreso a la residencial</h3>${ubiAdm({ name: 'vive', si: 'si', no: 'no', dentro: !!s.vive, casa: casaVive(s), casaName: 'viveCasa', nota: s.vive ? 'El técnico indicó: <b>' + esc(s.viveTxt || '') + '</b>. Confírmalo antes de aprobar.' : '' })}
       ${!s.vive && s.recomienda ? `<p class="pv-nota" style="margin-top:10px">${ic('users', 16)}<span>Lo recomienda <b>${esc(s.recomienda)}</b>. Conviene llamar para confirmar.</span></p>` : ''}
@@ -4774,7 +4774,7 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
     const un = String(f.get('user') || '').trim().toLowerCase(); const pw = String(f.get('pass') || '').trim();
     if (!/^[a-z0-9._-]{3,40}$/.test(un)) return toast('Usuario: solo letras, números, punto o guion (3 o más)');
     if (DB.usuarios.some(u => String(u.user).toLowerCase() === un)) return toast('Ese usuario ya existe');
-    if (pw.length < 6) return toast('La clave debe tener al menos 6 caracteres');
+    if (pw.length < 8) return toast('La clave debe tener al menos 8 caracteres');
     const esT = s.tipo === 'tecnico';
     if (esT && f.get('oficio')) { const of = leerOficio(f, 'oficio'); if (!of) return toast('Escribe el oficio'); s.oficio = of; recordarOficio(of); }
     const viveCasa = esT && f.get('vive') === 'si' ? String(f.get('viveCasa') || '') : '';
@@ -6036,7 +6036,7 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
   const ACT = ['solicitado', 'aceptado', 'confirmado', 'en_camino', 'en_proceso'];
   const esProv = u => u && (u.rol === 'profesional' || u.rol === 'vendedor');
   const nom = u => u.negocio || u.nombre || 'Proveedor';
-  const genClave = () => String(Math.floor(100000 + Math.random() * 900000));
+  const genClave = () => String(Math.floor(10000000 + Math.random() * 90000000));
   const waNum = t => { let d = String(t || '').replace(/\D/g, ''); if (d.length === 8) d = '503' + d; return d; };
   const entradas = u => ((DB.directorio && DB.directorio.servicios) || []).filter(s => s.userId === u.id || (u.provId && s.provId === u.provId) || (!s.userId && window.usuarioDeServ && usuarioDeServ(s.id) === u));
   const solicitud = u => (DB.provSolicitudes || []).find(s => s.userId === u.id || (u.provId && s.id === u.provId));
@@ -6064,8 +6064,8 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
         : `<button type="button" class="btn ok block" onclick="activarProv('${u.id}')">${ic('check', 18)}<span class="b-tx">Activar de nuevo</span></button>`}
       <form onsubmit="guardarAccesoProv(event,'${u.id}')" style="margin-top:18px"><h3 style="margin-top:0">Usuario y contraseña</h3>
         <label class="f">Usuario<input name="user" required autocapitalize="none" autocomplete="off" spellcheck="false" value="${esc(u.user || '')}"></label>
-        <label class="f">Nueva contraseña<div class="ap-pass"><input name="pass" id="apPass" minlength="6" autocomplete="new-password" placeholder="Opcional"><button type="button" class="btn ghost smb" onclick="document.getElementById('apPass').value='${genClave()}'">Generar</button></div></label>
-        <p class="note" style="margin-top:-4px">Déjala vacía si no quieres cambiarla. Mínimo 6 caracteres. Al guardar, puedes enviarle sus datos nuevos por WhatsApp.</p>
+        <label class="f">Nueva contraseña<div class="ap-pass"><input name="pass" id="apPass" minlength="8" autocomplete="new-password" placeholder="Opcional"><button type="button" class="btn ghost smb" onclick="document.getElementById('apPass').value='${genClave()}'">Generar</button></div></label>
+        <p class="note" style="margin-top:-4px">Déjala vacía si no quieres cambiarla. Mínimo 8 caracteres. Al guardar, puedes enviarle sus datos nuevos por WhatsApp.</p>
         <button class="btn block big-ok">Guardar cambios</button></form>`);
   };
 
@@ -6075,7 +6075,7 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
     if (!/^[a-z0-9._-]{3,40}$/.test(un)) return toast('Usuario: solo letras, números, punto o guion (3 o más)');
     const cambiaU = un !== String(u.user || '').toLowerCase();
     if (cambiaU && DB.usuarios.some(x => x.id !== u.id && String(x.user || '').toLowerCase() === un)) return toast('Ese usuario ya existe');
-    if (pw && pw.length < 6) return toast('La contraseña debe tener al menos 6 caracteres');
+    if (pw && pw.length < 8) return toast('La contraseña debe tener al menos 8 caracteres');
     if (!cambiaU && !pw) return toast('No hiciste cambios');
     u.user = un; if (pw) u.pass = pw;
     const s = solicitud(u); if (s) s.user = un;
@@ -6179,7 +6179,7 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
       ${on ? `<button type="button" class="btn bad block" onclick="ocultarDir('${id}',true)">${ic('lock', 18)}<span class="b-tx">Desactivar (ocultar del directorio)</span></button>` : `<button type="button" class="btn ok block" onclick="ocultarDir('${id}',false)">${ic('check', 18)}<span class="b-tx">Activar de nuevo</span></button>`}
       <form onsubmit="crearUsuarioDir(event,'${id}')" style="margin-top:18px"><h3 style="margin-top:0">Usuario y contraseña</h3>
         <p class="note" style="margin-top:0">Este perfil se creó en el directorio y <b>todavía no tiene usuario</b>, por eso no entra a la app. Si se lo creas, podrá recibir pedidos de los vecinos en "Servicios a domicilio", acordar la hora y entrar con código de ingreso.</p>
-        <div class="two"><label class="f">Usuario<input name="user" required autocapitalize="none" autocomplete="off" spellcheck="false" value="${esc(sugerir(s.nombre))}"></label><label class="f">Contraseña<input name="pass" required minlength="6" value="${genClave()}"></label></div>
+        <div class="two"><label class="f">Usuario<input name="user" required autocapitalize="none" autocomplete="off" spellcheck="false" value="${esc(sugerir(s.nombre))}"></label><label class="f">Contraseña<input name="pass" required minlength="8" value="${genClave()}"></label></div>
         <button class="btn block big-ok">Crear usuario</button></form>`);
   };
   window.ocultarDir = function (id, ocultar) {
@@ -6190,7 +6190,7 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
   const validarCred = (un, pw) => {
     if (!/^[a-z0-9._-]{3,40}$/.test(un)) return 'Usuario: solo letras, números, punto o guion (3 o más)';
     if (DB.usuarios.some(x => String(x.user || '').toLowerCase() === un)) return 'Ese usuario ya existe';
-    if (pw.length < 6) return 'La contraseña debe tener al menos 6 caracteres';
+    if (pw.length < 8) return 'La contraseña debe tener al menos 8 caracteres';
     return '';
   };
   // Crea el usuario (rol profesional) para un perfil del directorio
@@ -6229,7 +6229,7 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
       const btn = [...form.querySelectorAll('button')].filter(b => b.type !== 'button').pop(); if (!btn) return;
       btn.insertAdjacentHTML('beforebegin', `<div class="ap-opc"><label class="pv-chk"><input type="checkbox" name="crearU" onchange="apOpc(this)"><span>Darle usuario y contraseña en la app <small class="muted">(opcional)</small></span></label>
         <div class="ap-opc-c" hidden><p class="note" style="margin-top:0">Con usuario, podrá recibir pedidos de los vecinos en "Servicios a domicilio", acordar la hora y entrar con código de ingreso. Sin usuario, solo aparece en el directorio con su teléfono.</p>
-        <div class="two"><label class="f">Usuario<input name="apUser" autocapitalize="none" autocomplete="off" spellcheck="false"></label><label class="f">Contraseña<input name="apPass" minlength="6" autocomplete="new-password"></label></div></div></div>`);
+        <div class="two"><label class="f">Usuario<input name="apUser" autocapitalize="none" autocomplete="off" spellcheck="false"></label><label class="f">Contraseña<input name="apPass" minlength="8" autocomplete="new-password"></label></div></div></div>`);
     };
     window.apOpc = function (chk) {
       const c = chk.closest('.ap-opc').querySelector('.ap-opc-c'); const f = chk.form; c.hidden = !chk.checked;
@@ -6600,6 +6600,178 @@ Object.assign(I18N,{"Casas autorizadas":"Authorized houses","Registradas ahora":
 
 </script>
 <script data-origen="js/app/99-arranque.js">
+/* =========================================================
+   LEGAL Y PROTECCIÓN DE DATOS (Ley para la Protección de Datos
+   Personales de El Salvador, Decreto Legislativo N.° 144 de 2024)
+   1. Aceptación de Términos de Uso y Aviso de Privacidad: cada usuario
+      la acepta una vez por versión; se guarda quién, cuándo y qué versión.
+   2. Enlaces a terminos.html y privacidad.html en la entrada y en "Más".
+   3. Aviso a la visita al crear un pase.
+   4. Consentimiento del padre, madre o tutor al inscribir a un menor
+      (residente) y confirmación del responsable al inscribir a un alumno
+      de afuera (administración). Se guarda quién aceptó y cuándo.
+   5. Plazos de conservación: una vez al día, al entrar la administración,
+      se borran los registros vencidos (bitácora 12 meses, solicitudes de
+      técnicos rechazadas 90 días, fotos de reportes resueltos 12 meses).
+   ========================================================= */
+(function () {
+  const LEGAL_V = '1.0';
+  window.GW_LEGAL_V = LEGAL_V;
+  const RET = { bitacoraDias: 365, provRechazadasDias: 90, fotosReclamosDias: 365 };
+  const enlaces = `<a href="terminos.html" target="_blank" rel="noopener">Términos de uso</a> y el <a href="privacidad.html" target="_blank" rel="noopener">Aviso de privacidad</a>`;
+
+  /* ---------- 1. Aceptación ---------- */
+  const aceptado = u => !u || u.rol === 'superadmin' || (u.legal && u.legal.v === LEGAL_V);
+  let mostrando = false;
+  function pedirAceptacion() {
+    if (mostrando) return; mostrando = true;
+    sheet('Antes de continuar', `<div class="lg-gate" id="lgGate">
+      <p style="margin-top:0">Para usar GateWise necesitamos que aceptes cómo usamos y protegemos tus datos.</p>
+      <ul class="lg-list">
+        <li>Tus datos los administra tu residencial y solo se usan para la seguridad, los cobros y la comunicación de la comunidad.</li>
+        <li>No vendemos tus datos ni los usamos para publicidad.</li>
+        <li>Se guardan en servidores de Google en los Estados Unidos, con cifrado.</li>
+        <li>Puedes pedir verlos, corregirlos o borrarlos cuando quieras.</li>
+      </ul>
+      <form onsubmit="lgAceptar(event)">
+        <label class="chk lg-chk"><input type="checkbox" name="ok" required><span>He leído y acepto los ${enlaces}, incluido que mis datos se guarden en servidores de Google en los Estados Unidos.</span></label>
+        <button class="btn block big-ok">Aceptar y continuar</button>
+      </form>
+      <button type="button" class="btn ghost block" onclick="lgNoAcepto()">No acepto · salir</button>
+    </div>`);
+  }
+  window.lgAceptar = function (e) {
+    e.preventDefault(); const u = S.user && usuario(S.user.id); if (!u) return;
+    u.legal = { v: LEGAL_V, f: nowISO() }; if (S.user !== u) S.user.legal = u.legal;
+    mostrando = false; save(); closeSheet(); render(); toast('Gracias. Ya puedes usar la app');
+  };
+  window.lgNoAcepto = function () { mostrando = false; closeSheet(); salir(); };
+  const br = render;
+  render = function () {
+    const r = br.apply(this, arguments);
+    try {
+      revisar(60);
+    } catch (e) { }
+    return r;
+  };
+  window.render = render;
+  const hayGate = () => !!document.querySelector('#ov #lgGate');
+  function revisar(ms) {
+    setTimeout(() => { try { if (S.user && !aceptado(usuario(S.user.id) || S.user)) { if (!hayGate()) { mostrando = false; pedirAceptacion(); } } else mostrando = false; } catch (e) { } }, ms || 0);
+  }
+  // si la hoja se cierra con Escape o tocando afuera, vuelve a aparecer
+  setInterval(() => revisar(0), 1500);
+
+  /* ---------- 2. Enlaces ---------- */
+  if (typeof vLogin === 'function') {
+    const bl = vLogin;
+    vLogin = function () { const h = bl.apply(this, arguments); return h + `<p class="lg-pie"><a href="terminos.html" target="_blank" rel="noopener">Términos de uso</a> · <a href="privacidad.html" target="_blank" rel="noopener">Aviso de privacidad</a></p>`; };
+    window.vLogin = vLogin;
+  }
+  window.lgVer = function () {
+    const u = S.user && usuario(S.user.id);
+    sheet('Términos y privacidad', `<p style="margin-top:0">Consulta cómo protegemos tus datos y cuáles son tus derechos (ver, corregir, borrar o llevarte tus datos).</p>
+      <a class="btn ghost block" href="terminos.html" target="_blank" rel="noopener">${ic('doc', 18)} Términos de uso</a>
+      <a class="btn ghost block" href="privacidad.html" target="_blank" rel="noopener">${ic('shield', 18)} Aviso de privacidad</a>
+      ${u && u.legal ? `<p class="note">Aceptaste la versión ${esc(u.legal.v)} el ${fFecha(u.legal.f)}.</p>` : ''}
+      <p class="note">Para ejercer tus derechos escribe a la administración de tu residencial. Te responderán en un máximo de 20 días hábiles.</p>`);
+  };
+  Object.keys(VIEWS).forEach(r => {
+    const V = VIEWS[r]; if (!V || !V.mas) return; const b = V.mas;
+    V.mas = function () { const h = b.apply(this, arguments); if (typeof h !== 'string' || h.includes('lgVer()')) return h; const it = menuItem('shield', 'Términos y privacidad', 'lgVer()'); const i = h.indexOf('<h3>Sesión</h3>'); return i >= 0 ? h.slice(0, i) + it + h.slice(i) : h + it; };
+  });
+
+  /* ---------- utilidades para formularios en hojas ---------- */
+  const antesDelBoton = html => { const f = document.querySelector('#ov form'); if (!f) return; const bs = [...f.querySelectorAll('button')].filter(b => b.type !== 'button'); const b = bs[bs.length - 1]; if (b) b.insertAdjacentHTML('beforebegin', html); else f.insertAdjacentHTML('beforeend', html); };
+
+  /* ---------- 3. Aviso a la visita ---------- */
+  if (typeof nuevoPase === 'function') {
+    const bp = nuevoPase;
+    nuevoPase = function () { const r = bp.apply(this, arguments); try { antesDelBoton(`<p class="note lg-nota">${ic('shield', 14)} Al registrar a esta persona confirmas que le informaste que su nombre, DUI y horas de entrada y salida quedan registrados por seguridad.</p>`); } catch (e) { } return r; };
+    window.nuevoPase = nuevoPase;
+  }
+
+  /* ---------- 4. Menores de edad ---------- */
+  if (typeof formInscribir === 'function') {
+    const bf = formInscribir;
+    formInscribir = function () { const r = bf.apply(this, arguments); try { antesDelBoton(`<label class="chk lg-chk"><input type="checkbox" name="tutorOk" required><span>Soy el padre, madre o tutor de este menor y autorizo que sus datos (nombre, fecha de nacimiento, horario y código de ingreso) se registren para su inscripción y acceso a la academia.</span></label>`); } catch (e) { } return r; };
+    window.formInscribir = formInscribir;
+  }
+  if (typeof enviarSolAc === 'function') {
+    const be = enviarSolAc;
+    enviarSolAc = function (e) {
+      const antes = new Set(Object.keys(DB).filter(k => k.startsWith('acs_')));
+      const ok = !!(e && e.target && e.target.querySelector('[name=tutorOk]:checked'));
+      const r = be.apply(this, arguments);
+      try { Object.keys(DB).filter(k => k.startsWith('acs_') && !antes.has(k)).forEach(k => { DB[k].consentTutor = { ok, por: S.user.id, nombre: S.user.nombre, f: nowISO(), v: LEGAL_V }; }); save(); } catch (x) { }
+      return r;
+    };
+    window.enviarSolAc = enviarSolAc;
+  }
+  if (typeof aprobarSolAc === 'function') {
+    const ba = aprobarSolAc;
+    aprobarSolAc = function (k) {
+      const s = DB[k]; const c = s && s.consentTutor; const antes = new Set((DB.alumnos || []).map(a => a.id));
+      const r = ba.apply(this, arguments);
+      try { if (c) { (DB.alumnos || []).filter(a => !antes.has(a.id)).forEach(a => { a.consentTutor = c; }); save(); } } catch (x) { }
+      return r;
+    };
+    window.aprobarSolAc = aprobarSolAc;
+  }
+  if (typeof formAlumno === 'function') {
+    const bfa = formAlumno;
+    formAlumno = function (aid, id) {
+      const r = bfa.apply(this, arguments);
+      try { const al = id && typeof alumno === 'function' ? alumno(id) : null; if (!(al && al.consentTutor)) antesDelBoton(`<label class="chk lg-chk"><input type="checkbox" name="tutorOk" required><span>El padre, madre o tutor del alumno autorizó que se registren sus datos para la inscripción y el acceso a la academia.</span></label>`); } catch (e) { }
+      return r;
+    };
+    window.formAlumno = formAlumno;
+  }
+  if (typeof guardarAlumno === 'function') {
+    const bg = guardarAlumno;
+    guardarAlumno = function (e, aid, id) {
+      const ok = !!(e && e.target && e.target.querySelector('[name=tutorOk]:checked'));
+      const antes = new Set((DB.alumnos || []).map(a => a.id));
+      const r = bg.apply(this, arguments);
+      try {
+        if (ok) { const L = (DB.alumnos || []).filter(a => (id ? a.id === id : !antes.has(a.id))); L.forEach(a => { if (!a.consentTutor) a.consentTutor = { ok: true, por: S.user.id, nombre: S.user.nombre, f: nowISO(), v: LEGAL_V, registradoPor: 'administracion' }; }); if (L.length) save(); }
+      } catch (x) { }
+      return r;
+    };
+    window.guardarAlumno = guardarAlumno;
+  }
+
+  /* ---------- 5. Plazos de conservación ---------- */
+  const viejo = (iso, dias) => iso && String(iso).slice(0, 10) < addDays(ymd(), -dias);
+  function limpiar() {
+    if (!S.user || S.user.rol !== 'admin' || !DB || !DB.config) return;
+    const hoy = ymd(); if (DB.config.retencionUlt === hoy) return;
+    const R = Object.assign({}, RET, DB.config.retencion || {}); let n = 0;
+    // bitácora: pases cuyo último uso y vigencia pasaron el plazo
+    const ultimo = p => [p.hasta, p.desde, p.fecha].concat((p.ingresos || []).map(i => i.salida || i.entrada)).filter(Boolean).sort().pop();
+    if (Array.isArray(DB.pases)) { const antesP = DB.pases.length; DB.pases = DB.pases.filter(p => !viejo(ultimo(p), R.bitacoraDias)); n += antesP - DB.pases.length; }
+    if (Array.isArray(DB.autorizaciones)) { const a = DB.autorizaciones.length; DB.autorizaciones = DB.autorizaciones.filter(x => !viejo(x.fechaResp || x.fecha, R.bitacoraDias)); n += a - DB.autorizaciones.length; }
+    if (Array.isArray(DB.acadIngresos)) { const a = DB.acadIngresos.length; DB.acadIngresos = DB.acadIngresos.filter(x => !viejo(x.salida || x.entrada, R.bitacoraDias)); n += a - DB.acadIngresos.length; }
+    if (Array.isArray(DB.provSolicitudes)) { const a = DB.provSolicitudes.length; DB.provSolicitudes = DB.provSolicitudes.filter(x => !(x.estado === 'rechazada' && viejo(x.fechaRev || x.fecha, R.provRechazadasDias))); n += a - DB.provSolicitudes.length; }
+    (DB.reclamos || []).forEach(r => { if (r.estado === 'resuelto' && r.foto && viejo(r.fechaRes || r.fecha, R.fotosReclamosDias)) { r.foto = null; r.fotoBorrada = hoy; n++; } });
+    DB.config.retencionUlt = hoy;
+    save(); if (n) console.info('GateWise: ' + n + ' registro(s) vencido(s) eliminados según los plazos de conservación');
+  }
+  window.gwLimpiezaRetencion = limpiar;
+  const bent = entrar;
+  entrar = function () { const r = bent.apply(this, arguments); try { setTimeout(limpiar, 1500); } catch (e) { } return r; };
+  window.entrar = entrar;
+  try { setTimeout(() => { if (S.user && S.user.rol === 'admin') limpiar(); }, 3000); } catch (e) { }
+
+  /* ---------- Estilos ---------- */
+  const st = document.createElement('style'); st.id = 'gw-legal-css';
+  st.textContent = `.lg-list{margin:0 0 14px;padding-left:20px;line-height:1.5}.lg-list li{margin:6px 0}
+.lg-chk{display:flex;gap:10px;align-items:flex-start;margin:10px 0 4px;font-size:15px;line-height:1.45;cursor:pointer}.lg-chk input{width:22px;height:22px;flex:none;margin-top:1px;accent-color:var(--pri)}
+.lg-pie{text-align:center;font-size:14px;margin:18px 0 6px;color:var(--muted)}.lg-pie a{color:var(--pri);font-weight:600}
+.lg-nota{display:flex;gap:6px;align-items:flex-start;margin:10px 0 4px}.lg-nota svg{flex:none;margin-top:3px}`;
+  document.head.appendChild(st);
+})();
+
 /* ---------------- Arranque ---------------- */
 document.addEventListener('input',e=>{const t=e.target;if(!t||!t.name||!/(^|\.)dui$/.test(t.name)||esCondo()||paisRes()!=='SV')return;const d=t.value.replace(/\D/g,'').slice(0,9);t.value=d.length>8?d.slice(0,8)+'-'+d.slice(8):d});
 if(window.GATEWISE_MODO!=='produccion'){
@@ -7173,7 +7345,7 @@ if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.
   };
   cambiarPass = async function (e) {
     e.preventDefault(); const f = new FormData(e.target); const a = String(f.get('a') || ''), n = String(f.get('n') || '');
-    if (n.length < 6) return toast('La nueva clave debe tener al menos 6 caracteres');
+    if (n.length < 8) return toast('La nueva clave debe tener al menos 8 caracteres');
     try { const u = P.auth.currentUser; await u.reauthenticateWithCredential(firebase.auth.EmailAuthProvider.credential(u.email, P.owner ? a : claveAuth(a))); await u.updatePassword(P.owner ? n : claveAuth(n)); e.target.reset(); toast('Contraseña actualizada'); }
     catch (err) { toast(/wrong|invalid-credential/.test(String(err.code)) ? 'La contraseña actual no es correcta' : 'No se pudo cambiar: ' + (err.message || err.code)); }
   };
@@ -7189,7 +7361,7 @@ if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.
     e.preventDefault(); const f = new FormData(e.target); const c = casa(f.get('casa'));
     if (!c) return toast('Elige tu casa');
     if (!duiValido(String(f.get('dui')).trim())) return toast('El DUI debe tener 9 dígitos: 00000000-0');
-    if (String(f.get('pass') || '').length < 6) return toast('La clave debe tener al menos 6 caracteres');
+    if (String(f.get('pass') || '').length < 8) return toast('La clave debe tener al menos 8 caracteres');
     if (!SELFIE) return toast('Falta la foto en tiempo real');
     let doc, duif, foto; try { doc = await leerArchivo(f.get('doc')); duif = await leerArchivo(f.get('duif')); foto = await leerArchivo(f.get('foto')); } catch (x) { return toast('Archivo no válido. Usa foto o PDF'); }
     const un = String(f.get('user')).trim().toLowerCase();
@@ -7252,9 +7424,9 @@ if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.
   }
   resetDueno = async function () { try { await P.auth.sendPasswordResetEmail(OWNER_EMAIL); closeSheet(); toast('Te enviamos el correo a ' + OWNER_EMAIL); } catch (e) { toast('No se pudo enviar: ' + (e.message || e)); } };
 
-  /* ---------- Claves de al menos 6 caracteres (Firebase) ---------- */
+  /* ---------- Claves de al menos 8 caracteres (Firebase) ---------- */
   new MutationObserver(() => {
-    document.querySelectorAll('input[name=pass][minlength="4"],input[name=n][minlength="4"],input[name=adminPass]').forEach(i => { i.minLength = 6; if (/^\d{4}$/.test(i.value)) i.value = ''; });
+    document.querySelectorAll('input[name=pass][minlength="4"],input[name=n][minlength="4"],input[name=adminPass]').forEach(i => { i.minLength = 8; if (/^\d{4}$/.test(i.value)) i.value = ''; });
   }).observe(document.documentElement, { childList: true, subtree: true });
 
   /* =================== Arranque =================== */
